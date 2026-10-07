@@ -42,7 +42,7 @@ export function array(length) {
  * @param {*[]} arr
  * @param {T} value
  * @returns {T[]} The input array, mutated.
- */
+*/
 export function fill(arr, value) {
   for (let i = 0; i < arr.length; i++) {
     if (Array.isArray(arr[i])) {

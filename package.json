@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "depcruise": "depcruise app --validate",
-    "dev": "vite --host localhost",
+    "dev": "vite --host",
 
     "build": "run-s depcruise type-check \"build-only {@}\" --",
     "build:comment": "run-s = 'run all (npm scripts) sequentially'. Run: depcruise, (abort if any errors,) then type-check (type-check args tell it to run `npm run build-only` if successful), then build-only which actually builds the app. The `--` at the end passes any args given to `npm run build` on to `vite build`",

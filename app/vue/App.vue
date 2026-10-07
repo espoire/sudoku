@@ -3,6 +3,7 @@ import { inject } from 'vue';
 import TitleScreen from './cmp/title/TitleScreen.vue';
 import SettingsScreen from './cmp/settings/SettingsScreen.vue';
 import Constants from '../Constants.js';
+import SudokuUi from './cmp/SudokuUi.vue';
 
 const modes = Constants.modes;
 
@@ -14,6 +15,7 @@ const props = inject('props');
   <div class="vueAppWrap">
     <SettingsScreen v-if="props.mode === modes.settings" :settings="props.userSettings" />
     <TitleScreen v-if="props.mode === modes.title" :userSettings="props.userSettings" />
+    <SudokuUi v-if="props.mode === modes.play" :board="props.board" />
   </div>
 </template>
 

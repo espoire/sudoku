@@ -1,11 +1,11 @@
 import './vue/style/main.scss';
 import { createApp } from 'vue';
 import App from './vue/App.vue';
-import ThreeVueInterface from './VueInterface';
+import GlobalVueProps from './VueInterface';
 import { plugin as VueTippy } from 'vue-tippy';
 import 'tippy.js/dist/tippy.css';
 
-const props = ThreeVueInterface.props;
+const props = GlobalVueProps;
 
 const app = createApp(App);
 app.use(VueTippy);

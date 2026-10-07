@@ -1,6 +1,6 @@
 import Globals from './Globals.js';
 import Settings, { defaultUserSettings } from './Settings.js';
-import ThreeVueInterface from './VueInterface.js';
+import GlobalVueProps from './VueInterface.js';
 import { deepSet, dereference } from './util/object.js';
 import { warnInDev } from './util/Util.js';
 
@@ -72,7 +72,7 @@ export default class UserSettingsManager {
       return UserSettingsManager.syncVue(current, setting + '.');
     }
 
-    deepSet(ThreeVueInterface.props.userSettings, setting, current, /* createMissing */ true);
+    deepSet(GlobalVueProps.userSettings, setting, current, /* createMissing */ true);
   }
 
   static syncVue(value = userSettings, prefix = '') {

@@ -160,5 +160,3 @@ function _path(fileName) {
 function _jitter(magnitude) {
   return (Math.random() - 0.5) * magnitude;
 }
-
-window.expose('Sound', Sound);

@@ -1,17 +1,20 @@
 import { reactive } from 'vue';
 
 /** Exposes a collection of proxies for sending data into the Vue context for rendering to the 2D UI */
-const ThreeVueInterface = {
-  props: {
-    mode: 'title',
+const GlobalVueProps = reactive({
+  mode: 'title',
 
-    /** Programmatically copied from Settings.user; only need to intialize these keys to avoid crash-on-load due to access before programmatic initialization. */
-    userSettings: {
-      sound: { effects: true },
-    },
+  board: {
+    size: { x: 0, y :0 },
+    /** @type {Array<Array<{ value: number, given: boolean }>>} */
+    contents: [],
   },
-};
 
-ThreeVueInterface.props = reactive(ThreeVueInterface.props);
-window.ThreeVueInterface = ThreeVueInterface;
-export default ThreeVueInterface;
+  /** Programmatically copied from Settings.user; only need to intialize these keys to avoid crash-on-load due to access before programmatic initialization. */
+  userSettings: {
+    sound: { effects: true },
+  },
+});
+
+window.GlobalVueProps = GlobalVueProps;
+export default GlobalVueProps;

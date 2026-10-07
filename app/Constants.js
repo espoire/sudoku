@@ -7,6 +7,7 @@ const Constants = {
   modes: enumeration({
     title: 'title',
     settings: 'settings',
+    play: 'play',
   }),
 };
 
