@@ -1,0 +1,3 @@
+{
+  "vue.lint.unknownAtRules": "ignore"
+}

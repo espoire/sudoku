@@ -1,0 +1,132 @@
+@use "/app/vue/style/base.css";
+@use "/app/vue/style/animation.scss";
+
+html {
+  font-size: min(0.6dvh, 1dvw);
+}
+
+[data-v-tippy] {
+  pointer-events: auto;
+}
+
+.tippy-box {
+  max-width: 90rem !important;
+  border-radius: 2rem !important;
+  box-shadow: inset 0 0 0 0.1em var(--color-tooltip-border);
+  padding: 1.5rem 1.5rem 2rem 1.5rem;
+  filter: drop-shadow(0 0 1em black);
+}
+
+.tippy-arrow {
+  color: var(--color-tooltip-border) !important;
+}
+
+#mainColumn {
+  position: relative;
+  height: 100dvh;
+  width: 100dvw;
+  max-width: min(60dvh, 100dvw);
+  left: calc(50dvw - min(30dvh, 50dvw));
+  background-color: #0005;
+}
+
+#app {
+  height: 50%;
+  width: 100%;
+  padding: 0;
+  font-weight: normal;
+}
+
+/* @media (min-width: 1024px) {
+  body {
+    display: flex;
+    place-items: center;
+  }
+
+  #app {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 0 2rem;
+  }
+} */
+
+.subtle {
+  font-size: 80%;
+  opacity: 80%;
+}
+
+.inline-image {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.15em;
+  object-fit: cover;
+}
+
+.readable-text {
+  font-weight: bold;
+  text-shadow: 0 0 0.05em black, 0 0 0.1em black;
+}
+
+.very-readable-text {
+  font-weight: bold;
+  text-shadow: 0 0 0.05em black, 0 0 0.1em black, 0 0 0.15em black, 0 0 0.2em black, 0 0 0.25em black, 0 0 0.3em black;
+}
+
+.very-readable-icon {
+  filter: drop-shadow(0 0 0.05em black)
+    drop-shadow(0 0 0.1em black)
+    drop-shadow(0 0 0.15em black)
+    drop-shadow(0 0 0.2em black)
+    drop-shadow(0 0 0.25em black)
+    drop-shadow(0 0 0.3em black);
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+}
+
+.vibrant {
+  color: var(--color-vibrant);
+}
+
+.pastel {
+  color: var(--color-pastel);
+}
+
+.element-leaf {
+  color: var(--color-leaf);
+}
+
+.element-water {
+  color: var(--color-water);
+}
+
+.element-fire {
+  color: var(--color-fire);
+}
+
+.element-light {
+  color: var(--color-light);
+}
+
+.element-dark {
+  color: var(--color-dark);
+}
+
+.element-heal {
+  color: var(--color-heal);
+}
+
+.pulsating-red-error-text {
+  @extend .very-readable-text;
+  --color1: #f00f;
+  --color2: #f008;
+  animation: pulsateColor 1s infinite alternate linear;
+}

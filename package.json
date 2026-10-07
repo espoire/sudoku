@@ -1,0 +1,45 @@
+{
+  "name": "sudoku",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "depcruise": "depcruise app --validate",
+    "dev": "vite --host localhost",
+
+    "build": "run-s depcruise type-check \"build-only {@}\" --",
+    "build:comment": "run-s = 'run all (npm scripts) sequentially'. Run: depcruise, (abort if any errors,) then type-check (type-check args tell it to run `npm run build-only` if successful), then build-only which actually builds the app. The `--` at the end passes any args given to `npm run build` on to `vite build`",
+
+    "preview": "vite preview",
+    "staging": "vite preview",
+    "build-only": "vite build",
+    "type-check": "vue-tsc --build --force",
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
+    "format": "prettier --write ./app/**/*.js"
+  },
+  "dependencies": {
+    "three": "^0.162.0",
+    "tippy.js": "^6.3.7",
+    "vue": "^3.4.21",
+    "vue-tippy": "^6.7.1"
+  },
+  "devDependencies": {
+    "@rushstack/eslint-patch": "^1.3.3",
+    "@tsconfig/node20": "^20.1.2",
+    "@types/node": "^20.11.28",
+    "@vitejs/plugin-vue": "^6.0.1",
+    "@vue/eslint-config-prettier": "^8.0.0",
+    "@vue/eslint-config-typescript": "^12.0.0",
+    "@vue/tsconfig": "^0.5.1",
+    "dependency-cruiser": "^17.3.5",
+    "eslint": "^8.49.0",
+    "eslint-plugin-vue": "^9.17.0",
+    "npm-run-all2": "^6.1.2",
+    "prettier": "^3.0.3",
+    "sass": "^1.72.0",
+    "typescript": "~5.4.0",
+    "vite": "^7.0.6",
+    "vue-tsc": "^2.0.6"
+  },
+  "license": "ISC"
+}
