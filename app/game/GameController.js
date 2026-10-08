@@ -8,6 +8,8 @@ import { puzzleConfigs } from './puzzles.js';
 const { modes } = Constants;
 
 export default class GameController {
+  static #modeBeforeSettings = null;
+
   /** @type {modes} */
   mode = modes.title;
 
@@ -30,7 +32,12 @@ export default class GameController {
   }
 
   static onSettingsClicked() {
+    GameController.#modeBeforeSettings = GlobalVueProps.mode;
     GameController.setMode(modes.settings);
+  }
+
+  static onReturnFromSettings() {
+    GameController.setMode(GameController.#modeBeforeSettings);
   }
 
   static setMode(mode) {

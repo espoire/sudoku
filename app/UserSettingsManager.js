@@ -8,9 +8,7 @@ const userSettings = Settings.user;
 
 const specialOptionsTypes = {
   isMobile: 'boolean',
-  sound: {
-    effects: 'boolean',
-  },
+  darkMode: 'boolean',
 };
 
 export default class UserSettingsManager {

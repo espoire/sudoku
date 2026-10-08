@@ -15,9 +15,7 @@ const Settings = {
 
   user: {
     isMobile: educatedGuessIfEnvironmentIsMobile(),
-    sound: {
-      effects: true,
-    },
+    darkMode: false,
   },
 };
 

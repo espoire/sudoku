@@ -2,7 +2,6 @@
 import { ref } from 'vue';
 import Globals from '../../../Globals.js';
 import { getEpithet } from './epithet.js';
-import SfxToggleButton from './SfxToggleButton.vue';
 
 const props = defineProps(['userSettings']);
 
@@ -27,7 +26,6 @@ function onClickStart() {
     <div class="buttons">
       <button id="startGame" @click="onClickStart">Begin</button>
       <div id="startGameFinger">👆</div>
-      <SfxToggleButton :userSettings="props.userSettings" />
     </div>
   </div>
 </template>
@@ -68,7 +66,7 @@ function onClickStart() {
     rotate: -20deg;
     font-size: 3rem;
     color: yellow;
-    filter: drop-shadow(0.2rem 0.2rem 0 #ff08);
+    filter: drop-shadow(0.2rem 0.2rem 0.1rem #000);
     animation: pulsateSize 3s linear infinite;
     line-height: 1.2;
   }
@@ -104,15 +102,6 @@ function onClickStart() {
       &#startGame {
         --wobble-turn: 5deg;
         animation: wobble 2s ease-in-out -1s infinite alternate;
-      }
-
-      &#sfxMuteToggle {
-        position: absolute;
-        right: 3rem;
-        bottom: 3rem;
-        width: 16.61rem;
-        height: 16.61rem;
-        padding: 0;
       }
     }
 

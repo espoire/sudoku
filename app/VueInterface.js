@@ -11,9 +11,7 @@ const GlobalVueProps = reactive({
   },
 
   /** Programmatically copied from Settings.user; only need to intialize these keys to avoid crash-on-load due to access before programmatic initialization. */
-  userSettings: {
-    sound: { effects: true },
-  },
+  userSettings: {},
 });
 
 window.GlobalVueProps = GlobalVueProps;

@@ -21,15 +21,6 @@ html {
   color: var(--color-tooltip-border) !important;
 }
 
-#mainColumn {
-  position: relative;
-  height: 100dvh;
-  width: 100dvw;
-  max-width: min(60dvh, 100dvw);
-  left: calc(50dvw - min(30dvh, 50dvw));
-  background-color: #0005;
-}
-
 #app {
   height: 50%;
   width: 100%;

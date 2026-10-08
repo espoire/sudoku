@@ -2,6 +2,7 @@
 import { computed } from 'vue';
 import PrettyButton from './util/PrettyButton.vue';
 import { range } from '../../util/Array.js';
+import GameController from '../../game/GameController.js';
 
 const props = defineProps({
   board: {
@@ -24,6 +25,10 @@ function onActivateCell(event) {
   console.log("Cell activated:", event.target);
   // TODO
 }
+
+function onClickSettingsButton() {
+  GameController.onSettingsClicked();
+}
 </script>
 
 <template>
@@ -31,7 +36,7 @@ function onActivateCell(event) {
     <h1>
       Sudoku!
     </h1>
-    <PrettyButton class="settings-button">
+    <PrettyButton class="settings-button" @click="onClickSettingsButton">
       ⚙ Settings
     </PrettyButton>
   </div>
@@ -64,8 +69,16 @@ function onActivateCell(event) {
   line-height: 1;
   padding: 2rem;
   margin-bottom: 2rem;
+  border-bottom: .5rem solid #8886;
+
+  h1 {
+    color: var(--color-heading);
+    font-weight: bold;
+  }
 
   .settings-button {
+    color: var(--color-text);
+    background-color: var(--color-button-back);
     font-size: 3.5rem;
   }
 }
@@ -73,7 +86,7 @@ function onActivateCell(event) {
 .board-wrap {
   display: flex;
   flex-direction: column;
-  background-color: #fff;
+  background-color: var(--color-background);
   font-size: calc(var(--size, 10rem) * 0.7);
   line-height: 1;
   pointer-events: all;
@@ -89,14 +102,15 @@ function onActivateCell(event) {
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid #000;
-  color: #44f;
+  border: 1px solid var(--color-gridlines);
+  color: var(--color-text);
+  background-color: var(--color-cells);
 
   transition: outline 0.1s;
 
   &.given {
     font-weight: bold;
-    color: #000;
+    color: var(--color-givens);
   }
 
   &.thicker-top {

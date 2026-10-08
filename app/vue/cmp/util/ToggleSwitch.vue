@@ -2,7 +2,6 @@
 
 <script setup>
 import { ref } from 'vue';
-import Sound from '../../../Sound.js';
 
 const props = defineProps({
   on: Boolean,
@@ -18,9 +17,6 @@ const isOn = ref(props.on);
 function toggle() {
   isOn.value = !isOn.value;
   emit('toggle', isOn.value);
-  Sound.swapClick.play({
-    rate: isOn.value ? 1.5 : 1,
-  });
 }
 </script>
 

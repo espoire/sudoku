@@ -1,15 +1,7 @@
-<script setup>
-import Sound from '../../../Sound.js';
-
-function playSound() {
-  Sound.swapClick.play();
-}
-</script>
-
 <template>
   <div class="buttonWrap">
     <slot name="special" />
-    <div class="buttonBorder" @click="playSound">
+    <div class="buttonBorder">
       <div class="button">
         <span class="buttonText">
           <slot />
