@@ -96,7 +96,8 @@ export default class BoardInteractor {
     let wroteAny = false;
 
     for (const { row, column } of selection) {
-      wroteAny ||= this.board.setValue(row, column, value);
+      const success = this.board.setValue(row, column, value);
+      wroteAny ||= success;
     }
 
     if (wroteAny) {

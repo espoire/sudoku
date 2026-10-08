@@ -4,7 +4,7 @@ import Constants from '../Constants.js';
 import UserSettingsManager from '../UserSettingsManager.js';
 import Board from './Board.js';
 import BoardInteractor from './BoardInteractor.js';
-import { puzzleConfigs } from './puzzles.js';
+import { defaultPuzzleConfig } from './puzzles.js';
 
 const { modes } = Constants;
 
@@ -29,7 +29,7 @@ export default class GameController {
   }
 
   onAdvanceFromTitleScreen() {
-    this.board = new Board(puzzleConfigs[2]);
+    this.board = new Board(defaultPuzzleConfig);
     this.boardInteractor = new BoardInteractor(this.board);
     this.boardInteractor.updateVue();
     GameController.setMode(modes.play);
