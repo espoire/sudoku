@@ -29,6 +29,8 @@ export default class BoardInteractor {
   }
 
   selectAllMatchingValues(row, column) {
+    this.clearSelection();
+
     const value = this.board.cells[row][column].value;
     if (value == null) return;
 
