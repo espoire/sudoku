@@ -1,4 +1,5 @@
 import { array, fillFrom } from "../util/Array.js";
+import Constraint from "./Constraint.js";
 
 /** Data & logic class for the Sudoku board.
  * Supports variable sizes, including standard 9x9 and smaller variants.
@@ -10,6 +11,7 @@ import { array, fillFrom } from "../util/Array.js";
 export default class Board {
   /** @type {{ x: number, y: number }} */ size;
   /** @type {Cell[][]} */ cells;
+  /** @type {Constraint[]} */ constraints = [];
 
   /**
    * Initializes a new Sudoku board with the given size and initial numerals.
@@ -18,13 +20,14 @@ export default class Board {
    * @param {{ x: number, y: number }} param0.size
    * @param {string[]} param0.given A list of strings each representing a board row. Numerals are used for given values, and spaces represent non-given (empty) cells.
    */
-  constructor({ size = { x: 9, y: 9 }, given }) {
+  constructor({ size = { x: 9, y: 9 }, given, constraints = [Constraint.basic9x9SudokuRules] }) {
     this.size = structuredClone(size);
 
     this.cells = array(size.y, size.x);
     fillFrom(this.cells, (y, x) => new Cell(x, y));
 
     this.#loadGivenNumerals(given);
+    this.constraints = constraints;
   }
 
   /**
@@ -37,9 +40,13 @@ export default class Board {
     for (let y = 0; y < this.size.y; y++) {
       for (let x = 0; x < this.size.x; x++) {
         const value = given?.[y]?.[x];
-        if (digits.includes(value)) this.cells[y][x].lock(value);
+        if (digits.includes(value)) this.cells[y][x].lock(+value);
       }
     }
+  }
+
+  getValue(row, column) {
+    return this.cells[row][column].value;
   }
 
   /**
@@ -47,11 +54,36 @@ export default class Board {
    * @param {number} row The row index of the cell.
    * @param {number} column The column index of the cell.
    * @param {number|null} value The value to set, or null to clear the cell.
+   * @returns {boolean} True if the value was set successfully, false if the cell is locked.
    */
   setValue(row, column, value) {
     const cell = this.cells[row][column];
-    if (cell.locked) return;
+    if (cell.locked) return false;
     cell.value = value;
+
+    return true;
+  }
+
+  checkWin() {
+    // First, check constraints
+    for (const constraint of this.constraints) {
+      const result = constraint.check(this);
+      if (!result.valid) {
+        for (const error of result.errors) {
+          console.error(error.message, ...error.location);
+        }
+        return false;
+      }
+    }
+    
+    // Also, check if all cells are filled
+    for (let y = 0; y < this.size.y; y++) {
+      for (let x = 0; x < this.size.x; x++) {
+        if (this.cells[y][x].value === null) return false;
+      }
+    }
+
+    return true;
   }
 }
 
@@ -68,6 +100,9 @@ class Cell {
     this.position = { x, y };
   }
 
+  /**
+   * @param {number} value
+   */
   lock(value) {
     this.value = value;
     this.locked = true;

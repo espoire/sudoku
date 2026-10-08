@@ -1,3 +1,4 @@
+/** @typedef {import('./Board.js').default} Board */
 import GlobalVueProps from "../VueInterface.js";
 
 /**
@@ -24,6 +25,21 @@ export default class BoardInteractor {
    */
   handleCellActivation(row, column) {
     this.selectedCells[row][column] = !this.selectedCells[row][column];
+    this.updateVue();
+  }
+
+  selectAllMatchingValues(row, column) {
+    const value = this.board.cells[row][column].value;
+    if (value == null) return;
+
+    for (let r = 0; r < this.board.size.y; r++) {
+      for (let c = 0; c < this.board.size.x; c++) {
+        if (this.board.cells[r][c].value === value) {
+          this.selectedCells[r][c] = true;
+        }
+      }
+    }
+
     this.updateVue();
   }
 
@@ -75,9 +91,15 @@ export default class BoardInteractor {
    */
   handleNumeralInput(value) {
     const selection = this.#listSelection();
+    let wroteAny = false;
 
     for (const { row, column } of selection) {
-      this.board.setValue(row, column, value);
+      wroteAny ||= this.board.setValue(row, column, value);
+    }
+
+    if (wroteAny) {
+      const won = this.board.checkWin();
+      if (won) setTimeout(() => alert("Win! 🎉"), 0);
     }
 
     this.updateVue();

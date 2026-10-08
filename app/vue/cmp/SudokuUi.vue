@@ -31,6 +31,10 @@ function onActivateCell(row, column) {
   Globals.gameController.boardInteractor.handleCellActivation(row, column);
 }
 
+function onDoubleClickCell(row, column) {
+  Globals.gameController.boardInteractor.selectAllMatchingValues(row, column);
+}
+
 function onPressNumeral(value) {
   Globals.gameController.boardInteractor.handleNumeralInput(value);
 }
@@ -85,6 +89,7 @@ function onKeydown(event) {
         }"
         v-text="props.board.contents[i][j].value"
         @pointerdown="() => onActivateCell(i, j)"
+        @dblclick="() => onDoubleClickCell(i, j)"
       />
     </div>
   </div>

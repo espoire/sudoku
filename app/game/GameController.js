@@ -29,7 +29,7 @@ export default class GameController {
   }
 
   onAdvanceFromTitleScreen() {
-    this.board = new Board(puzzleConfigs[1]);
+    this.board = new Board(puzzleConfigs[2]);
     this.boardInteractor = new BoardInteractor(this.board);
     this.boardInteractor.updateVue();
     GameController.setMode(modes.play);
