@@ -1,5 +1,6 @@
 <script setup>
 import { computed } from 'vue';
+import PrettyButton from './util/PrettyButton.vue';
 import { range } from '../../util/Array.js';
 
 const props = defineProps({
@@ -26,15 +27,26 @@ function onActivateCell(event) {
 </script>
 
 <template>
-  <h1>
-    Sudoku!
-  </h1>
+  <div class="play-page-header">
+    <h1>
+      Sudoku!
+    </h1>
+    <PrettyButton class="settings-button">
+      ⚙ Settings
+    </PrettyButton>
+  </div>
 
-  <div class="boardWrap" :style="{ '--size': size }" v-if="props.board && props.board.size && props.board.contents">
-    <div class="boardRow" v-for="i in range(props.board.size.y)" :key="i">
-      <div class="boardCell"
+  <div class="board-wrap" :style="{ '--size': size }" v-if="props.board && props.board.size && props.board.contents">
+    <div class="board-row" v-for="i in range(props.board.size.y)" :key="i">
+      <div class="board-cell"
         v-for="j in range(props.board.size.x)" :key="j"
-        :class="{ given: props.board.contents[i][j].given }"
+        :class="{
+          given: props.board.contents[i][j].given,
+          'thicker-top': i%3 === 0,
+          'thicker-bottom': i%3 === 2,
+          'thicker-left': j%3 === 0,
+          'thicker-right': j%3 === 2,
+        }"
         v-text="props.board.contents[i][j].value"
         @pointerdown="onActivateCell"
       />
@@ -43,7 +55,22 @@ function onActivateCell(event) {
 </template>
 
 <style lang="scss" scoped>
-.boardWrap {
+.play-page-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 2rem;
+  line-height: 1;
+  padding: 2rem;
+  margin-bottom: 2rem;
+
+  .settings-button {
+    font-size: 3.5rem;
+  }
+}
+
+.board-wrap {
   display: flex;
   flex-direction: column;
   background-color: #fff;
@@ -52,11 +79,11 @@ function onActivateCell(event) {
   pointer-events: all;
 }
 
-.boardRow {
+.board-row {
   display: flex;
 }
 
-.boardCell {
+.board-cell {
   width: var(--size, 10rem);
   height: var(--size, 10rem);
   display: flex;
@@ -70,6 +97,19 @@ function onActivateCell(event) {
   &.given {
     font-weight: bold;
     color: #000;
+  }
+
+  &.thicker-top {
+    border-top-width: 0.5rem;
+  }
+  &.thicker-bottom {
+    border-bottom-width: 0.5rem;
+  }
+  &.thicker-left {
+    border-left-width: 0.5rem;
+  }
+  &.thicker-right {
+    border-right-width: 0.5rem;
   }
 
   &:hover {
