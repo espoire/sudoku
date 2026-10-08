@@ -3,6 +3,7 @@ import Settings from '../Settings.js';
 import Constants from '../Constants.js';
 import UserSettingsManager from '../UserSettingsManager.js';
 import Board from './Board.js';
+import BoardInteractor from './BoardInteractor.js';
 import { puzzleConfigs } from './puzzles.js';
 
 const { modes } = Constants;
@@ -15,6 +16,8 @@ export default class GameController {
 
   /** @type {Board} */
   board = null;
+  /** @type {BoardInteractor} */
+  boardInteractor = null;
 
   begin() {
     UserSettingsManager.syncVue();
@@ -27,7 +30,8 @@ export default class GameController {
 
   onAdvanceFromTitleScreen() {
     this.board = new Board(puzzleConfigs[1]);
-    this.board.updateVue();
+    this.boardInteractor = new BoardInteractor(this.board);
+    this.boardInteractor.updateVue();
     GameController.setMode(modes.play);
   }
 

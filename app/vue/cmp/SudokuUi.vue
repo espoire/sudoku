@@ -1,7 +1,9 @@
 <script setup>
-import { computed } from 'vue';
+import { computed, onMounted, onUnmounted } from 'vue';
 import PrettyButton from './util/PrettyButton.vue';
+import ModalManager from '../ModalManager.js';
 import { range } from '../../util/Array.js';
+import Globals from '../../Globals.js';
 import GameController from '../../game/GameController.js';
 
 const props = defineProps({
@@ -11,7 +13,7 @@ const props = defineProps({
       y: Number
     },
     contents: {
-      type: Array, // 2d array of Cell descriptor objects: { value: number, given: boolean }
+      type: Array, // 2d array of Cell descriptor objects: { value: number, given: boolean, selected: boolean }
     },
   },
 });
@@ -21,13 +23,41 @@ const size = computed(() => {
   return `${rems}rem`;
 });
 
-function onActivateCell(event) {
-  console.log("Cell activated:", event.target);
-  // TODO
-}
-
 function onClickSettingsButton() {
   GameController.onSettingsClicked();
+}
+
+function onActivateCell(row, column) {
+  Globals.gameController.boardInteractor.handleCellActivation(row, column);
+}
+
+function onPressNumeral(value) {
+  Globals.gameController.boardInteractor.handleNumeralInput(value);
+}
+
+const numerals = range(1, 9).map(n => `${n}`);
+const clearDigits = [' ', '0', 'Delete', 'Backspace'];
+onMounted(() => ModalManager.register('SudokuUi.vue', { onKeydown }));
+onUnmounted(() => ModalManager.unregister('SudokuUi.vue'));
+function onKeydown(event) {
+  if (event.key === 'F1') {
+    onClickSettingsButton();
+
+  } else if (event.key === 'Escape') {
+    const hasSelection = Globals.gameController.boardInteractor.hasAnySelection();
+    if (hasSelection) {
+      Globals.gameController.boardInteractor.clearSelection();
+    } else {
+      // Else open settings
+      onClickSettingsButton();
+    }
+
+  } else if (numerals.includes(event.key)) {
+    onPressNumeral(+event.key);
+
+  } else if (clearDigits.includes(event.key)) {
+    onPressNumeral(null);
+  }
 }
 </script>
 
@@ -47,13 +77,14 @@ function onClickSettingsButton() {
         v-for="j in range(props.board.size.x)" :key="j"
         :class="{
           given: props.board.contents[i][j].given,
+          selected: props.board.contents[i][j].selected,
           'thicker-top': i%3 === 0,
           'thicker-bottom': i%3 === 2,
           'thicker-left': j%3 === 0,
           'thicker-right': j%3 === 2,
         }"
         v-text="props.board.contents[i][j].value"
-        @pointerdown="onActivateCell"
+        @pointerdown="() => onActivateCell(i, j)"
       />
     </div>
   </div>
@@ -90,6 +121,8 @@ function onClickSettingsButton() {
   font-size: calc(var(--size, 10rem) * 0.7);
   line-height: 1;
   pointer-events: all;
+
+  --half-gridline-thickness: 0.75rem;
 }
 
 .board-row {
@@ -113,17 +146,23 @@ function onClickSettingsButton() {
     color: var(--color-givens);
   }
 
+  &.selected {
+    --outline-size: calc(var(--size, 10rem) / 10);
+    outline: var(--outline-size) solid #22fb;
+    outline-offset: calc(-1 * var(--outline-size) - 2px);
+  }
+
   &.thicker-top {
-    border-top-width: 0.5rem;
+    border-top-width: var(--half-gridline-thickness, 0.5rem);
   }
   &.thicker-bottom {
-    border-bottom-width: 0.5rem;
+    border-bottom-width: var(--half-gridline-thickness, 0.5rem);
   }
   &.thicker-left {
-    border-left-width: 0.5rem;
+    border-left-width: var(--half-gridline-thickness, 0.5rem);
   }
   &.thicker-right {
-    border-right-width: 0.5rem;
+    border-right-width: var(--half-gridline-thickness, 0.5rem);
   }
 
   &:hover {

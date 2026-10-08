@@ -3,7 +3,7 @@ import { ref } from 'vue';
 import Globals from '../../../Globals.js';
 import { getEpithet } from './epithet.js';
 
-const props = defineProps(['userSettings']);
+defineProps(['userSettings']);
 
 const epithet = ref(getEpithet());
 

@@ -1,5 +1,4 @@
 import { array, fillFrom } from "../util/Array.js";
-import GlobalVueProps from "../VueInterface.js";
 
 /** Data & logic class for the Sudoku board.
  * Supports variable sizes, including standard 9x9 and smaller variants.
@@ -43,15 +42,16 @@ export default class Board {
     }
   }
 
-  updateVue() {
-    const vm = GlobalVueProps.board;
-    vm.size.x = this.size.x;
-    vm.size.y = this.size.y;
-    vm.contents = this.cells.map(row =>
-      row.map(cell =>
-        cell.toVue()
-      )
-    );
+  /**
+   * Sets the value of a cell on the board, if it is not locked.
+   * @param {number} row The row index of the cell.
+   * @param {number} column The column index of the cell.
+   * @param {number|null} value The value to set, or null to clear the cell.
+   */
+  setValue(row, column, value) {
+    const cell = this.cells[row][column];
+    if (cell.locked) return;
+    cell.value = value;
   }
 }
 
