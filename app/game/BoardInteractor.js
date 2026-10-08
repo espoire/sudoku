@@ -24,7 +24,13 @@ export default class BoardInteractor {
    * @param {number} column The column index of the cell.
    */
   handleCellActivation(row, column) {
+    this.clearSelection();
     this.selectedCells[row][column] = !this.selectedCells[row][column];
+    this.updateVue();
+  }
+
+  handleCellDragEnter(row, column) {
+    this.selectedCells[row][column] = true;
     this.updateVue();
   }
 

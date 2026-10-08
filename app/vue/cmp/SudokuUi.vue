@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, onUnmounted } from 'vue';
+import { computed, onMounted, onUnmounted, ref } from 'vue';
 import PrettyButton from './util/PrettyButton.vue';
 import ModalManager from '../ModalManager.js';
 import { range } from '../../util/Array.js';
@@ -28,11 +28,8 @@ function onClickSettingsButton() {
 }
 
 function onActivateCell(row, column) {
+  console.log(`Activating cell at row ${row}, column ${column}`);
   Globals.gameController.boardInteractor.handleCellActivation(row, column);
-}
-
-function onDoubleClickCell(row, column) {
-  Globals.gameController.boardInteractor.selectAllMatchingValues(row, column);
 }
 
 function onPressNumeral(value) {
@@ -63,6 +60,61 @@ function onKeydown(event) {
     onPressNumeral(null);
   }
 }
+
+function handleDoubleClick(event) {
+  const cellTarget = getCellTarget(event);
+  if (!cellTarget) return;
+
+  const { row, column } = cellTarget;
+  Globals.gameController.boardInteractor.selectAllMatchingValues(row, column);
+}
+
+const boardEl = ref(null);
+let dragging = false;
+let visitedCells = null;
+function startDrag(event) {
+  dragging = true;
+  visitedCells = new Set();
+
+  boardEl.value.setPointerCapture(event.pointerId);
+
+  notifyDragCell(event);
+}
+
+function getCellTarget(event) {
+  const element = document.elementFromPoint(event.clientX, event.clientY);
+  const cell = element?.closest('.board-cell');
+  if (!cell) return;
+
+  const cellId = cell.dataset.cell;
+  const [row, column] = cellId.split(',').map(Number);
+
+  return { row, column };
+}
+
+function notifyDragCell(event) {
+  const element = document.elementFromPoint(event.clientX, event.clientY);
+  const cell = element?.closest('.board-cell');
+  if (!cell) return;
+
+  const cellId = cell.dataset.cell;
+  if (visitedCells.has(cellId)) return;
+  visitedCells.add(cellId);
+
+  const [row, column] = cellId.split(',').map(Number);
+  Globals.gameController.boardInteractor.handleCellDragEnter(row, column);
+}
+
+function drag(event) {
+  if (!dragging) return;
+  notifyDragCell(event);
+}
+
+function endDrag(event) {
+  dragging = false;
+  visitedCells = null;
+  boardEl.value.releasePointerCapture(event.pointerId);
+}
 </script>
 
 <template>
@@ -75,7 +127,14 @@ function onKeydown(event) {
     </PrettyButton>
   </div>
 
-  <div class="board-wrap" :style="{ '--size': size }" v-if="props.board && props.board.size && props.board.contents">
+  <div class="board-wrap" ref="boardEl"
+        v-if="props.board && props.board.size && props.board.contents"
+        :style="{ '--size': size }"
+        @pointerdown="startDrag"
+        @pointermove="drag"
+        @pointerup="endDrag"
+        @pointercancel="endDrag"
+        @dblclick="handleDoubleClick">
     <div class="board-row" v-for="i in range(props.board.size.y)" :key="i">
       <div class="board-cell"
         v-for="j in range(props.board.size.x)" :key="j"
@@ -87,9 +146,9 @@ function onKeydown(event) {
           'thicker-left': j%3 === 0,
           'thicker-right': j%3 === 2,
         }"
+        :data-cell="`${i},${j}`"
         v-text="props.board.contents[i][j].value"
         @pointerdown="() => onActivateCell(i, j)"
-        @dblclick="() => onDoubleClickCell(i, j)"
       />
     </div>
   </div>
@@ -143,18 +202,13 @@ function onKeydown(event) {
   border: 1px solid var(--color-gridlines);
   color: var(--color-text);
   background-color: var(--color-cells);
+  padding-bottom: 0.6rem;
 
   transition: outline 0.1s;
 
   &.given {
     font-weight: bold;
     color: var(--color-givens);
-  }
-
-  &.selected {
-    --outline-size: calc(var(--size, 10rem) / 10);
-    outline: var(--outline-size) solid #22fb;
-    outline-offset: calc(-1 * var(--outline-size) - 2px);
   }
 
   &.thicker-top {
@@ -174,6 +228,16 @@ function onKeydown(event) {
     --outline-size: calc(var(--size, 10rem) / 20);
     outline: var(--outline-size) solid #44f4;
     outline-offset: calc(-1 * var(--outline-size) - 2px);
+  }
+
+  &.selected {
+    --outline-size: calc(var(--size, 10rem) / 10);
+    outline: var(--outline-size) solid #22fb;
+    outline-offset: calc(-1 * var(--outline-size) - 2px);
+
+    &:hover {
+      outline-color: #33f8;
+    }
   }
 }
 </style>
