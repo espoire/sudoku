@@ -9,6 +9,7 @@ import GlobalVueProps from "../VueInterface.js";
 export default class BoardInteractor {
   /** @type {Board} */ board;
   /** @type {Array<Array<boolean>>} */ selectedCells = [];
+  /** @type {{ win: boolean, valid?: boolean, errors?: Array<{ message: string, location: Array<{ row: number, column: number }>}> }} */ #cachedValidationResult = null;
 
   constructor(board) {
     this.board = board;
@@ -115,9 +116,12 @@ export default class BoardInteractor {
       wroteAny ||= success;
     }
 
+    let validationResult = null;
     if (wroteAny) {
-      const won = this.board.checkWin();
-      if (won) setTimeout(() => alert("Win! 🎉"), 0);
+      validationResult = this.board.checkWin();
+      if (validationResult.win) setTimeout(() => alert("Win! 🎉"), 0);
+
+      this.#cachedValidationResult = validationResult;
     }
 
     this.updateVue();
@@ -134,6 +138,7 @@ export default class BoardInteractor {
       row.map((cell, columnIndex) => ({
         ...cell.toVue(),
         selected: this.selectedCells[rowIndex][columnIndex],
+        error: this.#cachedValidationResult?.errors?.some(e => e.location.some(l => l.row === rowIndex && l.column === columnIndex)) ?? false,
       }))
     );
   }

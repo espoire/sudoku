@@ -53,6 +53,9 @@ const props = inject('props');
   --color-cells: var(--vt-c-white);
 
   --color-warning: #fa0;
+  --color-warning-text: #b50;
+  --color-error: #faa;
+  --color-error-text: #b00;
 
   --color-mask: color-mix(in srgb, var(--color-background) 75%, transparent);
   --background-mask: radial-gradient(var(--color-mask), var(--color-background));
@@ -85,6 +88,11 @@ const props = inject('props');
     --color-givens: var(--color-text);
     --color-gridlines: #313131;
     --color-cells: var(--color-background-soft);
+
+    --color-warning: #b50;
+    --color-warning-text: #fa0;
+    --color-error: #500;
+    --color-error-text: #f77;
   }
 }
 

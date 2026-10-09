@@ -1,4 +1,5 @@
-Ctrl+A selects ALL cells
+Put new title screen logo in
+
 Multi-selection by holding ctrl+click to add additional cells-selected when you already have one or more selected
 Remove-from-selection by ctrl+click a cell already selected, and drag behavior becomes removal if started thusly
 Visual numpad for mouse-only numeral input
@@ -10,10 +11,9 @@ Undo/Redo
 Gameplay timer, pauses when options pane is open
 
 Highlight errors in red
-  always chec always and turn errors red
-  allert when theres an obvious mistake (dupilicate number in a box row or col)
+  Option: Also mark when the known solution is rendered impossible
+  Option: Do not mark during play, only list errors on board completion
 
-chec when complete and give win or mistae allert
 option for pencil type anwers vs perm pen marks
 "put all the settings under a menu of customize your game"
 make the outside box as thick as the box seperators

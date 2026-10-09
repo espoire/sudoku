@@ -6,7 +6,7 @@ const GlobalVueProps = reactive({
 
   board: {
     size: { x: 0, y :0 },
-    /** @type {Array<Array<{ value: number, given: boolean }>>} */
+    /** @type {Array<Array<{ value: number, given: boolean, error: boolean }>>} */
     contents: [],
   },
 

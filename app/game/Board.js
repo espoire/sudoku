@@ -64,26 +64,31 @@ export default class Board {
     return true;
   }
 
+  /**
+   * @returns {{ win: boolean, valid?: boolean, errors?: Array<{ message: string, location: Array<{ row: number, column: number }>}> }}
+   */
   checkWin() {
+    let constraintResult;
+
     // First, check constraints
     for (const constraint of this.constraints) {
-      const result = constraint.check(this);
-      if (!result.valid) {
-        for (const error of result.errors) {
+      constraintResult = constraint.check(this);
+      if (!constraintResult.valid) {
+        for (const error of constraintResult.errors) {
           console.error(error.message, ...error.location);
         }
-        return false;
+        return { win: false, ...constraintResult };
       }
     }
     
     // Also, check if all cells are filled
     for (let y = 0; y < this.size.y; y++) {
       for (let x = 0; x < this.size.x; x++) {
-        if (this.cells[y][x].value === null) return false;
+        if (this.cells[y][x].value === null) return { win: false, ...constraintResult };
       }
     }
 
-    return true;
+    return { win: true };
   }
 }
 

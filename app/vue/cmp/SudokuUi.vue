@@ -138,6 +138,7 @@ function endDrag(event) {
         v-for="j in range(props.board.size.x)" :key="j"
         :class="{
           given: props.board.contents[i][j].given,
+          error: props.board.contents[i][j].error,
           selected: props.board.contents[i][j].selected,
           'thicker-top': i%3 === 0,
           'thicker-bottom': i%3 === 2,
@@ -212,6 +213,11 @@ function endDrag(event) {
   &.given {
     font-weight: bold;
     color: var(--color-givens);
+  }
+
+  &.error {
+    color: var(--color-error-text);
+    background-color: var(--color-error);
   }
 
   &.thicker-top {
