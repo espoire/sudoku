@@ -5,6 +5,7 @@ import UserSettingsManager from '../UserSettingsManager.js';
 import Board from './Board.js';
 import BoardInteractor from './BoardInteractor.js';
 import { defaultPuzzleConfig } from './puzzles.js';
+import Timer from './Timer.js';
 
 const { modes } = Constants;
 
@@ -14,10 +15,9 @@ export default class GameController {
   /** @type {modes} */
   mode = modes.title;
 
-  /** @type {Board} */
-  board = null;
-  /** @type {BoardInteractor} */
-  boardInteractor = null;
+  /** @type {Board} */ board = null;
+  /** @type {BoardInteractor} */ boardInteractor = null;
+  /** @type {Timer} */ timer = new Timer();
 
   begin() {
     UserSettingsManager.syncVue();
@@ -32,6 +32,7 @@ export default class GameController {
     this.board = new Board(defaultPuzzleConfig);
     this.boardInteractor = new BoardInteractor(this.board);
     this.boardInteractor.updateVue();
+    this.timer.start();
     GameController.setMode(modes.play);
   }
 

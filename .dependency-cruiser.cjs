@@ -52,7 +52,6 @@ module.exports = {
           'dev/',                           // Development only manual-invoke code
           '\\.(testData|generator)\\.js$',  // Test data / generation scripts
           'ComponentTemplate\\.vue$',       // Vue component template, not used directly
-          'app/lib/three.module.min.js$',   // Third party library, referenced via index.html, NOT via import
         ]
       },
       to: {},
@@ -160,7 +159,6 @@ module.exports = {
       from: {
         pathNot: [
           '^(test)',
-          'app/ThreeMain.js$' // exception for Three.js main module, which invokes the test runner at (dev) startup; this is how we run tests in this project
         ],
       },
       to: {

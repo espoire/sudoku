@@ -3,16 +3,18 @@ import { computed, onMounted, onUnmounted, ref } from 'vue';
 import DragSelectionController from './DragSelectionController.js';
 import ModalManager from '/app/vue/ModalManager.js';
 import PrettyButton from '/app/vue/cmp/util/PrettyButton.vue';
-import { range } from '/app/util/Array.js';
 import Globals from '/app/Globals.js';
-import GameController from '/app/game/GameController.js';
 import Constants from '/app/Constants.js';
+import GameController from '/app/game/GameController.js';
+import Timer from '/app/game/Timer.js';
+import { range } from '/app/util/Array.js';
 
 const modes = Constants.modes;
 
 const props = defineProps({
   settings: Object,
   mode: String,
+
   board: {
     size: {
       x: Number,
@@ -21,6 +23,13 @@ const props = defineProps({
     contents: {
       type: Array, // 2d array of Cell descriptor objects: { value: number, given: boolean, selected: boolean }
     },
+  },
+
+  timer: {
+    startTime: Number, // start time in milliseconds
+    totalPausesLength: Number, // total length of all pauses in milliseconds
+    paused: Boolean, // whether the timer is currently paused
+    elapsedTimeAtPause: Number, // elapsed time at the moment of pause in milliseconds
   },
 });
 
@@ -50,15 +59,29 @@ function onUnhandledClick() {
   Globals.gameController.boardInteractor.clearSelection();
 }
 
+const displayedTime = ref('');
+let updateElapsedTimeInterval;
+function updateElapsedTime() {
+  const millis = Timer.getElapsedTime(props.timer);
+  displayedTime.value = Timer.format(millis);
+}
+function pauseTimer() { Globals.gameController.timer.pause(); }
+function resumeTimer() { Globals.gameController.timer.resume(); }
+
 const numerals = range(1, 9).map(n => `${n}`);
 const clearDigits = [' ', '0', 'Delete', 'Backspace'];
 onMounted(() => {
   ModalManager.register('SudokuUi.vue', { onKeydown });
   window.addEventListener('click', onUnhandledClick);
+  updateElapsedTime();
+  updateElapsedTimeInterval = setInterval(updateElapsedTime, 100);
+  resumeTimer();
 });
 onUnmounted(() => {
   ModalManager.unregister('SudokuUi.vue');
   window.removeEventListener('click', onUnhandledClick);
+  pauseTimer();
+  clearInterval(updateElapsedTimeInterval);
 });
 function onKeydown(event) {
   if (event.key === 'F1') {
@@ -101,6 +124,8 @@ function onClickResetButton() {
   <div class="column-wrap" :class="{ pen: settings.penDigitStyle }">
     <div class="play-page-header">
       <img class="logo" src="/img/name.min.svg" />
+      <div style="flex: 1" />
+      <div class="elapsed-time" v-text="displayedTime" />
       <img class="settings-button" src="/img/pause-button.min.svg" @click.stop="onClickSettingsButton" />
     </div>
   
@@ -150,6 +175,7 @@ function onClickResetButton() {
 
 .play-page-header {
   display: flex;
+  gap: 5rem;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
@@ -162,6 +188,13 @@ function onClickResetButton() {
   .logo {
     max-width: 80%;
     max-height: 5.4rem;
+  }
+
+  .elapsed-time {
+    font-size: 3rem;
+    font-weight: bold;
+    line-height: 1;
+    color: #fffa;
   }
 
   .settings-button {

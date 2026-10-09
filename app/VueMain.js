@@ -9,5 +9,5 @@ const props = GlobalVueProps;
 
 const app = createApp(App);
 app.use(VueTippy);
-app.provide('props', props); // Connect the ThreeVueInterface to the root Vue component
+app.provide('props', props); // Connect the global Vue props to the root Vue component
 app.mount('#vueApp'); // Mount the Vue app to the #vueApp DOM element, see index.html

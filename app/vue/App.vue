@@ -7,7 +7,7 @@ import SudokuUi from './cmp/board/SudokuUi.vue';
 
 const modes = Constants.modes;
 
-// Receive as app.provide() / inject() so we can more easily expose to ThreeVueInterface
+// Receive as app.provide() / inject() so we can more easily expose to GlobalVueProps
 const props = inject('props');
 </script>
 
@@ -16,7 +16,7 @@ const props = inject('props');
     <div class="mainColumn">
       <SettingsScreen v-if="props.mode === modes.settings" :settings="props.userSettings" />
       <TitleScreen v-if="props.mode === modes.title" :userSettings="props.userSettings" />
-      <SudokuUi v-if="props.mode === modes.play" :settings="props.userSettings" :mode="props.mode" :board="props.board" />
+      <SudokuUi v-if="props.mode === modes.play" :settings="props.userSettings" :mode="props.mode" :board="props.board" :timer="props.timer" />
     </div>
   </div>
 </template>

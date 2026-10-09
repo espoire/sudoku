@@ -10,6 +10,13 @@ const GlobalVueProps = reactive({
     contents: [],
   },
 
+  timer: {
+    startTime: 0,
+    totalPausesLength: 0,
+    paused: false,
+    elapsedTimeAtPause: 0,
+  },
+
   /** Programmatically copied from Settings.user; only need to intialize these keys to avoid crash-on-load due to access before programmatic initialization. */
   userSettings: {},
 });
