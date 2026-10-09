@@ -41,7 +41,7 @@ function onKeydown(event) {
 </script>
 
 <template>
-  <div class="settings-screen">
+  <div class="settings-screen" @click.stop>
     <div class="settings-header">
       <span>⚙ Settings</span>
       <PrettyButton

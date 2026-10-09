@@ -16,7 +16,7 @@ const props = inject('props');
     <div class="mainColumn">
       <SettingsScreen v-if="props.mode === modes.settings" :settings="props.userSettings" />
       <TitleScreen v-if="props.mode === modes.title" :userSettings="props.userSettings" />
-      <SudokuUi v-if="props.mode === modes.play" :board="props.board" />
+      <SudokuUi v-if="props.mode === modes.play" :mode="props.mode" :board="props.board" />
     </div>
   </div>
 </template>

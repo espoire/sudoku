@@ -48,6 +48,16 @@ export default class ModalManager {
     ModalManager.#modalStack.splice(lastMatchIndex, 1);
   }
 
+  /**
+   * Checks if the modal with the given name is currently on top of the modal stack.
+   * @param {string} name The name of the modal to check
+   * @returns {boolean} True if the modal is on top, false otherwise
+   */
+  static isOnTop(name) {
+    const topModal = last(ModalManager.#modalStack);
+    return topModal?.name === name;
+  }
+
   static init() {
     if (ModalManager.#initialized) return;
     ModalManager.#initialized = true;

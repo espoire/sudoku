@@ -6,8 +6,12 @@ import PrettyButton from '/app/vue/cmp/util/PrettyButton.vue';
 import { range } from '/app/util/Array.js';
 import Globals from '/app/Globals.js';
 import GameController from '/app/game/GameController.js';
+import Constants from '/app/Constants.js';
+
+const modes = Constants.modes;
 
 const props = defineProps({
+  mode: String,
   board: {
     size: {
       x: Number,
@@ -40,10 +44,21 @@ function onPressNumeral(value) {
   Globals.gameController.boardInteractor.handleNumeralInput(value);
 }
 
+function onUnhandledClick() {
+  if (!ModalManager.isOnTop('SudokuUi.vue') || props.mode !== modes.play) return;
+  Globals.gameController.boardInteractor.clearSelection();
+}
+
 const numerals = range(1, 9).map(n => `${n}`);
 const clearDigits = [' ', '0', 'Delete', 'Backspace'];
-onMounted(() => ModalManager.register('SudokuUi.vue', { onKeydown }));
-onUnmounted(() => ModalManager.unregister('SudokuUi.vue'));
+onMounted(() => {
+  ModalManager.register('SudokuUi.vue', { onKeydown });
+  window.addEventListener('click', onUnhandledClick);
+});
+onUnmounted(() => {
+  ModalManager.unregister('SudokuUi.vue');
+  window.removeEventListener('click', onUnhandledClick);
+});
 function onKeydown(event) {
   if (event.key === 'F1') {
     onClickSettingsButton();
@@ -85,7 +100,7 @@ function onClickResetButton() {
   <div class="column-wrap">
     <div class="play-page-header">
       <img class="logo" src="/img/name.min.svg" />
-      <img class="settings-button" src="/img/pause-button.min.svg" @click="onClickSettingsButton" />
+      <img class="settings-button" src="/img/pause-button.min.svg" @click.stop="onClickSettingsButton" />
     </div>
   
     <div class="board-wrap" ref="boardEl"
@@ -95,7 +110,8 @@ function onClickResetButton() {
           @pointermove="dragger.drag"
           @pointerup="dragger.end"
           @pointercancel="dragger.end"
-          @dblclick="handleDoubleClick">
+          @dblclick="handleDoubleClick"
+          @click.stop>
       <div class="board-row" v-for="i in range(props.board.size.y)" :key="i">
         <div class="board-cell"
           v-for="j in range(props.board.size.x)" :key="j"
@@ -116,7 +132,7 @@ function onClickResetButton() {
     </div>
   
     <div class="controls-footer">
-      <PrettyButton class="reset-button" @click="onClickResetButton">
+      <PrettyButton class="reset-button" @click.stop="onClickResetButton">
         Reset this Puzzle
       </PrettyButton>
     </div>
