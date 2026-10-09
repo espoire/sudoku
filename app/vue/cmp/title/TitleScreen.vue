@@ -12,7 +12,7 @@ function onClickStart() {
   <!-- <AmbushBanner /> Uncomment / replace for easy Vue component testing. -->
   <div class="titleScreen">
     <div class="logoWrap">
-      <img class="logo" src="/img/Name Logo.min.svg" />
+      <img class="logo" src="/img/Name with shadow.min.svg" />
     </div>
     <div class="buttons">
       <button id="startGame" @click="onClickStart">Begin</button>
