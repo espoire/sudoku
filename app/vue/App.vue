@@ -3,7 +3,7 @@ import { inject } from 'vue';
 import TitleScreen from './cmp/title/TitleScreen.vue';
 import SettingsScreen from './cmp/settings/SettingsScreen.vue';
 import Constants from '../Constants.js';
-import SudokuUi from './cmp/SudokuUi.vue';
+import SudokuUi from './cmp/board/SudokuUi.vue';
 
 const modes = Constants.modes;
 

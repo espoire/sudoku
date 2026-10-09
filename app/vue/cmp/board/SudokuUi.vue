@@ -1,9 +1,10 @@
 <script setup>
 import { computed, onMounted, onUnmounted, ref } from 'vue';
-import ModalManager from '../ModalManager.js';
-import { range } from '../../util/Array.js';
-import Globals from '../../Globals.js';
-import GameController from '../../game/GameController.js';
+import DragSelectionController from './DragSelectionController.js';
+import ModalManager from '/app/vue/ModalManager.js';
+import { range } from '/app/util/Array.js';
+import Globals from '/app/Globals.js';
+import GameController from '/app/game/GameController.js';
 
 const props = defineProps({
   board: {
@@ -16,6 +17,9 @@ const props = defineProps({
     },
   },
 });
+
+const boardEl = ref(null);
+const dragger = new DragSelectionController(boardEl);
 
 const size = computed(() => {
   const rems = 100 / Math.max(props.board.size.x, props.board.size.y);
@@ -70,53 +74,6 @@ function handleDoubleClick(event) {
   const { row, column } = cellTarget;
   Globals.gameController.boardInteractor.selectAllMatchingValues(row, column);
 }
-
-const boardEl = ref(null);
-let dragging = false;
-let visitedCells = null;
-function startDrag(event) {
-  dragging = true;
-  visitedCells = new Set();
-
-  boardEl.value.setPointerCapture(event.pointerId);
-
-  notifyDragCell(event);
-}
-
-function getCellTarget(event) {
-  const element = document.elementFromPoint(event.clientX, event.clientY);
-  const cell = element?.closest('.board-cell');
-  if (!cell) return;
-
-  const cellId = cell.dataset.cell;
-  const [row, column] = cellId.split(',').map(Number);
-
-  return { row, column };
-}
-
-function notifyDragCell(event) {
-  const element = document.elementFromPoint(event.clientX, event.clientY);
-  const cell = element?.closest('.board-cell');
-  if (!cell) return;
-
-  const cellId = cell.dataset.cell;
-  if (visitedCells.has(cellId)) return;
-  visitedCells.add(cellId);
-
-  const [row, column] = cellId.split(',').map(Number);
-  Globals.gameController.boardInteractor.handleCellDragEnter(row, column);
-}
-
-function drag(event) {
-  if (!dragging) return;
-  notifyDragCell(event);
-}
-
-function endDrag(event) {
-  dragging = false;
-  visitedCells = null;
-  boardEl.value.releasePointerCapture(event.pointerId);
-}
 </script>
 
 <template>
@@ -128,10 +85,10 @@ function endDrag(event) {
   <div class="board-wrap" ref="boardEl"
         v-if="props.board && props.board.size && props.board.contents"
         :style="{ '--size': size }"
-        @pointerdown="startDrag"
-        @pointermove="drag"
-        @pointerup="endDrag"
-        @pointercancel="endDrag"
+        @pointerdown="dragger.start"
+        @pointermove="dragger.drag"
+        @pointerup="dragger.end"
+        @pointercancel="dragger.end"
         @dblclick="handleDoubleClick">
     <div class="board-row" v-for="i in range(props.board.size.y)" :key="i">
       <div class="board-cell"

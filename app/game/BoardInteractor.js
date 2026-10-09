@@ -25,9 +25,20 @@ export default class BoardInteractor {
    * @param {number} column The column index of the cell.
    */
   handleCellActivation(row, column) {
+    // If the target cell is the ONLY selected cell, deselect it instead of selecting it again.
+    const selection = this.#listSelection();
+    if (selection.length === 1 && selection[0].row === row && selection[0].column === column) {
+      this.selectedCells[row][column] = false;
+      this.updateVue();
+      console.log(`Deselected cell at row ${row}, column ${column}`);
+      return;
+    }
+
+    // Else, replace the current selection with the newly activated cell.
     this.clearSelection();
     this.selectedCells[row][column] = !this.selectedCells[row][column];
     this.updateVue();
+    console.log(`Selected cell at row ${row}, column ${column}`);
   }
 
   handleCellDragEnter(row, column) {
