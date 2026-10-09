@@ -1,0 +1,19 @@
+Ctrl+A selects ALL cells
+Multi-selection by holding ctrl+click to add additional cells-selected when you already have one or more selected
+Remove-from-selection by ctrl+click a cell already selected, and drag behavior becomes removal if started thusly
+Visual numpad for mouse-only numeral input
+Press [the same number which is contained in all selected cells] acts as a delete command
+Deselect all cells by clicking within the app but outside the Sudoku grid
+Option for "if no cells selected, but one is hovered, relay keyboard inputs (e.g. numerals, delete) to the hovered cell" a la WoW mouseover macros
+Reset this puzzle button
+Undo/Redo
+Gameplay timer, pauses when options pane is open
+
+Highlight errors in red
+  always chec always and turn errors red
+  allert when theres an obvious mistake (dupilicate number in a box row or col)
+
+chec when complete and give win or mistae allert
+option for pencil type anwers vs perm pen marks
+"put all the settings under a menu of customize your game"
+make the outside box as thick as the box seperators

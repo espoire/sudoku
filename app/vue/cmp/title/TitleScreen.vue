@@ -1,15 +1,7 @@
 <script setup>
-import { ref } from 'vue';
 import Globals from '../../../Globals.js';
-import { getEpithet } from './epithet.js';
 
 defineProps(['userSettings']);
-
-const epithet = ref(getEpithet());
-
-function onClickEpithet() {
-  epithet.value = getEpithet()
-}
 
 function onClickStart() {
   Globals.gameController.onAdvanceFromTitleScreen()
@@ -20,8 +12,7 @@ function onClickStart() {
   <!-- <AmbushBanner /> Uncomment / replace for easy Vue component testing. -->
   <div class="titleScreen">
     <div class="logoWrap">
-      <span class="logo">Sudoku</span>
-      <div class="epithet" v-text="epithet" @click="onClickEpithet" />
+      <img class="logo" src="/img/Name Logo.min.svg" />
     </div>
     <div class="buttons">
       <button id="startGame" @click="onClickStart">Begin</button>
@@ -44,31 +35,8 @@ function onClickStart() {
   }
   
   .logo {
-    &:first-child {
-      font-size: 16.5rem;
-    }
-
-    font-size: 12rem;
-    color: rgb(from var(--color-text) r g b / 30%);
-    text-transform: uppercase;
-    line-height: 1;
-
-    background: linear-gradient(80deg, green, green, blue, blue, red, red, yellow, yellow, purple, purple, pink, pink);
-    background-clip: text;
-    -webkit-background-clip: text;
-    filter: drop-shadow(0.5rem 0.5rem 0 #fff7);
-  }
-
-  .epithet {
-    position: absolute;
-    left: calc(50% + 25rem);
-    top: 100%;
-    rotate: -20deg;
-    font-size: 3rem;
-    color: yellow;
-    filter: drop-shadow(0.2rem 0.2rem 0.1rem #000);
-    animation: pulsateSize 3s linear infinite;
-    line-height: 1.2;
+    margin-top: 2rem;
+    max-width: 80%;
   }
 
   .buttons {

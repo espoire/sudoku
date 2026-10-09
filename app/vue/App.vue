@@ -94,6 +94,6 @@ const props = inject('props');
   width: 100dvw;
   max-width: min(60dvh, 100dvw);
   left: calc(50dvw - min(30dvh, 50dvw));
-  background-color: #8882;
+  background-color: rgb(54, 18, 44);
 }
 </style>

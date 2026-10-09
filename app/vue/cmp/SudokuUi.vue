@@ -1,6 +1,5 @@
 <script setup>
 import { computed, onMounted, onUnmounted, ref } from 'vue';
-import PrettyButton from './util/PrettyButton.vue';
 import ModalManager from '../ModalManager.js';
 import { range } from '../../util/Array.js';
 import Globals from '../../Globals.js';
@@ -119,12 +118,8 @@ function endDrag(event) {
 
 <template>
   <div class="play-page-header">
-    <h1>
-      Sudoku!
-    </h1>
-    <PrettyButton class="settings-button" @click="onClickSettingsButton">
-      ⚙ Settings
-    </PrettyButton>
+    <img class="logo" src="/img/Name Logo.min.svg" />
+    <img class="settings-button" src="/img/Block logo.min.svg" @click="onClickSettingsButton" />
   </div>
 
   <div class="board-wrap" ref="boardEl"
@@ -166,15 +161,20 @@ function endDrag(event) {
   margin-bottom: 2rem;
   border-bottom: .5rem solid #8886;
 
-  h1 {
-    color: var(--color-heading);
-    font-weight: bold;
+  .logo {
+    max-width: 80%;
+    max-height: 5.4rem;
   }
 
   .settings-button {
-    color: var(--color-text);
-    background-color: var(--color-button-back);
-    font-size: 3.5rem;
+    pointer-events: all;
+    max-height: 5.4rem;
+    transition: scale 0.2s, filter 0.2s;
+
+    &:hover {
+      filter: brightness(1.2) drop-shadow(0.5rem 0.5rem 0.2rem #fff3);
+      scale: 1.1;
+    }
   }
 }
 
