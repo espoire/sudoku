@@ -57,6 +57,9 @@ function onKeydown(event) {
 
   } else if (clearDigits.includes(event.key)) {
     onPressNumeral(null);
+
+  } else if (event.ctrlKey && event.key === 'a') {
+    Globals.gameController.boardInteractor.selectAllCells();
   }
 }
 

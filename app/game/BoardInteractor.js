@@ -85,11 +85,20 @@ export default class BoardInteractor {
    * Clears the current selection of cells.
    */
   clearSelection() {
+    this.#setAllCellsSelection(false);
+  }
+
+  selectAllCells() {
+    this.#setAllCellsSelection(true);
+  }
+
+  #setAllCellsSelection(state) {
     for (let row = 0; row < this.selectedCells.length; row++) {
       for (let column = 0; column < this.selectedCells[row].length; column++) {
-        this.selectedCells[row][column] = false;
+        this.selectedCells[row][column] = state;
       }
     }
+
     this.updateVue();
   }
 
