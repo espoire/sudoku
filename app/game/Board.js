@@ -64,6 +64,14 @@ export default class Board {
     return true;
   }
 
+  reset() {
+    for (let y = 0; y < this.size.y; y++) {
+      for (let x = 0; x < this.size.x; x++) {
+        if (!this.cells[y][x].locked) this.cells[y][x].value = null;
+      }
+    }
+  }
+
   /**
    * @returns {{ win: boolean, valid?: boolean, errors?: Array<{ message: string, location: Array<{ row: number, column: number }>}> }}
    */

@@ -2,6 +2,7 @@
 import { computed, onMounted, onUnmounted, ref } from 'vue';
 import DragSelectionController from './DragSelectionController.js';
 import ModalManager from '/app/vue/ModalManager.js';
+import PrettyButton from '/app/vue/cmp/util/PrettyButton.vue';
 import { range } from '/app/util/Array.js';
 import Globals from '/app/Globals.js';
 import GameController from '/app/game/GameController.js';
@@ -74,43 +75,62 @@ function handleDoubleClick(event) {
   const { row, column } = cellTarget;
   Globals.gameController.boardInteractor.selectAllMatchingValues(row, column);
 }
+
+function onClickResetButton() {
+  Globals.gameController.boardInteractor.resetPuzzle();
+}
 </script>
 
 <template>
-  <div class="play-page-header">
-    <img class="logo" src="/img/name.min.svg" />
-    <img class="settings-button" src="/img/pause-button.min.svg" @click="onClickSettingsButton" />
-  </div>
-
-  <div class="board-wrap" ref="boardEl"
-        v-if="props.board && props.board.size && props.board.contents"
-        :style="{ '--size': size }"
-        @pointerdown="dragger.start"
-        @pointermove="dragger.drag"
-        @pointerup="dragger.end"
-        @pointercancel="dragger.end"
-        @dblclick="handleDoubleClick">
-    <div class="board-row" v-for="i in range(props.board.size.y)" :key="i">
-      <div class="board-cell"
-        v-for="j in range(props.board.size.x)" :key="j"
-        :class="{
-          given: props.board.contents[i][j].given,
-          error: props.board.contents[i][j].error,
-          selected: props.board.contents[i][j].selected,
-          'thicker-top': i%3 === 0,
-          'thicker-bottom': i%3 === 2,
-          'thicker-left': j%3 === 0,
-          'thicker-right': j%3 === 2,
-        }"
-        :data-cell="`${i},${j}`"
-        v-text="props.board.contents[i][j].value"
-        @pointerdown="() => onActivateCell(i, j)"
-      />
+  <div class="column-wrap">
+    <div class="play-page-header">
+      <img class="logo" src="/img/name.min.svg" />
+      <img class="settings-button" src="/img/pause-button.min.svg" @click="onClickSettingsButton" />
+    </div>
+  
+    <div class="board-wrap" ref="boardEl"
+          v-if="props.board && props.board.size && props.board.contents"
+          :style="{ '--size': size }"
+          @pointerdown="dragger.start"
+          @pointermove="dragger.drag"
+          @pointerup="dragger.end"
+          @pointercancel="dragger.end"
+          @dblclick="handleDoubleClick">
+      <div class="board-row" v-for="i in range(props.board.size.y)" :key="i">
+        <div class="board-cell"
+          v-for="j in range(props.board.size.x)" :key="j"
+          :class="{
+            given: props.board.contents[i][j].given,
+            error: props.board.contents[i][j].error,
+            selected: props.board.contents[i][j].selected,
+            'thicker-top': i%3 === 0,
+            'thicker-bottom': i%3 === 2,
+            'thicker-left': j%3 === 0,
+            'thicker-right': j%3 === 2,
+          }"
+          :data-cell="`${i},${j}`"
+          v-text="props.board.contents[i][j].value"
+          @pointerdown="() => onActivateCell(i, j)"
+        />
+      </div>
+    </div>
+  
+    <div class="controls-footer">
+      <PrettyButton class="reset-button" @click="onClickResetButton">
+        Reset this Puzzle
+      </PrettyButton>
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
+.column-wrap {
+  display: flex;
+  flex-direction: column;
+  width: 100rem;
+  height: 100%;
+}
+
 .play-page-header {
   display: flex;
   flex-direction: row;
@@ -148,62 +168,76 @@ function handleDoubleClick(event) {
   pointer-events: all;
 
   --half-gridline-thickness: 0.75rem;
-}
 
-.board-row {
-  display: flex;
-}
+  .board-row {
+    display: flex;
 
-.board-cell {
-  width: var(--size, 10rem);
-  height: var(--size, 10rem);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid var(--color-gridlines);
-  color: var(--color-text);
-  background-color: var(--color-cells);
-  padding-bottom: 0.6rem;
+    .board-cell {
+      width: var(--size, 10rem);
+      height: var(--size, 10rem);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--color-gridlines);
+      color: var(--color-text);
+      background-color: var(--color-cells);
+      padding-bottom: 0.6rem;
 
-  transition: outline 0.1s;
+      transition: outline 0.1s;
 
-  &.given {
-    font-weight: bold;
-    color: var(--color-givens);
-  }
+      &.given {
+        font-weight: bold;
+        color: var(--color-givens);
+      }
 
-  &.error {
-    color: var(--color-error-text);
-    background-color: var(--color-error);
-  }
+      &.error {
+        color: var(--color-error-text);
+        background-color: var(--color-error);
+      }
 
-  &.thicker-top {
-    border-top-width: var(--half-gridline-thickness, 0.5rem);
-  }
-  &.thicker-bottom {
-    border-bottom-width: var(--half-gridline-thickness, 0.5rem);
-  }
-  &.thicker-left {
-    border-left-width: var(--half-gridline-thickness, 0.5rem);
-  }
-  &.thicker-right {
-    border-right-width: var(--half-gridline-thickness, 0.5rem);
-  }
+      &.thicker-top {
+        border-top-width: var(--half-gridline-thickness, 0.5rem);
+      }
+      &.thicker-bottom {
+        border-bottom-width: var(--half-gridline-thickness, 0.5rem);
+      }
+      &.thicker-left {
+        border-left-width: var(--half-gridline-thickness, 0.5rem);
+      }
+      &.thicker-right {
+        border-right-width: var(--half-gridline-thickness, 0.5rem);
+      }
 
-  &:hover {
-    --outline-size: calc(var(--size, 10rem) / 20);
-    outline: var(--outline-size) solid #44f4;
-    outline-offset: calc(-1 * var(--outline-size) - 2px);
-  }
+      &:hover {
+        --outline-size: calc(var(--size, 10rem) / 20);
+        outline: var(--outline-size) solid #44f4;
+        outline-offset: calc(-1 * var(--outline-size) - 2px);
+      }
 
-  &.selected {
-    --outline-size: calc(var(--size, 10rem) / 10);
-    outline: var(--outline-size) solid #22fb;
-    outline-offset: calc(-1 * var(--outline-size) - 2px);
+      &.selected {
+        --outline-size: calc(var(--size, 10rem) / 10);
+        outline: var(--outline-size) solid #22fb;
+        outline-offset: calc(-1 * var(--outline-size) - 2px);
 
-    &:hover {
-      outline-color: #33f8;
+        &:hover {
+          outline-color: #33f8;
+        }
+      }
     }
+  }
+}
+
+.controls-footer {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 2rem;
+
+  .reset-button {
+    background-color: var(--color-button-destructive);
+    font-size: 4rem;
   }
 }
 </style>

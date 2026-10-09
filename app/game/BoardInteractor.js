@@ -19,6 +19,13 @@ export default class BoardInteractor {
     );
   }
 
+  resetPuzzle() {
+    this.board.reset();
+    this.clearSelection();
+    this.#cachedValidationResult = null;
+    this.updateVue();
+  }
+
   /**
    * Handles user input for clicking on a cell.
    * @param {number} row The row index of the cell.
