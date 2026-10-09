@@ -31,7 +31,7 @@ const props = inject('props');
   -webkit-user-drag: none;
 
   color: var(--color-text);
-  background-color: color-mix(in srgb, var(--color-background) 95%, transparent);
+  background-color: rgb(54, 18, 44);
   transition:
     background-color 0.5s;
 

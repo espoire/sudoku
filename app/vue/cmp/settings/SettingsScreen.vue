@@ -8,12 +8,10 @@ import UserSettingsManager from '../../../UserSettingsManager.js';
 import ModalManager from '../../ModalManager.js';
 import KeyboardHelper from '../../../util/KeyboardHelper.js';
 
+defineProps(['settings']);
 const toggle = UserSettingsManager.toggleSetting;
 const set = UserSettingsManager.setSetting;
-
-const props = defineProps(['settings']);
-
-const settingsListElement = ref(null);
+const settingsListEl = ref(null);
 
 function doSave() {
   Globals.saveFile?.save({ force: true }); // Bypass dev-test save prevention; if we manually change a setting, we want it saved.
@@ -26,7 +24,7 @@ function onClickReturnButton() {
 /** @param {'up' | 'down'} direction */
 function scroll(direction) {
   const amount = direction === 'up' ? -100 : 100;
-  settingsListElement.value?.scrollBy?.({ top: amount, behavior: 'smooth' });
+  settingsListEl.value?.scrollBy?.({ top: amount, behavior: 'smooth' });
 }
 
 onMounted(() => ModalManager.register('SettingsScreen.vue', { onKeydown }));
@@ -54,7 +52,7 @@ function onKeydown(event) {
       </PrettyButton>
     </div>
 
-    <div class="settings-list" ref="settingsListElement">
+    <div class="settings-list" ref="settingsListEl">
 
       <!-- Dark/light mode toggle -->
       <div>
@@ -78,6 +76,9 @@ function onKeydown(event) {
   width: 100%;
   min-height: 100%;
   font-size: 5rem;
+  background-color: color-mix(in srgb, var(--color-background) 90%, transparent);
+
+  transition: background-color 0.2s;
 
   button, input {
     pointer-events: all;
@@ -132,7 +133,7 @@ function onKeydown(event) {
   height: 88dvh;
   max-height: 88dvh;
 
-  overflow-y: scroll;
+  overflow-y: auto;
   pointer-events: all;
 
   &, & > div {
