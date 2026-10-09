@@ -3,7 +3,6 @@ Remove-from-selection by ctrl+click a cell already selected, and drag behavior b
 Visual numpad for mouse-only numeral input
 Press [the same number which is contained in all selected cells] acts as a delete command
 Option for "if no cells selected, but one is hovered, relay keyboard inputs (e.g. numerals, delete) to the hovered cell" a la WoW mouseover macros
-Reset this puzzle button
 Undo/Redo
 Gameplay timer, pauses when options pane is open
 
@@ -11,6 +10,5 @@ Highlight errors in red
   Option: Also mark when the known solution is rendered impossible
   Option: Do not mark during play, only list errors on board completion
 
-option for pencil type anwers vs perm pen marks
 "put all the settings under a menu of customize your game"
 make the outside box as thick as the box seperators

@@ -63,6 +63,17 @@ function onKeydown(event) {
           @toggle="toggle('darkMode')" />
       </div>
 
+      <!-- User-entered digit style toggle -->
+      <div>
+        <label for="penDigitStyleToggle">My Digit Style</label>
+        <ToggleSwitch
+          id="penDigitStyleToggle"
+          :labels="{ off: 'Pencil', on: 'Pen' }"
+          :on="settings.penDigitStyle"
+          @toggle="toggle('penDigitStyle')" />
+        <span class="hint">Pen-style marks look just like the puzzle-given digits.</span>
+      </div>
+
     </div>
   </div>
 </template>
@@ -105,8 +116,7 @@ function onKeydown(event) {
     font-size: 60%;
     font-style: italic;
     opacity: 0.7;
-    margin-top: -1.2rem;
-    margin-bottom: 2rem;
+    margin-top: -0.5rem;
     line-height: 1.2;
     text-align: center;
   }

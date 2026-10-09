@@ -16,6 +16,7 @@ const Settings = {
   user: {
     isMobile: educatedGuessIfEnvironmentIsMobile(),
     darkMode: false,
+    penDigitStyle: false,
   },
 };
 

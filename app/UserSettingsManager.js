@@ -9,6 +9,7 @@ const userSettings = Settings.user;
 const specialOptionsTypes = {
   isMobile: 'boolean',
   darkMode: 'boolean',
+  penDigitStyle: 'boolean',
 };
 
 export default class UserSettingsManager {

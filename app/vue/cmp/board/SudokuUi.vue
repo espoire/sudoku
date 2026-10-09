@@ -11,6 +11,7 @@ import Constants from '/app/Constants.js';
 const modes = Constants.modes;
 
 const props = defineProps({
+  settings: Object,
   mode: String,
   board: {
     size: {
@@ -97,7 +98,7 @@ function onClickResetButton() {
 </script>
 
 <template>
-  <div class="column-wrap">
+  <div class="column-wrap" :class="{ pen: settings.penDigitStyle }">
     <div class="play-page-header">
       <img class="logo" src="/img/name.min.svg" />
       <img class="settings-button" src="/img/pause-button.min.svg" @click.stop="onClickSettingsButton" />
@@ -201,7 +202,7 @@ function onClickResetButton() {
 
       transition: outline 0.1s;
 
-      &.given {
+      &.given, .pen & {
         font-weight: bold;
         color: var(--color-givens);
       }
