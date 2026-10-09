@@ -67,10 +67,8 @@ export default class Timer {
 
     if (h > 0) {
       formatted = `${h}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
-    } else if (m > 0) {
-      formatted = `${m}:${s.toString().padStart(2, '0')}`;
     } else {
-      formatted = `${s}`;
+      formatted = `${m}:${s.toString().padStart(2, '0')}`;
     }
 
     if (includeTenths) formatted += `.${tenths}`;

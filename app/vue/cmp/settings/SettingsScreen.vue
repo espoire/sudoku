@@ -74,6 +74,16 @@ function onKeydown(event) {
         <span class="hint">Pen-style marks look just like the puzzle-given digits.</span>
       </div>
 
+      <!-- Show timer tenths toggle -->
+      <div>
+        <label for="showTimerTenthsToggle">Puzzle Timer Format</label>
+        <ToggleSwitch
+          id="showTimerTenthsToggle"
+          :labels="{ off: '1:23', on: '1:23.4' }"
+          :on="settings.showTimerTenths"
+          @toggle="toggle('showTimerTenths')" />
+      </div>
+
     </div>
   </div>
 </template>

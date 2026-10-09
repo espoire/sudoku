@@ -63,7 +63,7 @@ const displayedTime = ref('');
 let updateElapsedTimeInterval;
 function updateElapsedTime() {
   const millis = Timer.getElapsedTime(props.timer);
-  displayedTime.value = Timer.format(millis);
+  displayedTime.value = Timer.format(millis, props.settings?.showTimerTenths ?? true);
 }
 function pauseTimer() { Globals.gameController.timer.pause(); }
 function resumeTimer() { Globals.gameController.timer.resume(); }

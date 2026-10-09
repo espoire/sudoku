@@ -10,6 +10,7 @@ const specialOptionsTypes = {
   isMobile: 'boolean',
   darkMode: 'boolean',
   penDigitStyle: 'boolean',
+  showTimerTenths: 'boolean',
 };
 
 export default class UserSettingsManager {
