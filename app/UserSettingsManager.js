@@ -10,6 +10,7 @@ const specialOptionsTypes = {
   isMobile: 'boolean',
   darkMode: 'boolean',
   penDigitStyle: 'boolean',
+  timer: 'boolean',
   showTimerTenths: 'boolean',
 };
 

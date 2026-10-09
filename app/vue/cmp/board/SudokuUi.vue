@@ -125,7 +125,7 @@ function onClickResetButton() {
     <div class="play-page-header">
       <img class="logo" src="/img/name.min.svg" />
       <div style="flex: 1" />
-      <div class="elapsed-time" v-text="displayedTime" />
+      <div class="elapsed-time" v-if="settings?.timer" v-text="displayedTime" />
       <img class="settings-button" src="/img/pause-button.min.svg" @click.stop="onClickSettingsButton" />
     </div>
   

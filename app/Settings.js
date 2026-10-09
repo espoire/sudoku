@@ -17,6 +17,7 @@ const Settings = {
     isMobile: educatedGuessIfEnvironmentIsMobile(),
     darkMode: false,
     penDigitStyle: false,
+    timer: true,
     showTimerTenths: false,
   },
 };

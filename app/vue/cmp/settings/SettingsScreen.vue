@@ -63,6 +63,26 @@ function onKeydown(event) {
           @toggle="toggle('darkMode')" />
       </div>
 
+      <!-- Show puzzle timer toggle -->
+      <div>
+        <label for="showTimerToggle">Timer</label>
+        <ToggleSwitch
+          id="showTimerToggle"
+          :labels="{ off: 'Hide', on: 'Show' }"
+          :on="settings.timer"
+          @toggle="toggle('timer')" />
+      </div>
+
+      <!-- Puzzle timer format toggle -->
+      <div :class="{ irrelevant: !settings.timer }">
+        <label for="showTimerTenthsToggle">Timer Format</label>
+        <ToggleSwitch
+          id="showTimerTenthsToggle"
+          :labels="{ off: '0:00', on: '0:00.0' }"
+          :on="settings.showTimerTenths"
+          @toggle="toggle('showTimerTenths')" />
+      </div>
+
       <!-- User-entered digit style toggle -->
       <div>
         <label for="penDigitStyleToggle">My Digit Style</label>
@@ -72,16 +92,6 @@ function onKeydown(event) {
           :on="settings.penDigitStyle"
           @toggle="toggle('penDigitStyle')" />
         <span class="hint">Pen-style marks look just like the puzzle-given digits.</span>
-      </div>
-
-      <!-- Show timer tenths toggle -->
-      <div>
-        <label for="showTimerTenthsToggle">Puzzle Timer Format</label>
-        <ToggleSwitch
-          id="showTimerTenthsToggle"
-          :labels="{ off: '1:23', on: '1:23.4' }"
-          :on="settings.showTimerTenths"
-          @toggle="toggle('showTimerTenths')" />
       </div>
 
     </div>
@@ -162,6 +172,10 @@ function onKeydown(event) {
     align-items: center;
     width: 100%;
   }
+
+  & > div {
+    transition: opacity 0.2s;
+  }
 }
 
 .row {
@@ -178,5 +192,13 @@ function onKeydown(event) {
 
 .smaller {
   font-size: 80%;
+}
+
+.irrelevant {
+  opacity: 0.4;
+
+  & label {
+    opacity: 0.6;
+  }
 }
 </style>
