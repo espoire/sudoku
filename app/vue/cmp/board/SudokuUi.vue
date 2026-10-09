@@ -78,8 +78,8 @@ function handleDoubleClick(event) {
 
 <template>
   <div class="play-page-header">
-    <img class="logo" src="/img/Name Logo.min.svg" />
-    <img class="settings-button" src="/img/Block logo.min.svg" @click="onClickSettingsButton" />
+    <img class="logo" src="/img/name.min.svg" />
+    <img class="settings-button" src="/img/pause-button.min.svg" @click="onClickSettingsButton" />
   </div>
 
   <div class="board-wrap" ref="boardEl"

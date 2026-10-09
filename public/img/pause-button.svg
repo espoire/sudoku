@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="184.28131"
+   height="209.1328"
+   viewBox="0 0 48.757761 55.333054"
+   version="1.1"
+   id="svg10789"
+   inkscape:version="1.4.3 (0d15f75, 2025-12-25)"
+   xml:space="preserve"
+   sodipodi:docname="pause-button.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"><sodipodi:namedview
+     id="namedview10791"
+     pagecolor="#808080"
+     bordercolor="#ffffff"
+     borderopacity="1"
+     inkscape:showpageshadow="false"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="true"
+     inkscape:deskcolor="#808080"
+     inkscape:document-units="px"
+     showgrid="false"
+     showborder="false"
+     inkscape:zoom="1.4142136"
+     inkscape:cx="144.24978"
+     inkscape:cy="126.92567"
+     inkscape:window-width="1718"
+     inkscape:window-height="1081"
+     inkscape:window-x="186"
+     inkscape:window-y="56"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="g239" /><defs
+     id="defs10786" /><g
+     inkscape:groupmode="layer"
+     id="g239"
+     inkscape:label="Logo 1"
+     style="display:inline"
+     transform="matrix(0.45783415,0,0,0.45783415,212.07086,63.581686)"><path
+       id="rect231"
+       style="fill:#ed5050;fill-opacity:1;stroke-width:0.7226;paint-order:stroke markers fill"
+       inkscape:label="salmon"
+       d="m -453.23686,-138.87493 c -5.52208,0 -9.96768,4.4456 -9.96768,9.96768 v 18.73893 63.443942 15.551441 3.18862 c 0,5.52207 4.44561,9.96768 9.96768,9.96768 h 18.74006 c 5.52208,0 9.96768,-4.44561 9.96768,-9.96768 v -3.18862 -15.551441 -76.323712 -5.85916 c 0,-5.52208 -4.4456,-9.96768 -9.96768,-9.96768 z" /><path
+       id="rect236"
+       style="display:inline;fill:#248b74;fill-opacity:1;stroke-width:0.7226;paint-order:stroke markers fill"
+       inkscape:label="teal"
+       d="m -385.41575,-138.87493 c -5.52208,0 -9.96768,4.4456 -9.96768,9.96768 v 10.07943 8.6595 69.857303 12.3267 c 0,5.52207 4.4456,9.96768 9.96768,9.96768 h 18.74009 c 5.52207,0 9.96768,-4.44561 9.96768,-9.96768 v -18.740061 c 0,-0.0076 -10e-4,-0.01495 -10e-4,-0.02257 v -63.421372 -8.6595 -10.07943 c 0,-5.52208 -4.44561,-9.96768 -9.96768,-9.96768 z" /></g></svg>
