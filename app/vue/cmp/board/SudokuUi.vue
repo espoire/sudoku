@@ -108,7 +108,7 @@ function onKeydown(event) {
 }
 
 function handleDoubleClick(event) {
-  const cellTarget = getCellTarget(event);
+  const cellTarget = dragger.getCellTarget(event);
   if (!cellTarget) return;
 
   const { row, column } = cellTarget;

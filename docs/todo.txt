@@ -1,10 +1,8 @@
 Multi-selection by holding ctrl+click to add additional cells-selected when you already have one or more selected
 Remove-from-selection by ctrl+click a cell already selected, and drag behavior becomes removal if started thusly
 Visual numpad for mouse-only numeral input
-Press [the same number which is contained in all selected cells] acts as a delete command
 Option for "if no cells selected, but one is hovered, relay keyboard inputs (e.g. numerals, delete) to the hovered cell" a la WoW mouseover macros
 Undo/Redo
-Gameplay timer, pauses when options pane is open
 
 Highlight errors in red
   Option: Also mark when the known solution is rendered impossible

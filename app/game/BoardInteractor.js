@@ -127,13 +127,23 @@ export default class BoardInteractor {
    */
   handleNumeralInput(value) {
     const selection = this.#listSelection();
-    let wroteAny = false;
 
-    for (const { row, column } of selection) {
-      const success = this.board.setValue(row, column, value);
-      wroteAny ||= success;
+    // If input is a digit and ALL editable selected cells already contain that digit, instead delete the value from all selected cells.
+    const isDigit = (value != null);
+    const editable = selection.filter(({ row, column }) => this.board.canEdit(row, column));
+    const allEditableContainSameValue = editable.every(({ row, column }) => this.board.getValue(row, column) === value);
+    if (isDigit && allEditableContainSameValue) {
+      value = null;
     }
 
+    // Apply the changes, note if any cells were successfully updated.
+    let wroteAny = false;
+    for (const { row, column } of editable) {
+      const changed = this.board.setValue(row, column, value);
+      wroteAny ||= changed;
+    }
+
+    // If any successful changes, re-validate
     let validationResult = null;
     if (wroteAny) {
       validationResult = this.board.checkWin();
@@ -142,6 +152,7 @@ export default class BoardInteractor {
       this.#cachedValidationResult = validationResult;
     }
 
+    // Update the UI with the new board state & validations.
     this.updateVue();
   }
 

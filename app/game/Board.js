@@ -54,14 +54,19 @@ export default class Board {
    * @param {number} row The row index of the cell.
    * @param {number} column The column index of the cell.
    * @param {number|null} value The value to set, or null to clear the cell.
-   * @returns {boolean} True if the value was set successfully, false if the cell is locked.
+   * @returns {boolean} True if the value was set successfully, false if the cell is locked or already contains the given value.
    */
   setValue(row, column, value) {
     const cell = this.cells[row][column];
     if (cell.locked) return false;
-    cell.value = value;
+    if (cell.value === value) return false;
 
+    cell.value = value;
     return true;
+  }
+
+  canEdit(row, column) {
+    return !this.cells[row][column].locked;
   }
 
   reset() {
