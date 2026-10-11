@@ -37,7 +37,6 @@ export default class BoardInteractor {
     if (selection.length === 1 && selection[0].row === row && selection[0].column === column) {
       this.selectedCells[row][column] = false;
       this.updateVue();
-      console.log(`Deselected cell at row ${row}, column ${column}`);
       return;
     }
 
@@ -45,7 +44,6 @@ export default class BoardInteractor {
     this.clearSelection();
     this.selectedCells[row][column] = !this.selectedCells[row][column];
     this.updateVue();
-    console.log(`Selected cell at row ${row}, column ${column}`);
   }
 
   handleCellDragEnter(row, column) {

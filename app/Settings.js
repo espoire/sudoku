@@ -8,7 +8,8 @@ const Settings = {
     // disableTestMode: true,
 
     log: {
-      modalEventRouting: true,
+      uiEventHandling: true,
+      modalEventRouting: false,
       uiModeChanges: false, // Logs whenever GameController.setMode is called (e.g. swapping fullscreen UIs like: combat/roleplay/map)
     },
   },
@@ -19,6 +20,7 @@ const Settings = {
     penDigitStyle: false,
     timer: true,
     showTimerTenths: false,
+    // mouseoverInput: false,
   },
 };
 

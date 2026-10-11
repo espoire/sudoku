@@ -3,8 +3,9 @@ import { computed, onMounted, onUnmounted, ref } from 'vue';
 import DragSelectionController from './DragSelectionController.js';
 import ModalManager from '/app/vue/ModalManager.js';
 import PrettyButton from '/app/vue/cmp/util/PrettyButton.vue';
-import Globals from '/app/Globals.js';
 import Constants from '/app/Constants.js';
+import Settings from '/app/Settings.js';
+import Globals from '/app/Globals.js';
 import GameController from '/app/game/GameController.js';
 import Timer from '/app/game/Timer.js';
 import { range } from '/app/util/Array.js';
@@ -41,20 +42,28 @@ const size = computed(() => {
   return `${rems}rem`;
 });
 
+function logEvent(methodName, ...args) {
+  if (!Settings?.test?.log?.uiEventHandling) return;
+  console.log(`[UI Event] ${methodName}`, ...args);
+}
+
 function onClickSettingsButton() {
+  logEvent('onClickSettingsButton');
   GameController.onSettingsClicked();
 }
 
 function onActivateCell(row, column) {
-  console.log(`Activating cell at row ${row}, column ${column}`);
+  logEvent('onActivateCell', row, column);
   Globals.gameController.boardInteractor.handleCellActivation(row, column);
 }
 
-function onPressNumeral(value) {
+function onNumeralInput(value) {
+  logEvent('onNumeralInput', value);
   Globals.gameController.boardInteractor.handleNumeralInput(value);
 }
 
 function onUnhandledClick() {
+  logEvent('onUnhandledClick');
   if (!ModalManager.isOnTop('SudokuUi.vue') || props.mode !== modes.play) return;
   Globals.gameController.boardInteractor.clearSelection();
 }
@@ -84,6 +93,7 @@ onUnmounted(() => {
   clearInterval(updateElapsedTimeInterval);
 });
 function onKeydown(event) {
+  logEvent('onKeydown', event);
   if (event.key === 'F1') {
     onClickSettingsButton();
 
@@ -97,17 +107,24 @@ function onKeydown(event) {
     }
 
   } else if (numerals.includes(event.key)) {
-    onPressNumeral(+event.key);
+    onNumeralInput(+event.key);
 
   } else if (clearDigits.includes(event.key)) {
-    onPressNumeral(null);
+    onNumeralInput(null);
 
   } else if (event.ctrlKey && event.key === 'a') {
     Globals.gameController.boardInteractor.selectAllCells();
   }
 }
 
+/** @param {number|null} value  The numeral clicked on the visual numpad, or null for the delete button. */
+function onVisualNumpadClick(value) {
+  logEvent('onVisualNumpadClick', value);
+  onNumeralInput(value);
+}
+
 function handleDoubleClick(event) {
+  logEvent('handleDoubleClick', event);
   const cellTarget = dragger.getCellTarget(event);
   if (!cellTarget) return;
 
@@ -116,6 +133,7 @@ function handleDoubleClick(event) {
 }
 
 function onClickResetButton() {
+  logEvent('onClickResetButton');
   Globals.gameController.boardInteractor.resetPuzzle();
 }
 </script>
@@ -158,6 +176,12 @@ function onClickResetButton() {
     </div>
   
     <div class="controls-footer">
+      <div class="visual-numpad">
+        <div class="board-cell" v-for="n in [1,2,3,4,5,6,7,8,9]" :key="n"
+            @click.stop="() => onVisualNumpadClick(n)"
+            v-text="n" />
+        <div class="board-cell delete" @click.stop="() => onVisualNumpadClick(null)">❌</div>
+      </div>
       <PrettyButton class="reset-button" @click.stop="onClickResetButton">
         Reset this Puzzle
       </PrettyButton>
@@ -218,61 +242,61 @@ function onClickResetButton() {
   pointer-events: all;
 
   --half-gridline-thickness: 0.75rem;
+}
 
-  .board-row {
-    display: flex;
+.board-row {
+  display: flex;
+}
 
-    .board-cell {
-      width: var(--size, 10rem);
-      height: var(--size, 10rem);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: 1px solid var(--color-gridlines);
-      color: var(--color-text);
-      background-color: var(--color-cells);
-      padding-bottom: 0.6rem;
+.board-cell {
+  width: var(--size, 10rem);
+  height: var(--size, 10rem);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--color-gridlines);
+  color: var(--color-text);
+  background-color: var(--color-cells);
+  padding-bottom: 0.6rem;
 
-      transition: outline 0.1s;
+  transition: outline 0.1s;
 
-      &.given, .pen & {
-        font-weight: bold;
-        color: var(--color-givens);
-      }
+  &.given, .pen & {
+    font-weight: bold;
+    color: var(--color-givens);
+  }
 
-      &.error {
-        color: var(--color-error-text);
-        background-color: var(--color-error);
-      }
+  &.error {
+    color: var(--color-error-text);
+    background-color: var(--color-error);
+  }
 
-      &.thicker-top {
-        border-top-width: var(--half-gridline-thickness, 0.5rem);
-      }
-      &.thicker-bottom {
-        border-bottom-width: var(--half-gridline-thickness, 0.5rem);
-      }
-      &.thicker-left {
-        border-left-width: var(--half-gridline-thickness, 0.5rem);
-      }
-      &.thicker-right {
-        border-right-width: var(--half-gridline-thickness, 0.5rem);
-      }
+  &.thicker-top {
+    border-top-width: var(--half-gridline-thickness, 0.5rem);
+  }
+  &.thicker-bottom {
+    border-bottom-width: var(--half-gridline-thickness, 0.5rem);
+  }
+  &.thicker-left {
+    border-left-width: var(--half-gridline-thickness, 0.5rem);
+  }
+  &.thicker-right {
+    border-right-width: var(--half-gridline-thickness, 0.5rem);
+  }
 
-      &:hover {
-        --outline-size: calc(var(--size, 10rem) / 20);
-        outline: var(--outline-size) solid #44f4;
-        outline-offset: calc(-1 * var(--outline-size) - 2px);
-      }
+  &:hover {
+    --outline-size: calc(var(--size, 10rem) / 20);
+    outline: var(--outline-size) solid #44f4;
+    outline-offset: calc(-1 * var(--outline-size) - 2px);
+  }
 
-      &.selected {
-        --outline-size: calc(var(--size, 10rem) / 10);
-        outline: var(--outline-size) solid #22fb;
-        outline-offset: calc(-1 * var(--outline-size) - 2px);
+  &.selected {
+    --outline-size: calc(var(--size, 10rem) / 10);
+    outline: var(--outline-size) solid #22fb;
+    outline-offset: calc(-1 * var(--outline-size) - 2px);
 
-        &:hover {
-          outline-color: #33f8;
-        }
-      }
+    &:hover {
+      outline-color: #33f8;
     }
   }
 }
@@ -284,6 +308,25 @@ function onClickResetButton() {
   align-items: center;
   justify-content: flex-end;
   padding: 2rem;
+
+  .visual-numpad {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    --size: 9rem;
+    font-size: calc(var(--size, 10rem) * 0.7);
+    margin-bottom: 10rem;
+
+    .board-cell {
+      pointer-events: all;
+      border-radius: 3rem;
+
+      &.delete {
+        background-color: color-mix(in srgb, var(--color-button-destructive) 40%, var(--color-cells));
+        font-size: calc(var(--size, 10rem) * 0.55);
+      }
+    }
+  }
 
   .reset-button {
     background-color: var(--color-button-destructive);

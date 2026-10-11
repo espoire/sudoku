@@ -1,6 +1,42 @@
+Notes
+  Mode Options
+    4 buttons above the Visual Numpad, to swap between input modes for digit/corner-mark/center-mark/cell-color.
+    TODO some day a larger affect-wide-areas-of-the-screen visual difference per current mode (maybe a viewport "border" pattern or color?)
+  Corner Marks
+    Small numbers, placed in corners per numeral, 1 upper-left (if present), 2 top-center (etc.)
+  Center Marks
+    A single centered text row of zero or more numerals
+  Conflict highlighting
+    Notes use blue font by default.
+    If a note would [produce an error if [that note-numeral were placed in the cell]] use a red font for that note-numeral only.
+    Option to enable/disable this feature.
+  Note suppression
+    If a fully-fledged digit is placed in the cell with notes, the notes are suppressed. Hide the notes, disallow editing the notes, don't bother error-checking the notes, but keep the data. The notes should reappear if the user removes the digit.
+  Delete
+    When selecting a cell/region, and issuing a delete command, do only one of the following, in this priority order:
+      1. Delete all fully-fledged digits (in editable cells) (skip this step if no eligible targets in selection)
+      2. Delete all numeral notes
+      3. 
+  Pencil Colors
+    User can select the color of the digit-notes, before writing them
+    At time of placing a digit-note, that digit-note records the then-active pencil color, and thereafter uses that color for rendering (when not overridden by error-checking color)
+  Colored Cell Backgrounds
+    Can toggle zero or more cell background colors per cell
+    If zero cell-color notes: cell displays with theme-default background color.
+    If exactly one cell-color note: cell uses that color as its background color.
+    If 2+ cell-color notes are present: cell background is stripes.
+      "1" color on top, "2" color next, ... "0" last.
+      Sort by color priority, then render as horizontal-stripes top-to-bottom.
+    Palette may vary per theme
+    One of the colors is the default cell background color -- per theme
+    Two live palettes, [default] and [colorblind].
+      If using colors from both palettes in the same cell, sort order is [1, 1b, 2, 2b, 3, ... 9, 9b, 0] where '0' is the default cell background color
+
+Visual numpad
+  Option for "layout like a PC numpad"
+
 Multi-selection by holding ctrl+click to add additional cells-selected when you already have one or more selected
 Remove-from-selection by ctrl+click a cell already selected, and drag behavior becomes removal if started thusly
-Visual numpad for mouse-only numeral input
 Option for "if no cells selected, but one is hovered, relay keyboard inputs (e.g. numerals, delete) to the hovered cell" a la WoW mouseover macros
 Undo/Redo
 

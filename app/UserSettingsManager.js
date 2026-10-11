@@ -12,6 +12,7 @@ const specialOptionsTypes = {
   penDigitStyle: 'boolean',
   timer: 'boolean',
   showTimerTenths: 'boolean',
+  // mouseoverInput: 'boolean',
 };
 
 export default class UserSettingsManager {

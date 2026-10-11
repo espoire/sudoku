@@ -94,6 +94,16 @@ function onKeydown(event) {
         <span class="hint">Pen-style marks look just like the puzzle-given digits.</span>
       </div>
 
+      <!-- Mouseover input toggle -->
+      <!-- <div>
+        <label for="mouseoverInputToggle">Mouseover Digit Entry</label>
+        <ToggleSwitch
+          id="mouseoverInputToggle"
+          :on="settings.mouseoverInput"
+          @toggle="toggle('mouseoverInput')" />
+        <span class="hint">When enabled, you can type digits on a keyboard to enter them directly into the puzzle, in the cell under your mouse. No effect while you have any cell(s) explicitly selected.</span>
+      </div> -->
+
     </div>
   </div>
 </template>
