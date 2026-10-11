@@ -1,8 +1,4 @@
 Notes
-  Mode Options
-    Don't apply digit/entry changes, if input mode is not 'digit'
-  Corner Marks
-    Small numbers, placed in corners per numeral, 1 upper-left (if present), 2 top-center (etc.)
   Center Marks
     A single centered text row of zero or more numerals
   Conflict highlighting

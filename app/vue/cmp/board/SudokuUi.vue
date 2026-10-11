@@ -22,7 +22,7 @@ const props = defineProps({
       y: Number
     },
     contents: {
-      type: Array, // 2d array of Cell descriptor objects: { value: number, given: boolean, selected: boolean }
+      type: Array, // 2d array of Cell descriptor objects: { value: number, given: boolean, selected: boolean, notes: { corner: number[] } }
     },
   },
 
@@ -179,18 +179,50 @@ function onClickInputModeButton(mode) {
             'thicker-right': j%3 === 2,
           }"
           :data-cell="`${i},${j}`"
-          v-text="props.board.contents[i][j].value"
           @pointerdown="() => onActivateCell(i, j)"
-        />
+        >
+          <span v-if="props.board.contents[i][j].value" v-text="props.board.contents[i][j].value" />
+          <div v-else class="cell-notes">
+            <div class="corner-notes">
+              <template v-for="n in range(1, 9)" :key="n">
+                <div class="note" v-if="props.board.contents[i][j].notes?.corner?.includes(n)"
+                    :class="`n${n}`"
+                    v-text="n" />
+              </template>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   
     <div class="controls-footer">
       <div class="input-modes">
-        <div class="input-mode-button" :class="{ active: props.inputMode === Constants.inputModes.digit }" @click.stop="() => onClickInputModeButton(Constants.inputModes.digit)">Digits</div>
-        <div class="input-mode-button" :class="{ active: props.inputMode === Constants.inputModes.cornerNote }" @click.stop="() => onClickInputModeButton(Constants.inputModes.cornerNote)">Corner<br />Notes</div>
-        <div class="input-mode-button" :class="{ active: props.inputMode === Constants.inputModes.centerNote }" @click.stop="() => onClickInputModeButton(Constants.inputModes.centerNote)">Center<br />Notes</div>
-        <div class="input-mode-button" :class="{ active: props.inputMode === Constants.inputModes.cellColor }" @click.stop="() => onClickInputModeButton(Constants.inputModes.cellColor)">Highlight</div>
+        <div class="input-mode-button"
+            :class="{ active: props.inputMode === Constants.inputModes.digit }"
+            @click.stop="() => onClickInputModeButton(Constants.inputModes.digit)"
+        >
+          Digits
+        </div>
+        <div class="input-mode-button"
+            :class="{ active: props.inputMode === Constants.inputModes.cornerNote }"
+            @click.stop="() => onClickInputModeButton(Constants.inputModes.cornerNote)"
+        >
+          Corner<br />
+          Notes
+        </div>
+        <div class="input-mode-button nyi"
+            :class="{ active: props.inputMode === Constants.inputModes.centerNote }"
+            @click.stop="() => onClickInputModeButton(Constants.inputModes.centerNote)"
+        >
+          Center<br />
+          Notes
+        </div>
+        <div class="input-mode-button nyi"
+            :class="{ active: props.inputMode === Constants.inputModes.cellColor }"
+            @click.stop="() => onClickInputModeButton(Constants.inputModes.cellColor)"
+        >
+          Highlight
+        </div>
       </div>
       <div class="visual-numpad">
         <div class="board-cell" v-for="n in [1,2,3,4,5,6,7,8,9]" :key="n"
@@ -317,6 +349,76 @@ function onClickInputModeButton(mode) {
   }
 }
 
+.cell-notes {
+  position: relative;
+  width: 100%;
+  height: 100%;
+
+  .corner-notes {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+
+    .note {
+      position: absolute;
+      width: 33.33%;
+      height: 33.33%;
+      line-height: 1;
+      text-align: center;
+      align-content: center;
+      translate: -50% -50%;
+      font-size: 35%;
+      font-weight: 550;
+      color: #44c;
+
+      &.n1 {
+        left: 10%;
+        top: 15%;
+      }
+
+      &.n2 {
+        left: 50%;
+        top: 15%;
+      }
+
+      &.n3 {
+        left: 90%;
+        top: 15%;
+      }
+
+      &.n4 {
+        left: 10%;
+        top: 52.5%;
+      }
+
+      &.n5 {
+        left: 50%;
+        top: 52.5%;
+      }
+
+      &.n6 {
+        left: 90%;
+        top: 52.5%;
+      }
+
+      &.n7 {
+        left: 10%;
+        top: 90%;
+      }
+
+      &.n8 {
+        left: 50%;
+        top: 90%;
+      }
+
+      &.n9 {
+        left: 90%;
+        top: 90%;
+      }
+    }
+  }
+}
+
 .controls-footer {
   flex-grow: 1;
   display: flex;
@@ -351,6 +453,12 @@ function onClickInputModeButton(mode) {
       pointer-events: all;
 
       transition: opacity 0.2s, font-weight 0.2s;
+
+      &.nyi {
+        opacity: 0.1;
+        font-size: 2.5rem;
+        pointer-events: none;
+      }
 
       &:hover {
         opacity: 0.7;
