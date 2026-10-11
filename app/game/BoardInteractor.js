@@ -9,8 +9,9 @@ import GlobalVueProps from "../VueInterface.js";
  */
 export default class BoardInteractor {
   /** @type {Board} */ board;
-  /** @type {Array<Array<Set<number>>>} */ cornerNotes = [];
   /** @type {Array<Array<boolean>>} */ selectedCells = [];
+  /** @type {Array<Array<Set<number>>>} */ cornerNotes = [];
+  /** @type {Array<Array<Set<number>>>} */ centerNotes = [];
   /** @type {{ win: boolean, valid?: boolean, errors?: Array<{ message: string, location: Array<{ row: number, column: number }>}> }} */ #cachedValidationResult = null;
   /** @type {'digit' | 'cornerNote' | 'centerNote' | 'cellColor'} */ #inputMode = Constants.inputModes.digit;
 
@@ -19,6 +20,7 @@ export default class BoardInteractor {
 
     this.selectedCells = create2DArray(board.size.y, board.size.x, false);
     this.cornerNotes = create2DArray(board.size.y, board.size.x, () => new Set());
+    this.centerNotes = create2DArray(board.size.y, board.size.x, () => new Set());
   }
 
   resetPuzzle() {
@@ -175,6 +177,7 @@ export default class BoardInteractor {
           mode = 'removing';
         }
 
+        // Apply change
         for (const { row, column } of noteable) {
           if (value == null) {
             this.cornerNotes[row][column].clear();
@@ -188,9 +191,28 @@ export default class BoardInteractor {
         // TODO note constraint validation
 
       } break;
-      case Constants.inputModes.centerNote:
-        // Handle center note input mode
-      break;
+      case Constants.inputModes.centerNote: {
+        // If input is a digit and ALL note-able selected cells already contain that center-note digit, instead delete the value from all selected cells.
+        const isDigit = (value != null);
+        const noteable = selection.filter(({ row, column }) => this.board.canEdit(row, column) && this.board.getValue(row, column) == null);
+        const allNoteableCellsContainSameNote = noteable.every(({ row, column }) => this.centerNotes[row][column].has(value));
+
+        let mode = 'adding';
+        if (isDigit && allNoteableCellsContainSameNote) {
+          mode = 'removing';
+        }
+
+        // Apply change
+        for (const { row, column } of noteable) {
+          if (value == null) {
+            this.centerNotes[row][column].clear();
+          } else if (mode === 'adding') {
+            this.centerNotes[row][column].add(value);
+          } else if (mode === 'removing') {
+            this.centerNotes[row][column].delete(value);
+          }
+        }
+      } break;
       case Constants.inputModes.cellColor:
         // Handle cell color input mode
       break;
@@ -215,6 +237,7 @@ export default class BoardInteractor {
         ...(this.board.getValue(rowIndex, columnIndex) == null) ? {
           notes: {
             corner: Array.from(this.cornerNotes[rowIndex][columnIndex]),
+            center: Array.from(this.centerNotes[rowIndex][columnIndex]),
           },
         } : {},
       }))

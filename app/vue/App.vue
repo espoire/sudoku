@@ -89,7 +89,7 @@ const props = inject('props');
     --color-text-inverted: var(--vt-c-text-light-2);
     --color-heading-inverted: var(--vt-c-text-light-1);
 
-    --color-givens: var(--color-text);
+    --color-givens: color-mix(in srgb, var(--vt-c-text-dark-1) 70%, var(--vt-c-text-dark-2));
     --color-gridlines: #313131;
     --color-cells: var(--color-background-soft);
 

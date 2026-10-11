@@ -1,12 +1,8 @@
 Notes
-  Center Marks
-    A single centered text row of zero or more numerals
   Conflict highlighting
     Notes use blue font by default.
     If a note would [produce an error if [that note-numeral were placed in the cell]] use a red font for that note-numeral only.
     Option to enable/disable this feature.
-  Note suppression
-    If a fully-fledged digit is placed in the cell with notes, the notes are suppressed. Hide the notes, disallow editing the notes, don't bother error-checking the notes, but keep the data. The notes should reappear if the user removes the digit.
   Delete
     When selecting a cell/region, and issuing a delete command, do only one of the following, in this priority order:
       1. Delete all fully-fledged digits (in editable cells) (skip this step if no eligible targets in selection)

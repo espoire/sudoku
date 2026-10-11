@@ -183,6 +183,9 @@ function onClickInputModeButton(mode) {
         >
           <span v-if="props.board.contents[i][j].value" v-text="props.board.contents[i][j].value" />
           <div v-else class="cell-notes">
+            <div class="center-notes">
+              <span class="note" v-for="n in props.board.contents[i][j].notes?.center ?? []" :key="n" v-text="n" />
+            </div>
             <div class="corner-notes">
               <template v-for="n in range(1, 9)" :key="n">
                 <div class="note" v-if="props.board.contents[i][j].notes?.corner?.includes(n)"
@@ -210,7 +213,7 @@ function onClickInputModeButton(mode) {
           Corner<br />
           Notes
         </div>
-        <div class="input-mode-button nyi"
+        <div class="input-mode-button"
             :class="{ active: props.inputMode === Constants.inputModes.centerNote }"
             @click.stop="() => onClickInputModeButton(Constants.inputModes.centerNote)"
         >
@@ -354,22 +357,36 @@ function onClickInputModeButton(mode) {
   width: 100%;
   height: 100%;
 
+  .center-notes {
+    position: absolute;
+    left: 50%;
+    top: 52.5%;
+    translate: -50% -50%;
+    font-size: 50%;
+    font-weight: 550;    // Slight bold
+    line-height: 1;
+
+    .note {
+      color: #44cc;
+    }
+  }
+
   .corner-notes {
     position: absolute;
     width: 100%;
     height: 100%;
+    line-height: 1;
+    font-weight: 550;    // Slight bold
 
     .note {
       position: absolute;
       width: 33.33%;
       height: 33.33%;
-      line-height: 1;
       text-align: center;
       align-content: center;
       translate: -50% -50%;
       font-size: 35%;
-      font-weight: 550;
-      color: #44c;
+      color: #44cc;
 
       &.n1 {
         left: 10%;
@@ -462,7 +479,7 @@ function onClickInputModeButton(mode) {
 
       &:hover {
         opacity: 0.7;
-        font-weight: 550;
+        font-weight: 550;    // Slight bold
       }
 
       &.active {
