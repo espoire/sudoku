@@ -135,29 +135,42 @@ export default class BoardInteractor {
    */
   handleNumeralInput(value) {
     const selection = this.#listSelection();
+    switch (this.#inputMode) {
+      case Constants.inputModes.digit: {
+        // If input is a digit and ALL editable selected cells already contain that digit, instead delete the value from all selected cells.
+        const isDigit = (value != null);
+        const editable = selection.filter(({ row, column }) => this.board.canEdit(row, column));
+        const allEditableContainSameValue = editable.every(({ row, column }) => this.board.getValue(row, column) === value);
+        if (isDigit && allEditableContainSameValue) {
+          value = null;
+        }
 
-    // If input is a digit and ALL editable selected cells already contain that digit, instead delete the value from all selected cells.
-    const isDigit = (value != null);
-    const editable = selection.filter(({ row, column }) => this.board.canEdit(row, column));
-    const allEditableContainSameValue = editable.every(({ row, column }) => this.board.getValue(row, column) === value);
-    if (isDigit && allEditableContainSameValue) {
-      value = null;
-    }
+        // Apply the changes, note if any cells were successfully updated.
+        let wroteAny = false;
+        for (const { row, column } of editable) {
+          const changed = this.board.setValue(row, column, value);
+          wroteAny ||= changed;
+        }
 
-    // Apply the changes, note if any cells were successfully updated.
-    let wroteAny = false;
-    for (const { row, column } of editable) {
-      const changed = this.board.setValue(row, column, value);
-      wroteAny ||= changed;
-    }
+        // If any successful changes, re-validate
+        let validationResult = null;
+        if (wroteAny) {
+          validationResult = this.board.checkWin();
+          if (validationResult.win) setTimeout(() => alert("Win! 🎉"), 0);
 
-    // If any successful changes, re-validate
-    let validationResult = null;
-    if (wroteAny) {
-      validationResult = this.board.checkWin();
-      if (validationResult.win) setTimeout(() => alert("Win! 🎉"), 0);
-
-      this.#cachedValidationResult = validationResult;
+          this.#cachedValidationResult = validationResult;
+        }
+      }
+      break;
+      case Constants.inputModes.cornerNote:
+        // Handle corner note input mode
+      break;
+      case Constants.inputModes.centerNote:
+        // Handle center note input mode
+      break;
+      case Constants.inputModes.cellColor:
+        // Handle cell color input mode
+      break;
     }
 
     // Update the UI with the new board state & validations.
