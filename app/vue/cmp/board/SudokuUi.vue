@@ -32,7 +32,12 @@ const props = defineProps({
     paused: Boolean, // whether the timer is currently paused
     elapsedTimeAtPause: Number, // elapsed time at the moment of pause in milliseconds
   },
+
+  inputMode: String, // 'digit' | 'corner-note' | 'center-note' | 'cell-color'
 });
+
+// import { deepClone } from '/app/util/Object.js';
+// console.log(deepClone(props));
 
 const boardEl = ref(null);
 const dragger = new DragSelectionController(boardEl);
@@ -136,6 +141,11 @@ function onClickResetButton() {
   logEvent('onClickResetButton');
   Globals.gameController.boardInteractor.resetPuzzle();
 }
+
+function onClickInputModeButton(mode) {
+  logEvent('onInputModeChange', mode);
+  Globals.gameController.boardInteractor.setInputMode(mode);
+}
 </script>
 
 <template>
@@ -176,6 +186,12 @@ function onClickResetButton() {
     </div>
   
     <div class="controls-footer">
+      <div class="input-modes">
+        <div class="input-mode-button" :class="{ active: props.inputMode === Constants.inputModes.digit }" @click.stop="() => onClickInputModeButton(Constants.inputModes.digit)">Digits</div>
+        <div class="input-mode-button" :class="{ active: props.inputMode === Constants.inputModes.cornerNote }" @click.stop="() => onClickInputModeButton(Constants.inputModes.cornerNote)">Corner<br />Notes</div>
+        <div class="input-mode-button" :class="{ active: props.inputMode === Constants.inputModes.centerNote }" @click.stop="() => onClickInputModeButton(Constants.inputModes.centerNote)">Center<br />Notes</div>
+        <div class="input-mode-button" :class="{ active: props.inputMode === Constants.inputModes.cellColor }" @click.stop="() => onClickInputModeButton(Constants.inputModes.cellColor)">Highlight</div>
+      </div>
       <div class="visual-numpad">
         <div class="board-cell" v-for="n in [1,2,3,4,5,6,7,8,9]" :key="n"
             @click.stop="() => onVisualNumpadClick(n)"
@@ -309,10 +325,46 @@ function onClickResetButton() {
   justify-content: flex-end;
   padding: 2rem;
 
-  .visual-numpad {
+  .input-modes, .visual-numpad {
     display: flex;
     flex-direction: row;
     gap: 1rem;
+  }
+
+  .input-modes {
+    width: 100rem;
+    justify-content: space-around;
+    margin-bottom: 3rem;
+
+    .input-mode-button {
+      background-color: #ffffff04;
+      padding: 3rem;
+      height: 15rem;
+      border-radius: 4rem;
+
+      color: #fff;
+      opacity: 0.5;
+      font-size: 4.5rem;
+      line-height: 1;
+      text-align: center;
+      align-content: center;
+      pointer-events: all;
+
+      transition: opacity 0.2s, font-weight 0.2s;
+
+      &:hover {
+        opacity: 0.7;
+        font-weight: 550;
+      }
+
+      &.active {
+        opacity: 1;
+        font-weight: bold;
+      }
+    }
+  }
+
+  .visual-numpad {
     --size: 9rem;
     font-size: calc(var(--size, 10rem) * 0.7);
     margin-bottom: 10rem;

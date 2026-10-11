@@ -1,4 +1,5 @@
 import { reactive } from 'vue';
+import Constants from './Constants.js';
 
 /** Exposes a collection of proxies for sending data into the Vue context for rendering to the 2D UI */
 const GlobalVueProps = reactive({
@@ -16,6 +17,9 @@ const GlobalVueProps = reactive({
     paused: false,
     elapsedTimeAtPause: 0,
   },
+
+  /** @type {'digit' | 'corner-note' | 'center-note' | 'cell-color'} The current input mode for the UI. */
+  inputMode: Constants.inputModes.digit,
 
   /** Programmatically copied from Settings.user; only need to intialize these keys to avoid crash-on-load due to access before programmatic initialization. */
   userSettings: {},

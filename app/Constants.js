@@ -9,6 +9,14 @@ const Constants = {
     settings: 'settings',
     play: 'play',
   }),
+
+  /** @readonly @enum {string} */
+  inputModes: enumeration({
+    digit: 'digit',
+    cornerNote: 'corner-note',
+    centerNote: 'center-note',
+    cellColor: 'cell-color',
+  }),
 };
 
 deepFreeze(Constants);

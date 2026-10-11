@@ -1,4 +1,5 @@
 /** @typedef {import('./Board.js').default} Board */
+import Constants from "../Constants.js";
 import GlobalVueProps from "../VueInterface.js";
 
 /**
@@ -10,6 +11,7 @@ export default class BoardInteractor {
   /** @type {Board} */ board;
   /** @type {Array<Array<boolean>>} */ selectedCells = [];
   /** @type {{ win: boolean, valid?: boolean, errors?: Array<{ message: string, location: Array<{ row: number, column: number }>}> }} */ #cachedValidationResult = null;
+  /** @type {'digit' | 'cornerNote' | 'centerNote' | 'cellColor'} */ #inputMode = Constants.inputModes.digit;
 
   constructor(board) {
     this.board = board;
@@ -117,6 +119,14 @@ export default class BoardInteractor {
     }
 
     this.updateVue();
+  }
+
+  /** @param {'digit' | 'cornerNote' | 'centerNote' | 'cellColor'} mode */
+  setInputMode(mode) {
+    this.#inputMode = mode;
+    
+    const vm = GlobalVueProps;
+    vm.inputMode = this.#inputMode;
   }
 
   /**
