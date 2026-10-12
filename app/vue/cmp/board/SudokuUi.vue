@@ -83,8 +83,8 @@ function updateElapsedTime() {
 function pauseTimer() { Globals.gameController.timer.pause(); }
 function resumeTimer() { Globals.gameController.timer.resume(); }
 
-const numerals = range(1, 9).map(n => `${n}`);
-const clearDigits = [' ', '0', 'Delete', 'Backspace'];
+const numerals = range(0, 9).map(n => `${n}`);
+const clearDigits = [' ', 'Delete', 'Backspace'];
 onMounted(() => {
   ModalManager.register('SudokuUi.vue', { onKeydown });
   window.addEventListener('click', onUnhandledClick);

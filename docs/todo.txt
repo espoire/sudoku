@@ -1,6 +1,4 @@
 Notes
-  UI sends request for user-input `0` when pressing a zero key
-    Treat as `null`/"delete" in most cases, but use as 'theme' color for 'cell-color' mode.
   Visual Numpad Modes
     Render visual numpad buttons as the note or color style that they would add
     Cell Colors
