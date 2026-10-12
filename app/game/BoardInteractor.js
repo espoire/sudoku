@@ -142,10 +142,43 @@ export default class BoardInteractor {
   handleNumeralInput(value) {
     const selection = this.#listSelection();
 
-    // TODO explicit-delete is a special case, ignoring mode and targetting whatever data is present, in a priority order
+    if (value == null) {
+      // Explicit delete: clear selected cells regardless of input mode, using a priority order
 
-    switch (this.#inputMode) {
+      // If any editable selected cells contain a value, clear values
+      const editable = selection.filter(({ row, column }) => this.board.canEdit(row, column));
+      const anyEditableContainValue = editable.some(({ row, column }) => this.board.getValue(row, column) != null);
+      if (anyEditableContainValue) {
+        for (const { row, column } of editable) {
+          this.board.setValue(row, column, null);
+        }
+      } else {
+
+        // Else if any noteable selected cells contain a center-note and/or corner-note, clear those notes
+
+        // (Since noteable := no value, and we must have no values to have reached this `else` case, noteable === editable)
+        const anyEditableContainNotes = editable.some(({ row, column }) => {
+          const hasCornerNotes = this.cornerNotes[row][column].size > 0;
+          const hasCenterNotes = this.centerNotes[row][column].size > 0;
+          return hasCornerNotes || hasCenterNotes;
+        });
+        if (anyEditableContainNotes) {
+          for (const { row, column } of editable) {
+            this.cornerNotes[row][column].clear();
+            this.centerNotes[row][column].clear();
+          }
+        } else {
+
+          // Else if any background-color related user colors are present, clear those
+          for (const { row, column } of selection) {
+            this.cellColors[row][column].clear();
+          }
+        }
+      }
+    } else switch (this.#inputMode) {
       case Constants.inputModes.digit: {
+        if (value === 0) value = null;
+
         // If input is a digit and ALL editable selected cells already contain that digit, instead delete the value from all selected cells.
         const isDigit = (value != null);
         const editable = selection.filter(({ row, column }) => this.board.canEdit(row, column));
@@ -171,6 +204,8 @@ export default class BoardInteractor {
         }
       } break;
       case Constants.inputModes.cornerNote: {
+        if (value === 0) value = null;
+
         // If input is a digit and ALL note-able selected cells already contain that corner-note digit, instead delete the value from all selected cells.
         const isDigit = (value != null);
         const noteable = selection.filter(({ row, column }) => this.board.canEdit(row, column) && this.board.getValue(row, column) == null);
@@ -196,6 +231,8 @@ export default class BoardInteractor {
 
       } break;
       case Constants.inputModes.centerNote: {
+        if (value === 0) value = null;
+
         // If input is a digit and ALL note-able selected cells already contain that center-note digit, instead delete the value from all selected cells.
         const isDigit = (value != null);
         const noteable = selection.filter(({ row, column }) => this.board.canEdit(row, column) && this.board.getValue(row, column) == null);

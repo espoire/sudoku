@@ -1,9 +1,6 @@
 Notes
-  Delete
-    When selecting a cell/region, and issuing a delete command, do only one of the following, in this priority order:
-      1. Delete all fully-fledged digits (in editable cells) (skip this step if no eligible targets in selection)
-      2. Delete all numeral notes
-      3. Delete all cell colors
+  UI sends request for user-input `0` when pressing a zero key
+    Treat as `null`/"delete" in most cases, but use as 'theme' color for 'cell-color' mode.
   Visual Numpad Modes
     Render visual numpad buttons as the note or color style that they would add
     Cell Colors

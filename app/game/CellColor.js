@@ -65,6 +65,10 @@ export class CellColorSet {
     return true;
   }
 
+  clear() {
+    this.#colors.length = 0;
+  }
+
   has(colorOrId) {
     const color = CellColor.lookup(colorOrId);
     if (!color) return false;
