@@ -20,7 +20,8 @@ const props = inject('props');
           :settings="props.userSettings" :mode="props.mode"
           :board="props.board"
           :timer="props.timer"
-          :inputMode="props.inputMode" />
+          :inputMode="props.inputMode"
+          :palette="props.palette" />
     </div>
   </div>
 </template>
@@ -68,15 +69,15 @@ const props = inject('props');
   --user-color-c7: rgb(80, 60, 40);
   --user-color-c8: rgb(60, 40, 20);
   --user-color-c9: rgb(40, 20, 10);
-  --user-color-b1: rgb(230, 210, 197);
-  --user-color-b2: rgb(160, 144, 156);
-  --user-color-b3: rgb(54, 18, 44);
-  --user-color-b4: rgb(200, 180, 160);
-  --user-color-b5: rgb(140, 120, 100);
-  --user-color-b6: rgb(100, 80, 60);
-  --user-color-b7: rgb(80, 60, 40);
-  --user-color-b8: rgb(60, 40, 20);
-  --user-color-b9: rgb(40, 20, 10);
+  --user-color-b1: red;
+  --user-color-b2: orange;
+  --user-color-b3: yellow;
+  --user-color-b4: green;
+  --user-color-b5: blue;
+  --user-color-b6: indigo;
+  --user-color-b7: violet;
+  --user-color-b8: pink;
+  --user-color-b9: white;
   --user-color-theme: var(--color-cells);
 
   --color-warning: #fa0;
@@ -126,15 +127,15 @@ const props = inject('props');
     --user-color-c7: rgb(80, 60, 40);
     --user-color-c8: rgb(60, 40, 20);
     --user-color-c9: rgb(40, 20, 10);
-    --user-color-b1: rgb(230, 210, 197);
-    --user-color-b2: rgb(160, 144, 156);
-    --user-color-b3: rgb(54, 18, 44);
-    --user-color-b4: rgb(200, 180, 160);
-    --user-color-b5: rgb(140, 120, 100);
-    --user-color-b6: rgb(100, 80, 60);
-    --user-color-b7: rgb(80, 60, 40);
-    --user-color-b8: rgb(60, 40, 20);
-    --user-color-b9: rgb(40, 20, 10);
+    --user-color-b1: red;
+    --user-color-b2: orange;
+    --user-color-b3: yellow;
+    --user-color-b4: green;
+    --user-color-b5: blue;
+    --user-color-b6: indigo;
+    --user-color-b7: violet;
+    --user-color-b8: pink;
+    --user-color-b9: white;
     --user-color-theme: var(--color-cells);
 
     --color-warning: #b50;

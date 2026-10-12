@@ -35,6 +35,8 @@ const props = defineProps({
   },
 
   inputMode: String, // 'digit' | 'corner-note' | 'center-note' | 'cell-color'
+
+  palette: String, // 'regular' | 'color-blind'
 });
 
 // import { deepClone } from '/app/util/Object.js';
@@ -84,7 +86,7 @@ function pauseTimer() { Globals.gameController.timer.pause(); }
 function resumeTimer() { Globals.gameController.timer.resume(); }
 
 const numerals = range(0, 9).map(n => `${n}`);
-const clearDigits = [' ', 'Delete', 'Backspace'];
+const clearDigits = [' ', '-', 'Delete', 'Backspace'];
 onMounted(() => {
   ModalManager.register('SudokuUi.vue', { onKeydown });
   window.addEventListener('click', onUnhandledClick);
@@ -100,7 +102,7 @@ onUnmounted(() => {
 });
 function onKeydown(event) {
   logEvent('onKeydown', event);
-  if (event.key === 'F1') {
+  if (event.key === 'Pause') {
     onClickSettingsButton();
 
   } else if (event.key === 'Escape') {
@@ -117,6 +119,9 @@ function onKeydown(event) {
 
   } else if (clearDigits.includes(event.key)) {
     onNumeralInput(null);
+
+  } else if (event.key === 'Tab' || event.key === '`') {
+    onClickPaletteToggleButton();
 
   } else if (event.ctrlKey && event.key === 'a') {
     Globals.gameController.boardInteractor.selectAllCells();
@@ -146,6 +151,11 @@ function onClickResetButton() {
 function onClickInputModeButton(mode) {
   logEvent('onInputModeChange', mode);
   Globals.gameController.boardInteractor.setInputMode(mode);
+}
+
+function onClickPaletteToggleButton() {
+  logEvent('onClickPaletteToggleButton');
+  Globals.gameController.boardInteractor.togglePalette();
 }
 </script>
 
@@ -232,8 +242,19 @@ function onClickInputModeButton(mode) {
         </div>
       </div>
       <div class="visual-numpad" :class="inputMode">
+        <div class="board-cell palette-toggle-button" v-if="inputMode === Constants.inputModes.cellColor"
+            @click.stop="onClickPaletteToggleButton"
+            :title="`Swap to ${palette === Constants.palettes.regular ? 'colorblind-friendly' : 'regular'} palette`"
+        >
+          🎨
+          <div class="hotkey-label">`</div>
+          <div class="current-palette-pips">
+            <div class="pip regular" :class="{ active: (palette === Constants.palettes.regular) }" />
+            <div class="pip colorblind" :class="{ active: (palette === Constants.palettes.colorBlind) }" />
+          </div>
+        </div>
         <div class="board-cell" v-for="n in [1,2,3,4,5,6,7,8,9, ...(inputMode === Constants.inputModes.cellColor ? [0] : [])]" :key="n"
-            :class="(inputMode === Constants.inputModes.cellColor ? (n === 0 ? ['color-theme'] : [`color-c${n}`]) : [])"
+            :class="(inputMode === Constants.inputModes.cellColor ? (n === 0 ? ['color-theme'] : (palette === Constants.palettes.regular ? [`color-c${n}`] : [`color-b${n}`])) : [])"
             @click.stop="() => onVisualNumpadClick(n)">
           <template v-if="inputMode !== Constants.inputModes.cellColor">
             {{ n }}
@@ -493,13 +514,14 @@ function onClickInputModeButton(mode) {
   }
 
   .visual-numpad {
+    height: 9rem;
     --size: 9rem;
     font-size: calc(var(--size, 10rem) * 0.7);
     margin-bottom: 10rem;
 
     &.cell-color {
-      --size: 8.5rem;
-      gap: 0.5rem;
+      --size: 8rem;
+      gap: 0.3rem;
 
       .board-cell {
         border: 1.5px solid #0004;
@@ -529,6 +551,34 @@ function onClickInputModeButton(mode) {
       position: relative;
       pointer-events: all;
       border-radius: 3rem;
+
+      &.palette-toggle-button {
+        background-color: var(--color-button);
+        font-size: calc(var(--size, 10rem) * 0.55);
+
+        .current-palette-pips {
+          position: absolute;
+          top: 70%;
+          width: 80%;
+
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+
+          .pip {
+            width: 0.3em;
+            height: 0.3em;
+            border-radius: 50%;
+            border: 1.5px solid #0004;
+
+            opacity: 0.3;
+
+            &.active { opacity: 1; border-color: #fff4; }
+            &.regular { background-color: green; }
+            &.colorblind { background-color: #08f; }
+          }
+        }
+      }
 
       &.delete {
         background-color: color-mix(in srgb, var(--color-button-destructive) 40%, var(--color-cells));

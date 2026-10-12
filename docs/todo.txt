@@ -1,10 +1,4 @@
 Notes
-  Visual Numpad Modes
-    Render visual numpad buttons as the note or color style that they would add
-    Corner Notes?
-    Center Notes?
-    Cell Colors
-      Add button for regular/colorblind palette swap
   Conflict highlighting
     Notes use blue font by default.
     If a note would [produce an error if [that note-numeral were placed in the cell]] use a red font for that note-numeral only.
@@ -14,6 +8,9 @@ Notes
     At time of placing a digit-note, that digit-note records the then-active pencil color, and thereafter uses that color for rendering (when not overridden by error-checking color)
   Mode Options
     TODO some day a larger affect-wide-areas-of-the-screen visual difference per current mode (maybe a viewport "border" pattern or color?)
+  Visual Numpad Modes
+    Corner Notes?
+    Center Notes?
 
 Visual numpad
   Option for "layout like a PC numpad"

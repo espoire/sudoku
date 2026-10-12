@@ -19,7 +19,7 @@ const Constants = {
   }),
 
   /** @readonly @enum {string} */
-  cellColorModes: enumeration({
+  palettes: enumeration({
     regular: 'regular',
     colorBlind: 'color-blind',
   }),

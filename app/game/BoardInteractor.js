@@ -16,7 +16,7 @@ export default class BoardInteractor {
   /** @type {Array<Array<CellColorSet>>} */ cellColors = []; 
   /** @type {{ win: boolean, valid?: boolean, errors?: Array<{ message: string, location: Array<{ row: number, column: number }>}> }} */ #cachedValidationResult = null;
   /** @type {'digit' | 'corner-note' | 'center-note' | 'cell-color'} */ #inputMode = Constants.inputModes.digit;
-  /** @type {'regular' | 'color-blind'} */ #cellColorMode = Constants.cellColorModes.regular;
+  /** @type {'regular' | 'color-blind'} */ #palette = Constants.palettes.regular;
 
   constructor(board) {
     this.board = board;
@@ -133,6 +133,13 @@ export default class BoardInteractor {
     
     const vm = GlobalVueProps;
     vm.inputMode = this.#inputMode;
+  }
+
+  togglePalette() {
+    if (this.#inputMode !== Constants.inputModes.cellColor) return;
+    this.#palette = (this.#palette === 'regular' ? 'color-blind' : 'regular');
+    const vm = GlobalVueProps;
+    vm.palette = this.#palette;
   }
 
   /**
@@ -264,7 +271,7 @@ export default class BoardInteractor {
         if (value === 0) {
           colorId = 'theme';
         } else {
-          colorId = (this.#cellColorMode === 'regular' ? 'c' : 'b') + value;
+          colorId = (this.#palette === 'regular' ? 'c' : 'b') + value;
         }
 
         const allSelectedCellsContainSameColor = selection.every(({ row, column }) => this.cellColors[row][column].has(colorId));

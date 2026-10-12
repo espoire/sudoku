@@ -21,6 +21,9 @@ const GlobalVueProps = reactive({
   /** @type {'digit' | 'corner-note' | 'center-note' | 'cell-color'} The current input mode for the UI. */
   inputMode: Constants.inputModes.digit,
 
+  /** @type {'regular' | 'color-blind'} The current palette for cell colors. */
+  palette: Constants.palettes.regular,
+
   /** Programmatically copied from Settings.user; only need to intialize these keys to avoid crash-on-load due to access before programmatic initialization. */
   userSettings: {},
 });
