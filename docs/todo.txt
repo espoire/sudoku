@@ -1,10 +1,10 @@
 Notes
   Visual Numpad Modes
     Render visual numpad buttons as the note or color style that they would add
+    Corner Notes?
+    Center Notes?
     Cell Colors
       Add button for regular/colorblind palette swap
-      Add an explicit zero button for 'theme' color id
-      X button needs to continue working as a delete button
   Conflict highlighting
     Notes use blue font by default.
     If a note would [produce an error if [that note-numeral were placed in the cell]] use a red font for that note-numeral only.
