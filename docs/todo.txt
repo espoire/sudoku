@@ -1,27 +1,22 @@
 Notes
-  Conflict highlighting
-    Notes use blue font by default.
-    If a note would [produce an error if [that note-numeral were placed in the cell]] use a red font for that note-numeral only.
-    Option to enable/disable this feature.
   Delete
     When selecting a cell/region, and issuing a delete command, do only one of the following, in this priority order:
       1. Delete all fully-fledged digits (in editable cells) (skip this step if no eligible targets in selection)
       2. Delete all numeral notes
-      3. 
+      3. Delete all cell colors
+  Visual Numpad Modes
+    Render visual numpad buttons as the note or color style that they would add
+    Cell Colors
+      Add button for regular/colorblind palette swap
+      Add an explicit zero button for 'theme' color id
+      X button needs to continue working as a delete button
+  Conflict highlighting
+    Notes use blue font by default.
+    If a note would [produce an error if [that note-numeral were placed in the cell]] use a red font for that note-numeral only.
+    Option to enable/disable this feature.
   Pencil Colors
     User can select the color of the digit-notes, before writing them
     At time of placing a digit-note, that digit-note records the then-active pencil color, and thereafter uses that color for rendering (when not overridden by error-checking color)
-  Colored Cell Backgrounds
-    Can toggle zero or more cell background colors per cell
-    If zero cell-color notes: cell displays with theme-default background color.
-    If exactly one cell-color note: cell uses that color as its background color.
-    If 2+ cell-color notes are present: cell background is stripes.
-      "1" color on top, "2" color next, ... "0" last.
-      Sort by color priority, then render as horizontal-stripes top-to-bottom.
-    Palette may vary per theme
-    One of the colors is the default cell background color -- per theme
-    Two live palettes, [default] and [colorblind].
-      If using colors from both palettes in the same cell, sort order is [1, 1b, 2, 2b, 3, ... 9, 9b, 0] where '0' is the default cell background color
   Mode Options
     TODO some day a larger affect-wide-areas-of-the-screen visual difference per current mode (maybe a viewport "border" pattern or color?)
 

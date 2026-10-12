@@ -17,6 +17,12 @@ const Constants = {
     centerNote: 'center-note',
     cellColor: 'cell-color',
   }),
+
+  /** @readonly @enum {string} */
+  cellColorModes: enumeration({
+    regular: 'regular',
+    colorBlind: 'color-blind',
+  }),
 };
 
 deepFreeze(Constants);

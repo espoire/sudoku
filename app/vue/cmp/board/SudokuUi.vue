@@ -9,6 +9,7 @@ import Globals from '/app/Globals.js';
 import GameController from '/app/game/GameController.js';
 import Timer from '/app/game/Timer.js';
 import { range } from '/app/util/Array.js';
+import { getLinearGradientFromColors } from './helpers.js';
 
 const modes = Constants.modes;
 
@@ -22,7 +23,7 @@ const props = defineProps({
       y: Number
     },
     contents: {
-      type: Array, // 2d array of Cell descriptor objects: { value: number, given: boolean, selected: boolean, notes: { corner: number[] } }
+      type: Array, // 2d array of Cell descriptor objects: { value: number, given: boolean, selected: boolean, notes: { corner: number[], center: number[] }, colors: string[] }
     },
   },
 
@@ -178,6 +179,9 @@ function onClickInputModeButton(mode) {
             'thicker-left': j%3 === 0,
             'thicker-right': j%3 === 2,
           }"
+          :style="{
+            backgroundImage: getLinearGradientFromColors(props.board.contents[i][j].colors)
+          }"
           :data-cell="`${i},${j}`"
           @pointerdown="() => onActivateCell(i, j)"
         >
@@ -220,7 +224,7 @@ function onClickInputModeButton(mode) {
           Center<br />
           Notes
         </div>
-        <div class="input-mode-button nyi"
+        <div class="input-mode-button"
             :class="{ active: props.inputMode === Constants.inputModes.cellColor }"
             @click.stop="() => onClickInputModeButton(Constants.inputModes.cellColor)"
         >
@@ -306,7 +310,7 @@ function onClickInputModeButton(mode) {
   align-items: center;
   justify-content: center;
   border: 1px solid var(--color-gridlines);
-  color: var(--color-text);
+  color: var(--color-pencil);
   background-color: var(--color-cells);
   padding-bottom: 0.6rem;
 
@@ -461,28 +465,22 @@ function onClickInputModeButton(mode) {
       height: 15rem;
       border-radius: 4rem;
 
-      color: #fff;
-      opacity: 0.5;
+      color: var(--color-text-mode-selector);
       font-size: 4.5rem;
       line-height: 1;
       text-align: center;
       align-content: center;
       pointer-events: all;
 
-      transition: opacity 0.2s, font-weight 0.2s;
-
-      &.nyi {
-        opacity: 0.1;
-        font-size: 2.5rem;
-        pointer-events: none;
-      }
+      transition: color 0.2s, opacity 0.2s, font-weight 0.2s;
 
       &:hover {
-        opacity: 0.7;
+        color: color-mix(in srgb, var(--color-text-mode-selector) 70%, var(--color-text-mode-selector-active));
         font-weight: 550;    // Slight bold
       }
 
       &.active {
+        color: var(--color-text-mode-selector-active);
         opacity: 1;
         font-weight: bold;
       }

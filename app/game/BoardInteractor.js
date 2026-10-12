@@ -1,6 +1,7 @@
 /** @typedef {import('./Board.js').default} Board */
 import Constants from "../Constants.js";
 import GlobalVueProps from "../VueInterface.js";
+import { CellColorSet } from "./CellColor.js";
 
 /**
  * A UI model and controller for interacting with the Sudoku board.
@@ -12,8 +13,10 @@ export default class BoardInteractor {
   /** @type {Array<Array<boolean>>} */ selectedCells = [];
   /** @type {Array<Array<Set<number>>>} */ cornerNotes = [];
   /** @type {Array<Array<Set<number>>>} */ centerNotes = [];
+  /** @type {Array<Array<CellColorSet>>} */ cellColors = []; 
   /** @type {{ win: boolean, valid?: boolean, errors?: Array<{ message: string, location: Array<{ row: number, column: number }>}> }} */ #cachedValidationResult = null;
-  /** @type {'digit' | 'cornerNote' | 'centerNote' | 'cellColor'} */ #inputMode = Constants.inputModes.digit;
+  /** @type {'digit' | 'corner-note' | 'center-note' | 'cell-color'} */ #inputMode = Constants.inputModes.digit;
+  /** @type {'regular' | 'color-blind'} */ #cellColorMode = Constants.cellColorModes.regular;
 
   constructor(board) {
     this.board = board;
@@ -21,6 +24,7 @@ export default class BoardInteractor {
     this.selectedCells = create2DArray(board.size.y, board.size.x, false);
     this.cornerNotes = create2DArray(board.size.y, board.size.x, () => new Set());
     this.centerNotes = create2DArray(board.size.y, board.size.x, () => new Set());
+    this.cellColors = create2DArray(board.size.y, board.size.x, () => new CellColorSet());
   }
 
   resetPuzzle() {
@@ -123,7 +127,7 @@ export default class BoardInteractor {
     this.updateVue();
   }
 
-  /** @param {'digit' | 'cornerNote' | 'centerNote' | 'cellColor'} mode */
+  /** @param {'digit' | 'corner-note' | 'center-note' | 'cell-color'} mode */
   setInputMode(mode) {
     this.#inputMode = mode;
     
@@ -213,9 +217,35 @@ export default class BoardInteractor {
           }
         }
       } break;
-      case Constants.inputModes.cellColor:
-        // Handle cell color input mode
-      break;
+      case Constants.inputModes.cellColor: {
+        if (value == null) break; // Ignore null values for cell color input, for now   // TODO
+        // Will need to distinguish explicit zero (keyboard/numpad/soft button) from null (delete/backspace/space)
+        // Explicit zero: treat as color id: 'theme' input.
+        // Null: use the delete info priority queue described in /todo.txt.   // TODO
+
+        let colorId;
+        if (value === 0) {
+          colorId = 'theme';
+        } else {
+          colorId = (this.#cellColorMode === 'regular' ? 'c' : 'b') + value;
+        }
+
+        const allSelectedCellsContainSameColor = selection.every(({ row, column }) => this.cellColors[row][column].has(colorId));
+
+        let mode = 'adding';
+        if (allSelectedCellsContainSameColor) {
+          mode = 'removing';
+        }
+
+        // Apply change
+        for (const { row, column } of selection) {
+          if (mode === 'adding') {
+            this.cellColors[row][column].add(colorId);
+          } else if (mode === 'removing') {
+            this.cellColors[row][column].delete(colorId);
+          }
+        }
+      } break;
     }
 
     // Update the UI with the new board state & validations.
@@ -240,6 +270,7 @@ export default class BoardInteractor {
             center: Array.from(this.centerNotes[rowIndex][columnIndex]),
           },
         } : {},
+        colors: this.cellColors[rowIndex][columnIndex].colors,
       }))
     );
   }
