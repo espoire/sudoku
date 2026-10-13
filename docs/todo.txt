@@ -1,5 +1,3 @@
-reset this puzzle should restart the timer
-
 Bind to "Tab": cycle to next input mode.
 
 Puzzle Routing

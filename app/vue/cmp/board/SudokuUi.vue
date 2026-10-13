@@ -146,6 +146,7 @@ function handleDoubleClick(event) {
 function onClickResetButton() {
   logEvent('onClickResetButton');
   Globals.gameController.boardInteractor.resetPuzzle();
+  Globals.gameController.timer.reset();
 }
 
 function onClickInputModeButton(mode) {

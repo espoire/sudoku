@@ -24,6 +24,16 @@ export default class Timer {
     return this;
   }
 
+  reset() {
+    this.totalPausesLength = 0;
+    this.paused = false;
+    this.pauseStartTime = null;
+    this.elapsedTimeAtPause = null;
+
+    this.startTime = performance.now();
+    this.updateVue();
+  }
+
   /** @returns {number} */
   getElapsedTime() {
     return Timer.getElapsedTime(this);

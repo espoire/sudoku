@@ -255,7 +255,7 @@ export const puzzleConfigs = [{
   ],
 }];
 
-export const defaultPuzzleConfig = puzzleConfigs.find(cfg => cfg.title === 'Test Puzzle #11');
+export const defaultPuzzleConfig = puzzleConfigs.find(cfg => cfg.id === 'test-puzzle-11');
 
 /**
  * Initializes a new Sudoku board with the given size and initial numerals.
