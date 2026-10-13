@@ -1,4 +1,5 @@
 import Settings from '../app/Settings.js';
+import { runPuzzleShareEncoderTests } from './game/PuzzleShareEncoder.test.js';
 import { runArrayUtilityTests, visualInspectionTestRotateRectangularArray } from './util/ArrayTest.js';
 import { testDeepEquals } from './util/ObjectTest.js';
 
@@ -11,6 +12,7 @@ export function runTests() {
   const temp = Settings.test;
   Settings.test = {};
 
+  runPuzzleShareEncoderTests();
   visualInspectionTestRotateRectangularArray(true);
   testDeepEquals();
   runArrayUtilityTests();

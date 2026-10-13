@@ -1,3 +1,18 @@
+reset this puzzle should restart the timer
+
+Bind to "Tab": cycle to next input mode.
+
+Puzzle Routing
+  User can link / enter a URL like ".../sudoku/#/puzzle/006814097081200004274009801358400709000057020040000315005638170620040080003792506/"
+  Game will parse, validate, and present that puzzle, if valid.
+  Use vue-router
+    import { createRouter, createWebHashHistory } from 'vue-router';
+    router.push(`/puzzle/${nextPuzzleString}`);
+
+Curated started collection of puzzles & directory UI
+
+Support an existing Sudoku import format
+
 Undo/Redo
 "put all the settings under a menu of customize your game"
 make the outside box as thick as the box seperators

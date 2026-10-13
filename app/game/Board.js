@@ -45,6 +45,13 @@ export default class Board {
     }
   }
 
+  /**
+   * Returns the currently-entered cell values as a simple 2D int array.
+   */
+  toRaw() {
+    return this.cells.map(row => row.map(cell => cell.value));
+  }
+
   getValue(row, column) {
     return this.cells[row][column].value;
   }
