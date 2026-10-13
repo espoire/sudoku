@@ -15,6 +15,7 @@ export default class BoardInteractor {
   /** @type {Array<Array<Set<number>>>} */ centerNotes = [];
   /** @type {Array<Array<CellColorSet>>} */ cellColors = []; 
   /** @type {{ win: boolean, valid?: boolean, errors?: Array<{ message: string, location: Array<{ row: number, column: number }>}> }} */ #cachedValidationResult = null;
+  /** @type {Array<Array<Dictionary<number, boolean> | null>>} */ #cachedNotesValidationResult = null;
   /** @type {'digit' | 'corner-note' | 'center-note' | 'cell-color'} */ #inputMode = Constants.inputModes.digit;
   /** @type {'regular' | 'color-blind'} */ #palette = Constants.palettes.regular;
 
@@ -205,9 +206,12 @@ export default class BoardInteractor {
         let validationResult = null;
         if (wroteAny) {
           validationResult = this.board.checkWin();
-          if (validationResult.win) setTimeout(() => alert("Win! 🎉"), 0);
-
           this.#cachedValidationResult = validationResult;
+          if (validationResult.win) {
+            setTimeout(() => alert("Win! 🎉"), 0); // To give Vue time to rerender with the new correct digit(s) before declaring victory
+          } else {
+            this.#cachedNotesValidationResult = this.board.validateNotes(this.#prepareNotesSummary());
+          }
         }
       } break;
       case Constants.inputModes.cornerNote: {
@@ -234,7 +238,7 @@ export default class BoardInteractor {
           }
         }
 
-        // TODO note constraint validation
+        this.#cachedNotesValidationResult = this.board.validateNotes(this.#prepareNotesSummary());
 
       } break;
       case Constants.inputModes.centerNote: {
@@ -260,12 +264,12 @@ export default class BoardInteractor {
             this.centerNotes[row][column].delete(value);
           }
         }
+
+        this.#cachedNotesValidationResult = this.board.validateNotes(this.#prepareNotesSummary());
+
       } break;
       case Constants.inputModes.cellColor: {
-        if (value == null) break; // Ignore null values for cell color input, for now   // TODO
-        // Will need to distinguish explicit zero (keyboard/numpad/soft button) from null (delete/backspace/space)
-        // Explicit zero: treat as color id: 'theme' input.
-        // Null: use the delete info priority queue described in /todo.txt.   // TODO
+        if (value == null) break;
 
         let colorId;
         if (value === 0) {
@@ -297,6 +301,18 @@ export default class BoardInteractor {
   }
 
   /**
+   * Lists all active (in cells without full-fledged digits) notes on the board, in a concise mode (center versus corner)-independent manner.
+   * @returns {Array<Array<Set<number>>>} A 2D array representing the summary of active notes for each cell.
+   */
+  #prepareNotesSummary() {
+    return create2DArray(this.board.size.y, this.board.size.x, (row, column) => {
+      if (this.board.getValue(row, column) != null) return null;
+      if (this.cornerNotes[row][column].size + this.centerNotes[row][column].size === 0) return null;
+      return new Set([...this.cornerNotes[row][column], ...this.centerNotes[row][column]]);
+    });
+  }
+
+  /**
    * Updates the Vue.js reactive board model with the current state of the board and selection.
    */
   updateVue() {
@@ -310,8 +326,8 @@ export default class BoardInteractor {
         error: this.#cachedValidationResult?.errors?.some(e => e.location.some(l => l.row === rowIndex && l.column === columnIndex)) ?? false,
         ...(this.board.getValue(rowIndex, columnIndex) == null) ? {
           notes: {
-            corner: Array.from(this.cornerNotes[rowIndex][columnIndex]),
-            center: Array.from(this.centerNotes[rowIndex][columnIndex]),
+            corner: Array.from(this.cornerNotes[rowIndex][columnIndex]).map(n => ({ value: n, valid: this.#cachedNotesValidationResult?.[rowIndex]?.[columnIndex]?.[n] })),
+            center: Array.from(this.centerNotes[rowIndex][columnIndex]).map(n => ({ value: n, valid: this.#cachedNotesValidationResult?.[rowIndex]?.[columnIndex]?.[n] })),
           },
         } : {},
         colors: this.cellColors[rowIndex][columnIndex].colors,
@@ -324,7 +340,7 @@ function create2DArray(rows, columns, generatorFnOrValue) {
   let generatorFn = generatorFnOrValue;
   if (typeof generatorFnOrValue !== 'function') generatorFn = () => generatorFnOrValue;
 
-  return Array.from({ length: rows }, () =>
-    Array.from({ length: columns }, generatorFn)
+  return Array.from({ length: rows }, (_, row) =>
+    Array.from({ length: columns }, (_, column) => generatorFn(row, column))
   );
 }

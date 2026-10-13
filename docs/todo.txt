@@ -1,7 +1,5 @@
 Notes
   Conflict highlighting
-    Notes use blue font by default.
-    If a note would [produce an error if [that note-numeral were placed in the cell]] use a red font for that note-numeral only.
     Option to enable/disable this feature.
   Pencil Colors
     User can select the color of the digit-notes, before writing them

@@ -103,6 +103,26 @@ export default class Board {
 
     return { win: true };
   }
+
+  /**
+   * @param {Array<Array<Set<number> | null>>} notesSummary A 2D array representing the summary of active notes for each cell.
+   * @returns {Array<Array<Dictionary<number, boolean> | null>>} A 2D array representing the validation result for each cell's notes.
+   */
+  validateNotes(notesSummary) {
+    return notesSummary.map((row, rowIndex) =>
+      row.map((notes, columnIndex) => {
+        if (notes == null) return null;
+        const validation = {};
+        for (const note of notes) {
+          validation[note] = this.constraints.every(constraint => {
+            const result = constraint.check(this, { row: rowIndex, column: columnIndex, value: note });
+            return typeof result === 'boolean' ? result : result.valid;
+          });
+        }
+        return validation;
+      })
+    );
+  }
 }
 
 /**

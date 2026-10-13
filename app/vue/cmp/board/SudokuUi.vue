@@ -23,7 +23,7 @@ const props = defineProps({
       y: Number
     },
     contents: {
-      type: Array, // 2d array of Cell descriptor objects: { value: number, given: boolean, selected: boolean, notes: { corner: number[], center: number[] }, colors: string[] }
+      type: Array, // 2d array of Cell descriptor objects: { value: number, given: boolean, selected: boolean, notes: { corner: { value: number, valid: boolean }[], center: { value: number, valid: boolean }[] }, colors: string[] }
     },
   },
 
@@ -198,12 +198,12 @@ function onClickPaletteToggleButton() {
           <span v-if="props.board.contents[i][j].value" v-text="props.board.contents[i][j].value" />
           <div v-else class="cell-notes">
             <div class="center-notes">
-              <span class="note" v-for="n in props.board.contents[i][j].notes?.center ?? []" :key="n" v-text="n" />
+              <span class="note" :class="{ error: !n.valid }" v-for="n in props.board.contents[i][j].notes?.center ?? []" :key="n.value" v-text="n.value" />
             </div>
             <div class="corner-notes">
               <template v-for="n in range(1, 9)" :key="n">
-                <div class="note" v-if="props.board.contents[i][j].notes?.corner?.includes(n)"
-                    :class="`n${n}`"
+                <div class="note" v-if="props.board.contents[i][j].notes?.corner?.some(v => v.value === n)"
+                    :class="[`n${n}`, (!props.board.contents[i][j].notes?.corner?.find(v => v.value === n).valid) ? 'error' : '']"
                     v-text="n" />
               </template>
             </div>
@@ -398,6 +398,10 @@ function onClickPaletteToggleButton() {
 
     .note {
       color: #44cc;
+
+      &.error {
+        color: var(--color-error-text);
+      }
     }
   }
 
@@ -417,6 +421,10 @@ function onClickPaletteToggleButton() {
       translate: -50% -50%;
       font-size: 35%;
       color: #44cc;
+
+      &.error {
+        color: var(--color-error-text);
+      }
 
       &.n1 {
         left: 10%;
