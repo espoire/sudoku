@@ -160,7 +160,7 @@ function onClickPaletteToggleButton() {
 </script>
 
 <template>
-  <div class="column-wrap" :class="{ pen: settings.penDigitStyle }">
+  <div class="column-wrap" :class="{ pen: settings.penDigitStyle, noteErrorMarks: settings.noteErrorMarks }">
     <div class="play-page-header">
       <img class="logo" src="/img/name.min.svg" />
       <div style="flex: 1" />
@@ -400,7 +400,7 @@ function onClickPaletteToggleButton() {
       color: #44cc;
 
       &.error {
-        color: var(--color-error-text);
+        .noteErrorMarks & { color: var(--color-error-text); }
       }
     }
   }
@@ -423,7 +423,7 @@ function onClickPaletteToggleButton() {
       color: #44cc;
 
       &.error {
-        color: var(--color-error-text);
+        .noteErrorMarks & { color: var(--color-error-text); }
       }
 
       &.n1 {

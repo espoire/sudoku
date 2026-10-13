@@ -94,6 +94,16 @@ function onKeydown(event) {
         <span class="hint">Pen-style marks look just like the puzzle-given digits.</span>
       </div>
 
+      <!-- User-notes error marking toggle -->
+      <div>
+        <label for="userNotesErrorMarkingToggle">Corner- and Center-Notes Rule Conflicts</label>
+        <ToggleSwitch
+          id="userNotesErrorMarkingToggle"
+          :labels="{ off: 'Do Not Check', on: 'Mark in Red' }"
+          :on="settings.noteErrorMarks"
+          @toggle="toggle('noteErrorMarks')" />
+      </div>
+
       <!-- Mouseover input toggle -->
       <!-- <div>
         <label for="mouseoverInputToggle">Mouseover Digit Entry</label>

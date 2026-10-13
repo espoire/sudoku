@@ -20,6 +20,7 @@ const Settings = {
     penDigitStyle: false,
     timer: true,
     showTimerTenths: false,
+    noteErrorMarks: true,
     // mouseoverInput: false,
   },
 };

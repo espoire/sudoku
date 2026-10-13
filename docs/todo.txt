@@ -1,6 +1,8 @@
+Undo/Redo
+"put all the settings under a menu of customize your game"
+make the outside box as thick as the box seperators
+
 Notes
-  Conflict highlighting
-    Option to enable/disable this feature.
   Pencil Colors
     User can select the color of the digit-notes, before writing them
     At time of placing a digit-note, that digit-note records the then-active pencil color, and thereafter uses that color for rendering (when not overridden by error-checking color)
@@ -16,11 +18,7 @@ Visual numpad
 Multi-selection by holding ctrl+click to add additional cells-selected when you already have one or more selected
 Remove-from-selection by ctrl+click a cell already selected, and drag behavior becomes removal if started thusly
 Option for "if no cells selected, but one is hovered, relay keyboard inputs (e.g. numerals, delete) to the hovered cell" a la WoW mouseover macros
-Undo/Redo
 
 Highlight errors in red
   Option: Also mark when the known solution is rendered impossible
   Option: Do not mark during play, only list errors on board completion
-
-"put all the settings under a menu of customize your game"
-make the outside box as thick as the box seperators

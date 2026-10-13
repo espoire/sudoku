@@ -1,5 +1,7 @@
 /** @typedef {import('./Board.js').default} Board */
 import Constants from "../Constants.js";
+import Settings from "../Settings.js";
+import { sort } from "../util/sort.js";
 import GlobalVueProps from "../VueInterface.js";
 import { CellColorSet } from "./CellColor.js";
 
@@ -210,7 +212,7 @@ export default class BoardInteractor {
           if (validationResult.win) {
             setTimeout(() => alert("Win! 🎉"), 0); // To give Vue time to rerender with the new correct digit(s) before declaring victory
           } else {
-            this.#cachedNotesValidationResult = this.board.validateNotes(this.#prepareNotesSummary());
+            this.#validateNotes();
           }
         }
       } break;
@@ -238,7 +240,7 @@ export default class BoardInteractor {
           }
         }
 
-        this.#cachedNotesValidationResult = this.board.validateNotes(this.#prepareNotesSummary());
+        this.#validateNotes();
 
       } break;
       case Constants.inputModes.centerNote: {
@@ -265,7 +267,7 @@ export default class BoardInteractor {
           }
         }
 
-        this.#cachedNotesValidationResult = this.board.validateNotes(this.#prepareNotesSummary());
+        this.#validateNotes();
 
       } break;
       case Constants.inputModes.cellColor: {
@@ -300,6 +302,15 @@ export default class BoardInteractor {
     this.updateVue();
   }
 
+  #validateNotes() {
+    if (!Settings.user.noteErrorMarks) {
+      this.#cachedNotesValidationResult = null;
+      return;
+    }
+
+    this.#cachedNotesValidationResult = this.board.validateNotes(this.#prepareNotesSummary());
+  }
+
   /**
    * Lists all active (in cells without full-fledged digits) notes on the board, in a concise mode (center versus corner)-independent manner.
    * @returns {Array<Array<Set<number>>>} A 2D array representing the summary of active notes for each cell.
@@ -326,8 +337,8 @@ export default class BoardInteractor {
         error: this.#cachedValidationResult?.errors?.some(e => e.location.some(l => l.row === rowIndex && l.column === columnIndex)) ?? false,
         ...(this.board.getValue(rowIndex, columnIndex) == null) ? {
           notes: {
-            corner: Array.from(this.cornerNotes[rowIndex][columnIndex]).map(n => ({ value: n, valid: this.#cachedNotesValidationResult?.[rowIndex]?.[columnIndex]?.[n] })),
-            center: Array.from(this.centerNotes[rowIndex][columnIndex]).map(n => ({ value: n, valid: this.#cachedNotesValidationResult?.[rowIndex]?.[columnIndex]?.[n] })),
+            corner: Array.from(this.cornerNotes[rowIndex][columnIndex]).sort(sort.numeric.ascending).map(n => ({ value: n, valid: this.#cachedNotesValidationResult?.[rowIndex]?.[columnIndex]?.[n] })),
+            center: Array.from(this.centerNotes[rowIndex][columnIndex]).sort(sort.numeric.ascending).map(n => ({ value: n, valid: this.#cachedNotesValidationResult?.[rowIndex]?.[columnIndex]?.[n] })),
           },
         } : {},
         colors: this.cellColors[rowIndex][columnIndex].colors,
