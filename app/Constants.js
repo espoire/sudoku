@@ -11,12 +11,12 @@ const Constants = {
   }),
 
   /** @readonly @enum {string} */
-  inputModes: enumeration({
+  inputModes: {
     digit: 'digit',
     cornerNote: 'corner-note',
     centerNote: 'center-note',
     cellColor: 'cell-color',
-  }),
+  },
 
   /** @readonly @enum {string} */
   palettes: enumeration({

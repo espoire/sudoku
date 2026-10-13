@@ -1,4 +1,4 @@
-Bind to "Tab": cycle to next input mode.
+Puzzle directory UI
 
 Puzzle Routing
   User can link / enter a URL like ".../sudoku/#/puzzle/006814097081200004274009801358400709000057020040000315005638170620040080003792506/"
@@ -6,8 +6,6 @@ Puzzle Routing
   Use vue-router
     import { createRouter, createWebHashHistory } from 'vue-router';
     router.push(`/puzzle/${nextPuzzleString}`);
-
-Curated started collection of puzzles & directory UI
 
 Support an existing Sudoku import format
 

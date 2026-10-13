@@ -138,6 +138,24 @@ export default class BoardInteractor {
     vm.inputMode = this.#inputMode;
   }
 
+  /**
+   * Cycles the input mode to the next or previous mode.
+   * @param {'next' | 'previous'} direction
+   */
+  cycleInputMode(direction = 'next') {
+    const inputModes = Object.values(Constants.inputModes);
+
+    const currentIndex = inputModes.indexOf(this.#inputMode);
+
+    if (direction === 'next') {
+      const nextIndex = (currentIndex + 1) % inputModes.length;
+      this.setInputMode(inputModes[nextIndex]);
+    } else if (direction === 'previous') {
+      const prevIndex = (currentIndex - 1 + inputModes.length) % inputModes.length;
+      this.setInputMode(inputModes[prevIndex]);
+    }
+  }
+
   togglePalette() {
     if (this.#inputMode !== Constants.inputModes.cellColor) return;
     this.#palette = (this.#palette === 'regular' ? 'color-blind' : 'regular');

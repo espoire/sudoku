@@ -120,7 +120,15 @@ function onKeydown(event) {
   } else if (clearDigits.includes(event.key)) {
     onNumeralInput(null);
 
-  } else if (event.key === 'Tab' || event.key === '`') {
+  } else if (event.key === 'Tab') {
+    if (event.shiftKey) {
+      cycleInputMode('previous');
+    } else {
+      cycleInputMode('next');
+    }
+    event.preventDefault();
+
+  } else if (event.key === '`') {
     onClickPaletteToggleButton();
 
   } else if (event.ctrlKey && event.key === 'a') {
@@ -152,6 +160,11 @@ function onClickResetButton() {
 function onClickInputModeButton(mode) {
   logEvent('onInputModeChange', mode);
   Globals.gameController.boardInteractor.setInputMode(mode);
+}
+
+function cycleInputMode(direction = 'next') {
+  logEvent('cycleInputMode', direction);
+  Globals.gameController.boardInteractor.cycleInputMode(direction);
 }
 
 function onClickPaletteToggleButton() {
