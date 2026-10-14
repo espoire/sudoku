@@ -1,4 +1,10 @@
-Puzzle directory UI
+"Daily Puzzle" generator
+  (For now) use today's system date as a seed
+  "King's Sudoku" variant constraint
+  Show active variant rules somewhere on UI
+  Anternate "Box" locations variant constraint
+  Support smaller boards
+  Generate random
 
 Puzzle Routing
   User can link / enter a URL like ".../sudoku/#/puzzle/006814097081200004274009801358400709000057020040000315005638170620040080003792506/"
@@ -7,7 +13,7 @@ Puzzle Routing
     import { createRouter, createWebHashHistory } from 'vue-router';
     router.push(`/puzzle/${nextPuzzleString}`);
 
-Support an existing Sudoku import format
+Puzzle directory UI polish
 
 Undo/Redo
 "put all the settings under a menu of customize your game"
@@ -22,6 +28,8 @@ Notes
   Visual Numpad Modes
     Corner Notes?
     Center Notes?
+
+Support an existing Sudoku import format
 
 Visual numpad
   Option for "layout like a PC numpad"

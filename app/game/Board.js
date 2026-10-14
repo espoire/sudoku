@@ -1,5 +1,5 @@
 import { array, fillFrom } from "../util/Array.js";
-import Constraint from "./Constraint.js";
+import Constraint from "./constraint/Constraint.js";
 
 /** Data & logic class for the Sudoku board.
  * Supports variable sizes, including standard 9x9 and smaller variants.
