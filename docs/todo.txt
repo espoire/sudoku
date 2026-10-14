@@ -6,6 +6,16 @@
   Support smaller boards
   Generate random
 
+Notes
+  Pencil Colors
+    User can select the color of the digit-notes, before writing them
+    At time of placing a digit-note, that digit-note records the then-active pencil color, and thereafter uses that color for rendering (when not overridden by error-checking color)
+  Mode Options
+    TODO some day a larger affect-wide-areas-of-the-screen visual difference per current mode (maybe a viewport "border" pattern or color?)
+  Visual Numpad Modes
+    Corner Notes?
+    Center Notes?
+
 Puzzle Routing
   User can link / enter a URL like ".../sudoku/#/puzzle/006814097081200004274009801358400709000057020040000315005638170620040080003792506/"
   Game will parse, validate, and present that puzzle, if valid.
@@ -18,16 +28,6 @@ Puzzle directory UI polish
 Undo/Redo
 "put all the settings under a menu of customize your game"
 make the outside box as thick as the box seperators
-
-Notes
-  Pencil Colors
-    User can select the color of the digit-notes, before writing them
-    At time of placing a digit-note, that digit-note records the then-active pencil color, and thereafter uses that color for rendering (when not overridden by error-checking color)
-  Mode Options
-    TODO some day a larger affect-wide-areas-of-the-screen visual difference per current mode (maybe a viewport "border" pattern or color?)
-  Visual Numpad Modes
-    Corner Notes?
-    Center Notes?
 
 Support an existing Sudoku import format
 

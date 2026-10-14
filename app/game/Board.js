@@ -1,5 +1,8 @@
+/** @typedef {import("./constraint/Constraint.js").default} Constraint */
+
 import { array, fillFrom } from "../util/Array.js";
 import Constraint from "./constraint/Constraint.js";
+import ConstraintLoader from "./constraint/ConstraintLoader.js";
 
 /** Data & logic class for the Sudoku board.
  * Supports variable sizes, including standard 9x9 and smaller variants.
@@ -15,19 +18,22 @@ export default class Board {
 
   /**
    * Initializes a new Sudoku board with the given size and initial numerals.
-   * @param {*} param0 The parameter object.
-   * @param {string} param0.title The title of the puzzle.
-   * @param {{ x: number, y: number }} param0.size
-   * @param {string[]} param0.given A list of strings each representing a board row. Numerals are used for given values, and spaces represent non-given (empty) cells.
+   * @param {*} config The parameter object.
+   * @param {string} config.title The title of the puzzle.
+   * @param {{ x: number, y: number }} config.size
+   * @param {string[]} config.given A list of strings each representing a board row. Numerals are used for given values, and spaces represent non-given (empty) cells.
+   * @param {string[]} config.constraints An array of constraint descriptors to apply to the board. May reference other data elements on the config. 
    */
-  constructor({ size = { x: 9, y: 9 }, given, constraints = [Constraint.basic9x9SudokuRules] }) {
+  constructor(config) {
+    const { size = { x: 9, y: 9 }, given } = config;
+
     this.size = structuredClone(size);
 
     this.cells = array(size.y, size.x);
     fillFrom(this.cells, (y, x) => new Cell(x, y));
 
     this.#loadGivenNumerals(given);
-    this.constraints = constraints;
+    this.constraints = ConstraintLoader.load(config);
   }
 
   /**
@@ -85,30 +91,34 @@ export default class Board {
   }
 
   /**
+   * Checks whether the current board state satisfies all constraints and if all cells are filled.
+   * @param {boolean} [enumerate=true] Whether to enumerate all constraint violations or stop at the first failure.
    * @returns {{ win: boolean, valid?: boolean, errors?: Array<{ message: string, location: Array<{ row: number, column: number }>}> }}
    */
-  checkWin() {
-    let constraintResult;
+  checkWin(enumerate = true) {
+    let results;
 
-    // First, check constraints
+    // First, check 'correctness' constraints
     for (const constraint of this.constraints) {
-      constraintResult = constraint.check(this);
+      const constraintResult = constraint.check(this);
+
       if (!constraintResult.valid) {
-        for (const error of constraintResult.errors) {
-          console.error(error.message, ...error.location);
-        }
-        return { win: false, ...constraintResult };
+        for (const error of constraintResult.errors) console.error(error.message, ...error.location);
+        if (!enumerate) return { win: false, ...constraintResult };
       }
+
+      results = Constraint.mergeConstraintCheckResults(results ?? { valid: true, errors: [] }, constraintResult);
     }
     
-    // Also, check if all cells are filled
+    // Then check completion constraints (if any)
+    // Check if all cells are filled (TODO convert to a 'completion' constraint)
     for (let y = 0; y < this.size.y; y++) {
       for (let x = 0; x < this.size.x; x++) {
-        if (this.cells[y][x].value === null) return { win: false, ...constraintResult };
+        if (this.cells[y][x].value === null) return { win: false, ...results };
       }
     }
 
-    return { win: true };
+    return { win: true, ...results };
   }
 
   /**

@@ -6,7 +6,7 @@ export default class SudokuBoxDigitUniquenessConstraintGenerator {
    * @param {{ x: number, y: number }} boardSize The size of the sudoku board for which to generate the box digit uniqueness constraint.
    */
   static generate(boardSize) {
-    const { boxes, boxWidth, boxHeight, boxRowLength, boxColumnLength } = this.selectBoxesFor(boardSize);
+    const { boxes, boxWidth, boxHeight } = this.selectBoxesFor(boardSize);
 
     const checkFn = (board) => {
       const errors = [];
@@ -109,8 +109,6 @@ export default class SudokuBoxDigitUniquenessConstraintGenerator {
       boxes,
       boxWidth,
       boxHeight,
-      boxRowLength,
-      boxColumnLength,
     };
   }
 }
