@@ -26,6 +26,9 @@ const GlobalVueProps = reactive({
 
   /** Programmatically copied from Settings.user; only need to intialize these keys to avoid crash-on-load due to access before programmatic initialization. */
   userSettings: {},
+
+  /** @type {Array<{ id: string, title: string }>} The list of available puzzles. */
+  puzzles: [],
 });
 
 window.GlobalVueProps = GlobalVueProps;

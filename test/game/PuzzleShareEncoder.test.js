@@ -1,4 +1,4 @@
-import { puzzleConfigs } from "/app/game/puzzles.js";
+import puzzleConfigs from "/app/game/puzzles.js";
 import PuzzleShareEncoder from "/app/game/PuzzleShareEncoder.js";
 import { runFunctionalTests } from "../TestHelpers.js";
 import { mean } from "../../app/util/Array.js";

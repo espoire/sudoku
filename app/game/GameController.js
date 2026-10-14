@@ -1,10 +1,10 @@
 import GlobalVueProps from '../VueInterface.js';
 import Settings from '../Settings.js';
+import puzzleConfigs from './puzzles.js';
 import Constants from '../Constants.js';
 import UserSettingsManager from '../UserSettingsManager.js';
 import Board from './Board.js';
 import BoardInteractor from './BoardInteractor.js';
-import { defaultPuzzleConfig } from './puzzles.js';
 import Timer from './Timer.js';
 
 const { modes } = Constants;
@@ -29,7 +29,12 @@ export default class GameController {
   }
 
   onAdvanceFromTitleScreen() {
-    this.board = new Board(defaultPuzzleConfig);
+    GlobalVueProps.puzzles = puzzleConfigs.map(cfg => ({ id: cfg.id, title: cfg.title }));
+    GameController.setMode(modes.directory);
+  }
+
+  onStartPuzzle(id) {
+    this.board = new Board(puzzleConfigs.find(cfg => cfg.id === id));
     this.boardInteractor = new BoardInteractor(this.board);
     this.boardInteractor.updateVue();
     this.timer.start();

@@ -1,4 +1,4 @@
-export const puzzleConfigs = [{
+const puzzleConfigs = [{
   title: 'Template',
   id: null,
   size: { x: 9, y: 9 },
@@ -254,8 +254,7 @@ export const puzzleConfigs = [{
     '32      6',
   ],
 }];
-
-export const defaultPuzzleConfig = puzzleConfigs.find(cfg => cfg.id === 'test-puzzle-11');
+export default puzzleConfigs;
 
 /**
  * Initializes a new Sudoku board with the given size and initial numerals.
