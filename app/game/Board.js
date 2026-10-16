@@ -96,29 +96,28 @@ export default class Board {
    * @returns {{ win: boolean, valid?: boolean, errors?: Array<{ message: string, location: Array<{ row: number, column: number }>}> }}
    */
   checkWin(enumerate = true) {
-    let results;
+    let results = { valid: true, errors: [] };
 
-    // First, check 'correctness' constraints
+    // Check for correctness first
     for (const constraint of this.constraints) {
       const constraintResult = constraint.check(this);
+      if (constraintResult == null) continue;
 
       if (!constraintResult.valid) {
         for (const error of constraintResult.errors) console.error(error.message, ...error.location);
         if (!enumerate) return { win: false, ...constraintResult };
       }
 
-      results = Constraint.mergeConstraintCheckResults(results ?? { valid: true, errors: [] }, constraintResult);
-    }
-    
-    // Then check completion constraints (if any)
-    // Check if all cells are filled (TODO convert to a 'completion' constraint)
-    for (let y = 0; y < this.size.y; y++) {
-      for (let x = 0; x < this.size.x; x++) {
-        if (this.cells[y][x].value === null) return { win: false, ...results };
-      }
+      results = Constraint.mergeConstraintCheckResults(results, constraintResult);
     }
 
-    return { win: true, ...results };
+    // Then check for completion
+    let complete = true;
+    for (const constraint of this.constraints) {
+      complete &&= constraint.checkComplete(this);
+    }
+
+    return { win: complete && results.valid, ...results };
   }
 
   /**
@@ -132,8 +131,8 @@ export default class Board {
         const validation = {};
         for (const note of notes) {
           validation[note] = this.constraints.every(constraint => {
-            const result = constraint.check(this, { row: rowIndex, column: columnIndex, value: note });
-            return typeof result === 'boolean' ? result : result.valid;
+            const result = constraint.checkNote(this, { row: rowIndex, column: columnIndex, value: note });
+            return result;
           });
         }
         return validation;

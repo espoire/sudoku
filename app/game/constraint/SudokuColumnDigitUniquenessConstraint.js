@@ -2,13 +2,11 @@
 /** @typedef {import('./Constraint.js').ConstraintCheckResult} ConstraintCheckResult */
 
 export default class SudokuColumnDigitUniquenessConstraint {
-  static type = 'correctness';
-
   /**
    * @param {Board} board
    * @returns {ConstraintCheckResult} A detailed result for checking the whole board.
    */
-  static checkFn(board) {
+  static check(board) {
     const errors = [];
   
     for (let x = 0; x < board.size.x; x++) {
@@ -43,7 +41,7 @@ export default class SudokuColumnDigitUniquenessConstraint {
    * @param {{ row: number, column: number, value: number }} note 
    * @returns {boolean}
    */
-  static checkNoteFn(board, note) {
+  static checkNote(board, note) {
     const target = note.value;
 
     const x = note.column;

@@ -253,6 +253,19 @@ const puzzleConfigs = [{
     '  5  1   ',
     '32      6',
   ],
+}, {
+  // title: 'Artisanal "Daily" Puzzle',
+  // id: 'artisanal-daily-puzzle',
+  // size: { x: 6, y: 6 },
+  // given: [
+  //   '7     ',
+  //   '   7  ',
+  //   ' 7    ',
+  //   '    7 ',
+  //   '  7   ',
+  //   '      ',
+  // ],
+  // constraints: [], // TODO: completion-7s (place only the 7s to complete), king's (same-numerals cannot be adjacent diagonally), alternate boxes (custom box locations)
 }];
 export default puzzleConfigs;
 

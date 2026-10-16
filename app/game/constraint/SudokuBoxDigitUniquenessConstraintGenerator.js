@@ -8,7 +8,7 @@ export default class SudokuBoxDigitUniquenessConstraintGenerator {
   static generate(boardSize) {
     const { boxes, boxWidth, boxHeight } = this.selectBoxesFor(boardSize);
 
-    const checkFn = (board) => {
+    const check = (board) => {
       const errors = [];
   
       // Iterate the boxes, checking for duplicate values within each box.
@@ -39,7 +39,7 @@ export default class SudokuBoxDigitUniquenessConstraintGenerator {
       return { valid: errors.length === 0, errors };
     };
 
-    const checkNoteFn = (board, note) => {
+    const checkNote = (board, note) => {
       const target = note.value;
 
       const x = note.column;
@@ -62,9 +62,8 @@ export default class SudokuBoxDigitUniquenessConstraintGenerator {
     };
 
     return {
-      checkFn,
-      checkNoteFn,
-      type: 'correctness',
+      check,
+      checkNote,
     };
   }
 

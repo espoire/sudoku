@@ -4,6 +4,7 @@
 import SudokuRowDigitUniquenessConstraint from './SudokuRowDigitUniquenessConstraint.js';
 import SudokuColumnDigitUniquenessConstraint from './SudokuColumnDigitUniquenessConstraint.js';
 import SudokuBoxDigitUniquenessConstraintGenerator from './SudokuBoxDigitUniquenessConstraintGenerator.js';
+import AllCellsFilledCompletionConstraint from './AllCellsFilledCompletionConstraint.js';
 
 /**
  * Constraint model and checker class for Sudoku and variant rules.
@@ -12,30 +13,31 @@ export default class Constraint {
   static sudokuRow = new Constraint(SudokuRowDigitUniquenessConstraint);
   static sudokuColumn = new Constraint(SudokuColumnDigitUniquenessConstraint);
   static sudokuBox = (board) => new Constraint(SudokuBoxDigitUniquenessConstraintGenerator.generate(board.size));
+  static allCellsFilled = new Constraint(AllCellsFilledCompletionConstraint);
 
   /** @type {(board: Board) => ConstraintCheckResult} */ #checkFn;
   /** @type {(board: Board, note: { row: number, column: number, value: number }) => boolean} */ #checkNoteFn;
-  /** @type {'correctness' | 'completion'} */ #type;
-  get type() { return this.#type; }
+  /** @type {(board: Board) => boolean} */ #checkCompleteFn;
 
   /**
-   * @param {(board: Board) => ConstraintCheckResult} checkFn The function to check the constraint.
-   * @param {(board: Board, note: { row: number, column: number, value: number }) => boolean} checkNoteFn The function to check the constraint for a specific cell.
-   * @param {'correctness' | 'completion'} type The type of the constraint. Correctness constraints are used for rule-violation highlighting, while completion constraints only block the completion of the puzzle.
+   * @param {(board: Board) => ConstraintCheckResult} check The function to check the constraint.
+   * @param {(board: Board, note: { row: number, column: number, value: number }) => boolean} checkNote The function to check the constraint for a specific cell.
+   * @param {(board: Board) => boolean} checkComplete The function to check the completion condition of the constraint.
    */
-  constructor({ checkFn, checkNoteFn, type = 'correctness' }) {
-    this.#checkFn = checkFn;
-    this.#checkNoteFn = checkNoteFn;
-    this.#type = type;
+  constructor({ check, checkNote, checkComplete }) {
+    this.#checkFn = check;
+    this.#checkNoteFn = checkNote;
+    this.#checkCompleteFn = checkComplete;
   }
 
   /**
    * Checks whether the given board satisfies this constraint.
    * @param {Board} board
-   * @returns {ConstraintCheckResult} A detailed result for checking the whole board.
+   * @returns {ConstraintCheckResult?} A detailed result for checking the whole board, or null if this constraint does not provide a full-board-in-progress validity check.
    */
   check(board) {
-    return this.#checkFn(board);
+    if (typeof this.#checkFn === 'function') return  this.#checkFn(board);
+    return null;
   }
 
   /**
@@ -45,7 +47,18 @@ export default class Constraint {
    * @returns {boolean}
    */
   checkNote(board, note) {
-    return this.#checkNoteFn(board, note);
+    if (typeof this.#checkNoteFn === 'function') return this.#checkNoteFn(board, note);
+    return false;
+  }
+
+  /**
+   * Checks whether the given board satisfies the completion condition of this constraint.
+   * @param {Board} board
+   * @returns {boolean}
+   */
+  checkComplete(board) {
+    if (typeof this.#checkCompleteFn === 'function') return this.#checkCompleteFn(board);
+    return true;
   }
 
   /**

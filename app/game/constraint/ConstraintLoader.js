@@ -12,7 +12,10 @@ const nameMap = {
     generate: Constraint.sudokuBox,
   },
   box: 'sudokuBox',
-  default: ['sudokuRow','sudokuColumn','sudokuBox'],
+  allCellsFilled: Constraint.allCellsFilled,
+  full: 'allCellsFilled',
+
+  default: ['row','column','box', 'full'],
 };
 
 export default class ConstraintLoader {
