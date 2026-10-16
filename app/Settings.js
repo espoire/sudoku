@@ -8,7 +8,7 @@ const Settings = {
     // disableTestMode: true,
 
     log: {
-      uiEventHandling: true,
+      uiEventHandling: false,
       modalEventRouting: false,
       uiModeChanges: false, // Logs whenever GameController.setMode is called (e.g. swapping fullscreen UIs like: combat/roleplay/map)
     },

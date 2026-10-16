@@ -10,8 +10,6 @@ import { range } from '/app/util/Array.js';
 import BoardSelector from './BoardSelector.vue';
 import { logUiEvent } from './helpers.js';
 
-const modes = Constants.modes;
-
 const props = defineProps({
   settings: Object,
   mode: String,
@@ -51,12 +49,6 @@ function onNumeralInput(value) {
   Globals.gameController.boardInteractor.handleNumeralInput(value);
 }
 
-function onUnhandledClick() {
-  logUiEvent('onUnhandledClick');
-  if (!ModalManager.isOnTop('SudokuUi.vue') || props.mode !== modes.play) return;
-  Globals.gameController.boardInteractor.clearSelection();
-}
-
 const displayedTime = ref('');
 let updateElapsedTimeInterval;
 function updateElapsedTime() {
@@ -69,31 +61,22 @@ function resumeTimer() { Globals.gameController.timer.resume(); }
 const numerals = range(0, 9).map(n => `${n}`);
 const clearDigits = [' ', '-', 'Delete', 'Backspace'];
 onMounted(() => {
-  ModalManager.register('SudokuUi.vue', { onKeydown });
-  window.addEventListener('click', onUnhandledClick);
+  ModalManager.registerPeer('BoardSelector.vue', 'SudokuUi.vue', { onKeydown });
   updateElapsedTime();
   updateElapsedTimeInterval = setInterval(updateElapsedTime, 100);
   resumeTimer();
 });
 onUnmounted(() => {
   ModalManager.unregister('SudokuUi.vue');
-  window.removeEventListener('click', onUnhandledClick);
   pauseTimer();
   clearInterval(updateElapsedTimeInterval);
 });
+
+const pauseKeys = ['Pause', 'Escape'];
 function onKeydown(event) {
   logUiEvent('onKeydown', event);
-  if (event.key === 'Pause') {
+  if (pauseKeys.includes(event.key)) {
     onClickSettingsButton();
-
-  } else if (event.key === 'Escape') {
-    const hasSelection = Globals.gameController.boardInteractor.hasAnySelection();
-    if (hasSelection) {
-      Globals.gameController.boardInteractor.clearSelection();
-    } else {
-      // Else open settings
-      onClickSettingsButton();
-    }
 
   } else if (numerals.includes(event.key)) {
     onNumeralInput(+event.key);
@@ -111,9 +94,6 @@ function onKeydown(event) {
 
   } else if (event.key === '`') {
     onClickPaletteToggleButton();
-
-  } else if (event.ctrlKey && event.key === 'a') {
-    Globals.gameController.boardInteractor.selectAllCells();
   }
 }
 
@@ -154,7 +134,7 @@ function onClickPaletteToggleButton() {
       <img class="settings-button" src="/img/pause-button.min.svg" @click.stop="onClickSettingsButton" />
     </div>
   
-    <BoardSelector :board="board" />
+    <BoardSelector :board="board" :mode="mode" />
   
     <div class="controls-footer">
       <div class="input-modes">

@@ -104,7 +104,7 @@ export default class Board {
       if (constraintResult == null) continue;
 
       if (!constraintResult.valid) {
-        for (const error of constraintResult.errors) console.error(error.message, ...error.location);
+        for (const error of constraintResult.errors) console.warn(error.message, ...error.location);
         if (!enumerate) return { win: false, ...constraintResult };
       }
 

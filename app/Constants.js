@@ -8,6 +8,8 @@ const Constants = {
     title: 'title',
     settings: 'settings',
     play: 'play',
+    directory: 'directory',
+    edit: 'edit',
   }),
 
   /** @readonly @enum {string} */
