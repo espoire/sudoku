@@ -1,4 +1,9 @@
+Put the colors in!
+
 Puzzle Editor UI
+  Visual Numpad
+  Wire up copy-as-JSON button
+  Build import JSON puzzle UI
 
 Bug: all the Notes are visually marked wrong
 Bug: "Bar of Soap" --> Insert all 1s --> Delete all via [Delete] key --> Given 1s still show as invalid

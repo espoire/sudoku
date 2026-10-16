@@ -3,8 +3,9 @@ import Settings from '../Settings.js';
 import puzzleConfigs from './puzzles.js';
 import Constants from '../Constants.js';
 import UserSettingsManager from '../UserSettingsManager.js';
-import Board from './Board.js';
-import BoardInteractor from './BoardInteractor.js';
+import Board from './board/Board.js';
+import BoardInteractor from './board/BoardInteractor.js';
+import PuzzleEditInteractor from './board/PuzzleEditInteractor.js';
 import Timer from './Timer.js';
 
 const { modes } = Constants;
@@ -16,7 +17,7 @@ export default class GameController {
   mode = modes.title;
 
   /** @type {Board} */ board = null;
-  /** @type {BoardInteractor} */ boardInteractor = null;
+  /** @type {BoardInteractor | PuzzleEditInteractor} */ interactor = null;
   /** @type {Timer} */ timer = new Timer();
 
   begin() {
@@ -24,10 +25,10 @@ export default class GameController {
     GameController.showTitleScreen();
   }
 
-  static onAdvanceFromTitleScreen() {
+  onAdvanceFromTitleScreen() {
     // Globals.gameController.onStartPuzzle(puzzleConfigs[5].id);
     // GameController.showPuzzleDirectory();
-    GameController.showPuzzleEditor();
+    this.showPuzzleEditor();
   }
 
   static showTitleScreen() {
@@ -39,14 +40,17 @@ export default class GameController {
     GameController.setMode(modes.directory);
   }
 
-  static showPuzzleEditor() {
+  showPuzzleEditor() {
+    this.board = new Board(puzzleConfigs.find(cfg => cfg.id === null));
+    this.interactor = new PuzzleEditInteractor(this.board);
+    this.interactor.updateVue();
     GameController.setMode(modes.edit);
   }
 
   onStartPuzzle(id) {
     this.board = new Board(puzzleConfigs.find(cfg => cfg.id === id));
-    this.boardInteractor = new BoardInteractor(this.board);
-    this.boardInteractor.updateVue();
+    this.interactor = new BoardInteractor(this.board);
+    this.interactor.updateVue();
     this.timer.start();
     GameController.setMode(modes.play);
   }

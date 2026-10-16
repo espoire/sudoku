@@ -20,8 +20,8 @@ const props = inject('props');
       <TitleScreen v-if="props.mode === modes.title" :userSettings="props.userSettings" />
       <PuzzleDirectory v-if="props.mode === modes.directory" :puzzles="props.puzzles" />
       <PuzzleEditorUi v-if="props.mode === modes.edit"
-          :settings="props.userSettings"
-          :puzzle="props.puzzle" />
+          :mode="props.mode"
+          :board="props.board" />
       <SudokuUi v-if="props.mode === modes.play"
           :settings="props.userSettings" :mode="props.mode"
           :board="props.board"

@@ -1,16 +1,32 @@
 <script setup>
-import { computed, ref } from 'vue';
+import { computed, onMounted, onUnmounted, ref } from 'vue';
 import { randBool, randomArrayElement } from '../../../util/random';
 import { capitalize, toSnakeCase, toTitleCase } from '../../../util/string';
-import { first } from '../../../util/Array';
+import { first, range } from '../../../util/Array';
+import BoardSelector from '../board/BoardSelector.vue';
+import ModalManager from '../../ModalManager.js';
+import { logUiEvent } from '../board/helpers.js';
 
-const props = defineProps({});
+const props = defineProps({
+  mode: String,
+
+  board: {
+    size: {
+      x: Number,
+      y: Number
+    },
+    contents: {
+      type: Array, // 2d array of Cell descriptor objects: { value: number, given: boolean, selected: boolean, notes: { corner: { value: number, valid: boolean }[], center: { value: number, valid: boolean }[] }, colors: string[] }
+    },
+  },
+});
+
 let title = ref('');
 let id = ref('');
 
 const vowels = ['a', 'e', 'i', 'o', 'u', 'x'];
-const adjectives = ['aardvark', 'apple', 'awesome', 'banana', 'big', 'bogus', 'cherry', 'colossal', 'choice', 'cool', 'date', 'dank', 'elderberry', 'endless', 'embodied', 'epic', 'fig', 'fantastic', 'first', 'grape', 'giant', 'great', 'good', 'honeydew', 'huge', 'iris', 'indecent', 'imperishable', 'impossible', 'juice', 'jungle', 'kiwi', 'kingly', 'lemon', 'large', 'lovely', 'legit', 'lean', 'mango', 'massive', 'monkey', 'nectarine', 'null', 'neat', 'number', 'numeric', 'orange', 'okay', 'oversized', 'papaya', 'perfect', 'primo', 'quince', 'raspberry', 'strawberry', 'straight', 'scarlet', 'second', 'subterranean', 'tangerine', 'tall', 'talented', 'tenth', 'ugly', 'undefined', 'ultimate', 'vanilla', 'verifiable', 'watermelon', 'whimsical', 'wily', 'xray', 'yam', 'zucchini', 'zany'];
-const nouns = ['advice', 'adventure', 'array', 'animism', 'box', 'boggle', 'blossom', 'business', 'chess', 'chase', 'choice', 'doubt', 'dance', 'devil', 'detour', 'entrancement', 'evening', 'epic', 'find', 'frenzy', 'guess', 'galavant', 'geometry', 'graveyard', 'grid', 'hide', 'hearsay', 'incident', 'jape', 'japes', 'journey', 'key', 'look', 'laughs', 'letter', 'list', 'madness', 'marquee', 'masquerade', 'matrix', 'mystery', 'mysticism', 'night', 'novel', 'opinion', 'order', 'object', 'overture', 'puzzle', 'panic', 'picture', 'poetry', 'quest', 'query', 'riddle', 'riot', 'romp', 'story', 'song', 'spell', 'soiree', 'tale', 'trek', 'tour', 'tiles', 'utterance', 'view', 'voyage', 'waltz', 'whirl', 'whim', 'whimsy', 'wilderness', 'yarn', 'zeal'];
+const adjectives = ['aardvark', 'apple', 'awesome', 'banana', 'big', 'bogus', 'cherry', 'colossal', 'choice', 'cool', 'date', 'dank', 'elderberry', 'endless', 'embodied', 'epic', 'fig', 'fantastic', 'first', 'grape', 'giant', 'great', 'good', 'honeydew', 'huge', 'iris', 'indecent', 'imperishable', 'impossible', 'juice', 'jungle', 'kiwi', 'kingly', 'lemon', 'large', 'lovely', 'legit', 'lean', 'mango', 'massive', 'monkey', 'nectarine', 'null', 'neat', 'number', 'numeric', 'orange', 'okay', 'oversized', 'papaya', 'perfect', 'primo', 'quince', 'raspberry', 'strawberry', 'straight', 'scarlet', 'second', 'subterranean', 'sus', 'tangerine', 'tall', 'talented', 'tenth', 'ugly', 'undefined', 'ultimate', 'vanilla', 'verifiable', 'watermelon', 'whimsical', 'wily', 'xray', 'yam', 'zucchini', 'zany'];
+const nouns = ['advice', 'adventure', 'array', 'animism', 'box', 'boggle', 'blossom', 'business', 'chess', 'chase', 'choice', 'doubt', 'dance', 'devil', 'detour', 'entrancement', 'evening', 'epic', 'find', 'frenzy', 'guess', 'galavant', 'geometry', 'graveyard', 'grid', 'hide', 'hearsay', 'incident', 'jape', 'japes', 'journey', 'key', 'look', 'laughs', 'letter', 'list', 'madness', 'marquee', 'masquerade', 'matrix', 'mystery', 'mysticism', 'night', 'novel', 'opinion', 'order', 'object', 'olive', 'overture', 'puzzle', 'panic', 'picture', 'poetry', 'quest', 'query', 'riddle', 'riot', 'romp', 'story', 'song', 'spell', 'soiree', 'tale', 'trek', 'tour', 'tiles', 'utterance', 'view', 'voyage', 'waltz', 'whirl', 'whim', 'whimsy', 'wilderness', 'yarn', 'zeal'];
 
 const words = [
   randomArrayElement(adjectives),
@@ -28,6 +44,32 @@ const placeholderId = computed(() => title.value ? toSnakeCase(title.value) : de
 
 function onBlurTitle() { title.value = toTitleCase(title.value); }
 function onBlurId() { id.value = toSnakeCase(id.value); }
+
+
+const numerals = range(0, 9).map(n => `${n}`);
+const clearDigits = [' ', '-', 'Delete', 'Backspace'];
+onMounted(() => {
+  ModalManager.registerPeer('BoardSelector.vue', 'PuzzleEditorUi.vue', { onKeydown });
+});
+onUnmounted(() => {
+  ModalManager.unregister('PuzzleEditorUi.vue');
+});
+
+function onKeydown(event) {
+  logUiEvent('onKeydown', event);
+  
+  if (numerals.includes(event.key)) {
+    onNumeralInput(+event.key);
+
+  } else if (clearDigits.includes(event.key)) {
+    onNumeralInput(null);
+  }
+}
+
+function onNumeralInput(value) {
+  logUiEvent('onNumeralInput', value);
+  Globals.gameController.interactor.handleNumeralInput(value);
+}
 </script>
 
 <template>
@@ -40,7 +82,9 @@ function onBlurId() { id.value = toSnakeCase(id.value); }
       <label for="id">ID</label>
       <input type="text" id="id" class="id-text-input" :placeholder="placeholderId" v-model="id" @blur="onBlurId"/>
     </div>
-    <div class="submit-button">Submit</div>
+    <div class="submit-button">Copy as JSON</div>
+
+    <BoardSelector :board="board" :mode="mode" />
   </div>
 </template>
 

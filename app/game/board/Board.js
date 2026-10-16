@@ -1,8 +1,8 @@
-/** @typedef {import("./constraint/Constraint.js").default} Constraint */
+/** @typedef {import("../constraint/Constraint.js").default} Constraint */
 
-import { array, fillFrom } from "../util/Array.js";
-import Constraint from "./constraint/Constraint.js";
-import ConstraintLoader from "./constraint/ConstraintLoader.js";
+import { array, fillFrom } from "../../util/Array.js";
+import Constraint from "../constraint/Constraint.js";
+import ConstraintLoader from "../constraint/ConstraintLoader.js";
 
 /** Data & logic class for the Sudoku board.
  * Supports variable sizes, including standard 9x9 and smaller variants.
@@ -75,6 +75,24 @@ export default class Board {
     if (cell.value === value) return false;
 
     cell.value = value;
+    return true;
+  }
+
+  /**
+   * Sets the value of a cell as a given, bypassing the locked check.
+   * If deleting an existing given value, the cell will be unlocked.
+   * 
+   * @param {number} row The row index of the cell.
+   * @param {number} column The column index of the cell.
+   * @param {number|null} value The value to set, or null to clear the cell.
+   * @returns {boolean} True if the value was changed, false otherwise.
+   */
+  writeGiven(row, column, value) {
+    const cell = this.cells[row][column];
+    if (cell.value === value) return false;
+
+    cell.value = value;
+    cell.locked = (value != null);
     return true;
   }
 

@@ -46,7 +46,7 @@ function onClickSettingsButton() {
 
 function onNumeralInput(value) {
   logUiEvent('onNumeralInput', value);
-  Globals.gameController.boardInteractor.handleNumeralInput(value);
+  Globals.gameController.interactor.handleNumeralInput(value);
 }
 
 const displayedTime = ref('');
@@ -60,6 +60,7 @@ function resumeTimer() { Globals.gameController.timer.resume(); }
 
 const numerals = range(0, 9).map(n => `${n}`);
 const clearDigits = [' ', '-', 'Delete', 'Backspace'];
+const pauseKeys = ['Pause', 'Escape'];
 onMounted(() => {
   ModalManager.registerPeer('BoardSelector.vue', 'SudokuUi.vue', { onKeydown });
   updateElapsedTime();
@@ -72,7 +73,6 @@ onUnmounted(() => {
   clearInterval(updateElapsedTimeInterval);
 });
 
-const pauseKeys = ['Pause', 'Escape'];
 function onKeydown(event) {
   logUiEvent('onKeydown', event);
   if (pauseKeys.includes(event.key)) {
@@ -105,23 +105,23 @@ function onVisualNumpadClick(value) {
 
 function onClickResetButton() {
   logUiEvent('onClickResetButton');
-  Globals.gameController.boardInteractor.resetPuzzle();
+  Globals.gameController.interactor.resetPuzzle();
   Globals.gameController.timer.reset();
 }
 
 function onClickInputModeButton(mode) {
   logUiEvent('onInputModeChange', mode);
-  Globals.gameController.boardInteractor.setInputMode(mode);
+  Globals.gameController.interactor.setInputMode(mode);
 }
 
 function cycleInputMode(direction = 'next') {
   logUiEvent('cycleInputMode', direction);
-  Globals.gameController.boardInteractor.cycleInputMode(direction);
+  Globals.gameController.interactor.cycleInputMode(direction);
 }
 
 function onClickPaletteToggleButton() {
   logUiEvent('onClickPaletteToggleButton');
-  Globals.gameController.boardInteractor.togglePalette();
+  Globals.gameController.interactor.togglePalette();
 }
 </script>
 

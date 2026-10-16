@@ -1,6 +1,6 @@
 /** @typedef {{ given: string[] }} PuzzleConfig */
 
-import Board from "./Board.js";
+import Board from "./board/Board.js";
 
 /**
  * Handles serializing and deserializing puzzle share data, as used

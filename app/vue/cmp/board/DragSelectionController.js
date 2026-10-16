@@ -46,7 +46,7 @@ export default class DragSelectionController {
     if (!this.markCellDragVisited(event)) return;
 
     const {row, column} = this.getCellTarget(event);
-    Globals.gameController.boardInteractor.handleCellDragEnter(row, column);
+    Globals.gameController.interactor.handleCellDragEnter(row, column);
   }
 
   drag(event) {

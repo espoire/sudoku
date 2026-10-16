@@ -1,132 +1,40 @@
-/** @typedef {import('./Board.js').default} Board */
-import Constants from "../Constants.js";
-import Settings from "../Settings.js";
-import { sort } from "../util/sort.js";
-import GlobalVueProps from "../VueInterface.js";
+/** @typedef {import('./board/Board.js').default} Board */
+import Constants from "../../Constants.js";
+import Settings from "../../Settings.js";
+import { sort } from "../../util/sort.js";
+import GlobalVueProps from "../../VueInterface.js";
 import { CellColorSet } from "./CellColor.js";
+import { create2DArray } from "./helpers.js";
+import Interactor from "./Interactor.js";
 
 /**
  * A UI model and controller for interacting with the Sudoku board.
  * Wraps and mediates access to a Board data object.
  * Supports its own cell-multi-selection and notations management.
  */
-export default class BoardInteractor {
+export default class BoardInteractor extends Interactor {
   /** @type {Board} */ board;
   /** @type {Array<Array<boolean>>} */ selectedCells = [];
   /** @type {Array<Array<Set<number>>>} */ cornerNotes = [];
   /** @type {Array<Array<Set<number>>>} */ centerNotes = [];
   /** @type {Array<Array<CellColorSet>>} */ cellColors = []; 
-  /** @type {{ win: boolean, valid?: boolean, errors?: Array<{ message: string, location: Array<{ row: number, column: number }>}> }} */ #cachedValidationResult = null;
+  /** @type {{ win: boolean, valid?: boolean, errors?: Array<{ message: string, location: Array<{ row: number, column: number }>}> }} */ cachedValidationResult = null;
   /** @type {Array<Array<Dictionary<number, boolean> | null>>} */ #cachedNotesValidationResult = null;
   /** @type {'digit' | 'corner-note' | 'center-note' | 'cell-color'} */ #inputMode = Constants.inputModes.digit;
   /** @type {'regular' | 'color-blind'} */ #palette = Constants.palettes.regular;
 
   constructor(board) {
-    this.board = board;
-
-    this.selectedCells = create2DArray(board.size.y, board.size.x, false);
+    super(board);
     this.cornerNotes = create2DArray(board.size.y, board.size.x, () => new Set());
     this.centerNotes = create2DArray(board.size.y, board.size.x, () => new Set());
     this.cellColors = create2DArray(board.size.y, board.size.x, () => new CellColorSet());
   }
 
   resetPuzzle() {
-    this.board.reset();
-    this.clearSelection();
-    this.#cachedValidationResult = null;
-    this.updateVue();
-  }
-
-  /**
-   * Handles user input for clicking on a cell.
-   * @param {number} row The row index of the cell.
-   * @param {number} column The column index of the cell.
-   */
-  handleCellActivation(row, column) {
-    // If the target cell is the ONLY selected cell, deselect it instead of selecting it again.
-    const selection = this.#listSelection();
-    if (selection.length === 1 && selection[0].row === row && selection[0].column === column) {
-      this.selectedCells[row][column] = false;
-      this.updateVue();
-      return;
-    }
-
-    // Else, replace the current selection with the newly activated cell.
-    this.clearSelection();
-    this.selectedCells[row][column] = !this.selectedCells[row][column];
-    this.updateVue();
-  }
-
-  handleCellDragEnter(row, column) {
-    this.selectedCells[row][column] = true;
-    this.updateVue();
-  }
-
-  selectAllMatchingValues(row, column) {
-    this.clearSelection();
-
-    const value = this.board.cells[row][column].value;
-    if (value == null) return;
-
-    for (let r = 0; r < this.board.size.y; r++) {
-      for (let c = 0; c < this.board.size.x; c++) {
-        if (this.board.cells[r][c].value === value) {
-          this.selectedCells[r][c] = true;
-        }
-      }
-    }
-
-    this.updateVue();
-  }
-
-  /**
-   * @returns {Array<{row: number, column: number}>} The list of selected cells.
-   */
-  #listSelection() {
-    const selection = [];
-
-    for (let row = 0; row < this.selectedCells.length; row++) {
-      for (let column = 0; column < this.selectedCells[row].length; column++) {
-        if (this.selectedCells[row][column]) {
-          selection.push({ row, column });
-        }
-      }
-    }
-
-    return selection;
-  }
-
-  /**
-   * @returns {boolean} True if at least one cell is currently selected.
-   */
-  hasAnySelection() {
-    for (let row = 0; row < this.selectedCells.length; row++) {
-      for (let column = 0; column < this.selectedCells[row].length; column++) {
-        if (this.selectedCells[row][column]) return true;
-      }
-    }
-
-    return false;
-  }
-
-  /**
-   * Clears the current selection of cells.
-   */
-  clearSelection() {
-    this.#setAllCellsSelection(false);
-  }
-
-  selectAllCells() {
-    this.#setAllCellsSelection(true);
-  }
-
-  #setAllCellsSelection(state) {
-    for (let row = 0; row < this.selectedCells.length; row++) {
-      for (let column = 0; column < this.selectedCells[row].length; column++) {
-        this.selectedCells[row][column] = state;
-      }
-    }
-
+    super.resetPuzzle();
+    this.cornerNotes = create2DArray(this.board.size.y, this.board.size.x, () => new Set());
+    this.centerNotes = create2DArray(this.board.size.y, this.board.size.x, () => new Set());
+    this.cellColors = create2DArray(this.board.size.y, this.board.size.x, () => new CellColorSet());
     this.updateVue();
   }
 
@@ -168,7 +76,7 @@ export default class BoardInteractor {
    * @param {number?} value The number the user pressed, or null for a command to clear the selected cells.
    */
   handleNumeralInput(value) {
-    const selection = this.#listSelection();
+    const selection = this.listSelection();
 
     if (value == null) {
       // Explicit delete: clear selected cells regardless of input mode, using a priority order
@@ -226,7 +134,7 @@ export default class BoardInteractor {
         let validationResult = null;
         if (wroteAny) {
           validationResult = this.board.checkWin();
-          this.#cachedValidationResult = validationResult;
+          this.cachedValidationResult = validationResult;
           if (validationResult.win) {
             setTimeout(() => alert("Win! 🎉"), 0); // To give Vue time to rerender with the new correct digit(s) before declaring victory
           } else {
@@ -352,7 +260,7 @@ export default class BoardInteractor {
       row.map((cell, columnIndex) => ({
         ...cell.toVue(),
         selected: this.selectedCells[rowIndex][columnIndex],
-        error: this.#cachedValidationResult?.errors?.some(e => e.location.some(l => l.row === rowIndex && l.column === columnIndex)) ?? false,
+        error: this.cachedValidationResult?.errors?.some(e => e.location.some(l => l.row === rowIndex && l.column === columnIndex)) ?? false,
         ...(this.board.getValue(rowIndex, columnIndex) == null) ? {
           notes: {
             corner: Array.from(this.cornerNotes[rowIndex][columnIndex]).sort(sort.numeric.ascending).map(n => ({ value: n, valid: this.#cachedNotesValidationResult?.[rowIndex]?.[columnIndex]?.[n] })),
@@ -363,13 +271,4 @@ export default class BoardInteractor {
       }))
     );
   }
-}
-
-function create2DArray(rows, columns, generatorFnOrValue) {
-  let generatorFn = generatorFnOrValue;
-  if (typeof generatorFnOrValue !== 'function') generatorFn = () => generatorFnOrValue;
-
-  return Array.from({ length: rows }, (_, row) =>
-    Array.from({ length: columns }, (_, column) => generatorFn(row, column))
-  );
 }

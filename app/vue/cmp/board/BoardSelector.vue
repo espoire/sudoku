@@ -40,15 +40,15 @@ function onKeydown(event) {
 
   // [Escape] Clear selection if any
   if (event.key === 'Escape') {
-    const hasSelection = Globals.gameController.boardInteractor.hasAnySelection();
+    const hasSelection = Globals.gameController.interactor.hasAnySelection();
     if (hasSelection) {
-      Globals.gameController.boardInteractor.clearSelection();
+      Globals.gameController.interactor.clearSelection();
       return false; // Mark event handled, so earlier peers in ModalManager won't receive it.
     }
 
   // [Ctrl+A] Select all cells
   } else if (event.ctrlKey && event.key === 'a') {
-    Globals.gameController.boardInteractor.selectAllCells();
+    Globals.gameController.interactor.selectAllCells();
     return false; // Mark event handled, so earlier peers in ModalManager won't receive it.
   }
 }
@@ -56,12 +56,12 @@ function onKeydown(event) {
 function onUnhandledClick() {
   logUiEvent('onUnhandledClick');
   if (!ModalManager.isOnTop('SudokuUi.vue') || props.mode === modes.settings) return;
-  Globals.gameController.boardInteractor.clearSelection();
+  Globals.gameController.interactor.clearSelection();
 }
   
 function onActivateCell(row, column) {
   logUiEvent('onActivateCell', row, column);
-  Globals.gameController.boardInteractor.handleCellActivation(row, column);
+  Globals.gameController.interactor.handleCellActivation(row, column);
 }
 
 function handleDoubleClick(event) {
@@ -70,7 +70,7 @@ function handleDoubleClick(event) {
   if (!cellTarget) return;
 
   const { row, column } = cellTarget;
-  Globals.gameController.boardInteractor.selectAllMatchingValues(row, column);
+  Globals.gameController.interactor.selectAllMatchingValues(row, column);
 }
 </script>
 

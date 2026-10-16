@@ -1,10 +1,10 @@
 <script setup>
-import GameController from '/app/game/GameController.js';
+import Globals from '../../../Globals';
 
 defineProps(['userSettings']);
 
 function onClickStart() {
-  GameController.onAdvanceFromTitleScreen()
+  Globals.gameController.onAdvanceFromTitleScreen()
 }
 </script>
 
