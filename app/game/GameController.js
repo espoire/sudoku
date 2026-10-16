@@ -26,8 +26,8 @@ export default class GameController {
 
   static onAdvanceFromTitleScreen() {
     // Globals.gameController.onStartPuzzle(puzzleConfigs[5].id);
-    GameController.showPuzzleDirectory();
-    // GameController.showPuzzleEditor();
+    // GameController.showPuzzleDirectory();
+    GameController.showPuzzleEditor();
   }
 
   static showTitleScreen() {

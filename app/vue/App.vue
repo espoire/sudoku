@@ -5,6 +5,7 @@ import SettingsScreen from './cmp/settings/SettingsScreen.vue';
 import Constants from '../Constants.js';
 import SudokuUi from './cmp/board/SudokuUi.vue';
 import PuzzleDirectory from './cmp/directory/PuzzleDirectory.vue';
+import PuzzleEditorUi from './cmp/edit/PuzzleEditorUi.vue';
 
 const modes = Constants.modes;
 
@@ -18,6 +19,9 @@ const props = inject('props');
       <SettingsScreen v-if="props.mode === modes.settings" :settings="props.userSettings" />
       <TitleScreen v-if="props.mode === modes.title" :userSettings="props.userSettings" />
       <PuzzleDirectory v-if="props.mode === modes.directory" :puzzles="props.puzzles" />
+      <PuzzleEditorUi v-if="props.mode === modes.edit"
+          :settings="props.userSettings"
+          :puzzle="props.puzzle" />
       <SudokuUi v-if="props.mode === modes.play"
           :settings="props.userSettings" :mode="props.mode"
           :board="props.board"

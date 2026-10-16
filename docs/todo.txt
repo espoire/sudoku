@@ -1,9 +1,16 @@
+Puzzle Editor UI
+
+Bug: all the Notes are visually marked wrong
+Bug: "Bar of Soap" --> Insert all 1s --> Delete all via [Delete] key --> Given 1s still show as invalid
+
 "Daily Puzzle" generator
+  Support smaller boards
+    Add alternative Box locations rendering support
+    [Custom / generated-from-size] allowed-digits-lists & UI
   (For now) use today's system date as a seed
   "King's Sudoku" variant constraint
   Show active variant rules somewhere on UI
   Anternate "Box" locations variant constraint
-  Support smaller boards
   Generate random
 
 Notes
