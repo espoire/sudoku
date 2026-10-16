@@ -1,20 +1,19 @@
 import Globals from '/app/Globals.js';
 
 export default class DragSelectionController {
-  /** @type {import('vue').Ref<HTMLElement>} */ #boardRef;
+  /** @type {HTMLElement} */ #boardEl;
   /** @type {boolean} */ dragging = false;
   /** @type {Set<string>|null} */ visitedCells = null;
 
-  constructor(boardRef) {
-    this.#boardRef = boardRef;
+  constructor(boardEl) {
+    this.#boardEl = boardEl;
   }
-  
 
   start(event) {
     this.dragging = true;
     this.visitedCells = new Set();
 
-    this.#boardRef.value.setPointerCapture(event.pointerId);
+    this.#boardEl.setPointerCapture(event.pointerId);
   }
 
   getCellTarget(event) {
@@ -58,6 +57,6 @@ export default class DragSelectionController {
   end(event) {
     this.dragging = false;
     this.visitedCells = null;
-    this.#boardRef.value.releasePointerCapture(event.pointerId);
+    this.#boardEl.releasePointerCapture(event.pointerId);
   }
 }

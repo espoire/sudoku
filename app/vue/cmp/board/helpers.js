@@ -1,3 +1,5 @@
+import Settings from "../../../Settings.js";
+
 export function getLinearGradientFromColors(colorIds) {
   if (!colorIds || colorIds.length === 0) return null;
 
@@ -9,4 +11,9 @@ export function getLinearGradientFromColors(colorIds) {
   });
 
   return `linear-gradient(180deg, ${gradientParts.join(', ')})`;
+}
+
+export function logUiEvent(methodName, ...args) {
+  if (!Settings?.test?.log?.uiEventHandling) return;
+  console.log(`[UI Event] ${methodName}`, ...args);
 }

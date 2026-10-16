@@ -21,16 +21,26 @@ export default class GameController {
 
   begin() {
     UserSettingsManager.syncVue();
-    this.showTitleScreen();
+    GameController.showTitleScreen();
   }
 
-  showTitleScreen() {
+  static onAdvanceFromTitleScreen() {
+    // Globals.gameController.onStartPuzzle(puzzleConfigs[5].id);
+    GameController.showPuzzleDirectory();
+    // GameController.showPuzzleEditor();
+  }
+
+  static showTitleScreen() {
     GameController.setMode(modes.title);
   }
 
-  onAdvanceFromTitleScreen() {
+  static showPuzzleDirectory() {
     GlobalVueProps.puzzles = puzzleConfigs.map(cfg => ({ id: cfg.id, title: cfg.title }));
     GameController.setMode(modes.directory);
+  }
+
+  static showPuzzleEditor() {
+    GameController.setMode(modes.edit);
   }
 
   onStartPuzzle(id) {

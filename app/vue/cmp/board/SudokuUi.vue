@@ -1,15 +1,14 @@
 <script setup>
-import { computed, onMounted, onUnmounted, ref } from 'vue';
-import DragSelectionController from './DragSelectionController.js';
+import { onMounted, onUnmounted, ref } from 'vue';
 import ModalManager from '/app/vue/ModalManager.js';
 import PrettyButton from '/app/vue/cmp/util/PrettyButton.vue';
 import Constants from '/app/Constants.js';
-import Settings from '/app/Settings.js';
 import Globals from '/app/Globals.js';
 import GameController from '/app/game/GameController.js';
 import Timer from '/app/game/Timer.js';
 import { range } from '/app/util/Array.js';
-import { getLinearGradientFromColors } from './helpers.js';
+import BoardSelector from './BoardSelector.vue';
+import { logUiEvent } from './helpers.js';
 
 const modes = Constants.modes;
 
@@ -42,36 +41,18 @@ const props = defineProps({
 // import { deepClone } from '/app/util/Object.js';
 // console.log(deepClone(props));
 
-const boardEl = ref(null);
-const dragger = new DragSelectionController(boardEl);
-
-const size = computed(() => {
-  const rems = 100 / Math.max(props.board.size.x, props.board.size.y);
-  return `${rems}rem`;
-});
-
-function logEvent(methodName, ...args) {
-  if (!Settings?.test?.log?.uiEventHandling) return;
-  console.log(`[UI Event] ${methodName}`, ...args);
-}
-
 function onClickSettingsButton() {
-  logEvent('onClickSettingsButton');
+  logUiEvent('onClickSettingsButton');
   GameController.onSettingsClicked();
 }
 
-function onActivateCell(row, column) {
-  logEvent('onActivateCell', row, column);
-  Globals.gameController.boardInteractor.handleCellActivation(row, column);
-}
-
 function onNumeralInput(value) {
-  logEvent('onNumeralInput', value);
+  logUiEvent('onNumeralInput', value);
   Globals.gameController.boardInteractor.handleNumeralInput(value);
 }
 
 function onUnhandledClick() {
-  logEvent('onUnhandledClick');
+  logUiEvent('onUnhandledClick');
   if (!ModalManager.isOnTop('SudokuUi.vue') || props.mode !== modes.play) return;
   Globals.gameController.boardInteractor.clearSelection();
 }
@@ -101,7 +82,7 @@ onUnmounted(() => {
   clearInterval(updateElapsedTimeInterval);
 });
 function onKeydown(event) {
-  logEvent('onKeydown', event);
+  logUiEvent('onKeydown', event);
   if (event.key === 'Pause') {
     onClickSettingsButton();
 
@@ -138,37 +119,28 @@ function onKeydown(event) {
 
 /** @param {number|null} value  The numeral clicked on the visual numpad, or null for the delete button. */
 function onVisualNumpadClick(value) {
-  logEvent('onVisualNumpadClick', value);
+  logUiEvent('onVisualNumpadClick', value);
   onNumeralInput(value);
 }
 
-function handleDoubleClick(event) {
-  logEvent('handleDoubleClick', event);
-  const cellTarget = dragger.getCellTarget(event);
-  if (!cellTarget) return;
-
-  const { row, column } = cellTarget;
-  Globals.gameController.boardInteractor.selectAllMatchingValues(row, column);
-}
-
 function onClickResetButton() {
-  logEvent('onClickResetButton');
+  logUiEvent('onClickResetButton');
   Globals.gameController.boardInteractor.resetPuzzle();
   Globals.gameController.timer.reset();
 }
 
 function onClickInputModeButton(mode) {
-  logEvent('onInputModeChange', mode);
+  logUiEvent('onInputModeChange', mode);
   Globals.gameController.boardInteractor.setInputMode(mode);
 }
 
 function cycleInputMode(direction = 'next') {
-  logEvent('cycleInputMode', direction);
+  logUiEvent('cycleInputMode', direction);
   Globals.gameController.boardInteractor.cycleInputMode(direction);
 }
 
 function onClickPaletteToggleButton() {
-  logEvent('onClickPaletteToggleButton');
+  logUiEvent('onClickPaletteToggleButton');
   Globals.gameController.boardInteractor.togglePalette();
 }
 </script>
@@ -182,74 +154,32 @@ function onClickPaletteToggleButton() {
       <img class="settings-button" src="/img/pause-button.min.svg" @click.stop="onClickSettingsButton" />
     </div>
   
-    <div class="board-wrap" ref="boardEl"
-          v-if="props.board && props.board.size && props.board.contents"
-          :style="{ '--size': size }"
-          @pointerdown="dragger.start"
-          @pointermove="dragger.drag"
-          @pointerup="dragger.end"
-          @pointercancel="dragger.end"
-          @dblclick="handleDoubleClick"
-          @click.stop>
-      <div class="board-row" v-for="i in range(props.board.size.y)" :key="i">
-        <div class="board-cell"
-          v-for="j in range(props.board.size.x)" :key="j"
-          :class="{
-            given: props.board.contents[i][j].given,
-            error: props.board.contents[i][j].error,
-            selected: props.board.contents[i][j].selected,
-            'thicker-top': i%3 === 0,
-            'thicker-bottom': i%3 === 2,
-            'thicker-left': j%3 === 0,
-            'thicker-right': j%3 === 2,
-          }"
-          :style="{
-            backgroundImage: getLinearGradientFromColors(props.board.contents[i][j].colors)
-          }"
-          :data-cell="`${i},${j}`"
-          @pointerdown="() => onActivateCell(i, j)"
-        >
-          <span v-if="props.board.contents[i][j].value" v-text="props.board.contents[i][j].value" />
-          <div v-else class="cell-notes">
-            <div class="center-notes">
-              <span class="note" :class="{ error: !n.valid }" v-for="n in props.board.contents[i][j].notes?.center ?? []" :key="n.value" v-text="n.value" />
-            </div>
-            <div class="corner-notes">
-              <template v-for="n in range(1, 9)" :key="n">
-                <div class="note" v-if="props.board.contents[i][j].notes?.corner?.some(v => v.value === n)"
-                    :class="[`n${n}`, (!props.board.contents[i][j].notes?.corner?.find(v => v.value === n).valid) ? 'error' : '']"
-                    v-text="n" />
-              </template>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <BoardSelector :board="board" />
   
     <div class="controls-footer">
       <div class="input-modes">
         <div class="input-mode-button"
-            :class="{ active: props.inputMode === Constants.inputModes.digit }"
+            :class="{ active: inputMode === Constants.inputModes.digit }"
             @click.stop="() => onClickInputModeButton(Constants.inputModes.digit)"
         >
           Digits
         </div>
         <div class="input-mode-button"
-            :class="{ active: props.inputMode === Constants.inputModes.cornerNote }"
+            :class="{ active: inputMode === Constants.inputModes.cornerNote }"
             @click.stop="() => onClickInputModeButton(Constants.inputModes.cornerNote)"
         >
           Corner<br />
           Notes
         </div>
         <div class="input-mode-button"
-            :class="{ active: props.inputMode === Constants.inputModes.centerNote }"
+            :class="{ active: inputMode === Constants.inputModes.centerNote }"
             @click.stop="() => onClickInputModeButton(Constants.inputModes.centerNote)"
         >
           Center<br />
           Notes
         </div>
         <div class="input-mode-button"
-            :class="{ active: props.inputMode === Constants.inputModes.cellColor }"
+            :class="{ active: inputMode === Constants.inputModes.cellColor }"
             @click.stop="() => onClickInputModeButton(Constants.inputModes.cellColor)"
         >
           Highlight
@@ -324,166 +254,6 @@ function onClickPaletteToggleButton() {
     &:hover {
       filter: brightness(1.2) drop-shadow(0.5rem 0.5rem 0.2rem #fff3);
       scale: 1.1;
-    }
-  }
-}
-
-.board-wrap {
-  display: flex;
-  flex-direction: column;
-  background-color: var(--color-background);
-  font-size: calc(var(--size, 10rem) * 0.7);
-  line-height: 1;
-  pointer-events: all;
-
-  --half-gridline-thickness: 0.75rem;
-}
-
-.board-row {
-  display: flex;
-}
-
-.board-cell {
-  width: var(--size, 10rem);
-  height: var(--size, 10rem);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid var(--color-gridlines);
-  color: var(--color-pencil);
-  background-color: var(--color-cells);
-  padding-bottom: 0.6rem;
-
-  transition: outline 0.1s;
-
-  &.given, .pen & {
-    font-weight: bold;
-    color: var(--color-givens);
-  }
-
-  &.error {
-    color: var(--color-error-text);
-    background-color: var(--color-error);
-  }
-
-  &.thicker-top {
-    border-top-width: var(--half-gridline-thickness, 0.5rem);
-  }
-  &.thicker-bottom {
-    border-bottom-width: var(--half-gridline-thickness, 0.5rem);
-  }
-  &.thicker-left {
-    border-left-width: var(--half-gridline-thickness, 0.5rem);
-  }
-  &.thicker-right {
-    border-right-width: var(--half-gridline-thickness, 0.5rem);
-  }
-
-  &:hover {
-    --outline-size: calc(var(--size, 10rem) / 20);
-    outline: var(--outline-size) solid #44f4;
-    outline-offset: calc(-1 * var(--outline-size) - 2px);
-  }
-
-  &.selected {
-    --outline-size: calc(var(--size, 10rem) / 10);
-    outline: var(--outline-size) solid #22fb;
-    outline-offset: calc(-1 * var(--outline-size) - 2px);
-
-    &:hover {
-      outline-color: #33f8;
-    }
-  }
-}
-
-.cell-notes {
-  position: relative;
-  width: 100%;
-  height: 100%;
-
-  .center-notes {
-    position: absolute;
-    left: 50%;
-    top: 52.5%;
-    translate: -50% -50%;
-    font-size: 50%;
-    font-weight: 550;    // Slight bold
-    line-height: 1;
-
-    .note {
-      color: #44cc;
-
-      &.error {
-        .noteErrorMarks & { color: var(--color-error-text); }
-      }
-    }
-  }
-
-  .corner-notes {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    line-height: 1;
-    font-weight: 550;    // Slight bold
-
-    .note {
-      position: absolute;
-      width: 33.33%;
-      height: 33.33%;
-      text-align: center;
-      align-content: center;
-      translate: -50% -50%;
-      font-size: 35%;
-      color: #44cc;
-
-      &.error {
-        .noteErrorMarks & { color: var(--color-error-text); }
-      }
-
-      &.n1 {
-        left: 10%;
-        top: 15%;
-      }
-
-      &.n2 {
-        left: 50%;
-        top: 15%;
-      }
-
-      &.n3 {
-        left: 90%;
-        top: 15%;
-      }
-
-      &.n4 {
-        left: 10%;
-        top: 52.5%;
-      }
-
-      &.n5 {
-        left: 50%;
-        top: 52.5%;
-      }
-
-      &.n6 {
-        left: 90%;
-        top: 52.5%;
-      }
-
-      &.n7 {
-        left: 10%;
-        top: 90%;
-      }
-
-      &.n8 {
-        left: 50%;
-        top: 90%;
-      }
-
-      &.n9 {
-        left: 90%;
-        top: 90%;
-      }
     }
   }
 }
