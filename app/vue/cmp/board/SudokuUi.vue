@@ -9,6 +9,7 @@ import Timer from '/app/game/Timer.js';
 import { range } from '/app/util/Array.js';
 import BoardSelector from './BoardSelector.vue';
 import { logUiEvent } from './helpers.js';
+import BoardCell from './BoardCell.vue';
 
 const props = defineProps({
   settings: Object,
@@ -167,6 +168,7 @@ function onClickPaletteToggleButton() {
       </div>
       <div class="visual-numpad" :class="inputMode">
         <div class="board-cell palette-toggle-button" v-if="inputMode === Constants.inputModes.cellColor"
+            :style="{ backgroundColor: palette === Constants.palettes.regular ? '#240' : '#048' }"
             @click.stop="onClickPaletteToggleButton"
             :title="`Swap to ${palette === Constants.palettes.regular ? 'colorblind-friendly' : 'regular'} palette`"
         >
@@ -177,15 +179,16 @@ function onClickPaletteToggleButton() {
             <div class="pip colorblind" :class="{ active: (palette === Constants.palettes.colorBlind) }" />
           </div>
         </div>
-        <div class="board-cell" v-for="n in [1,2,3,4,5,6,7,8,9, ...(inputMode === Constants.inputModes.cellColor ? [0] : [])]" :key="n"
-            :class="(inputMode === Constants.inputModes.cellColor ? (n === 0 ? ['color-theme'] : (palette === Constants.palettes.regular ? [`color-c${n}`] : [`color-b${n}`])) : [])"
-            @click.stop="() => onVisualNumpadClick(n)">
-          <template v-if="inputMode !== Constants.inputModes.cellColor">
-            {{ n }}
-          </template>
-          <div class="hotkey-label" v-else v-text="n"/>
-        </div>
-        <div class="board-cell delete" @click.stop="() => onVisualNumpadClick(null)">❌</div>
+        <BoardCell v-for="n in [1,2,3,4,5,6,7,8,9, ...(inputMode === Constants.inputModes.cellColor ? [0] : [])]" :key="n"
+          :class="(inputMode === Constants.inputModes.cellColor ? (n === 0 ? ['color-theme'] : (palette === Constants.palettes.regular ? [`color-c${n}`] : [`color-b${n}`])) : [])"
+          :cell="{ value: inputMode === Constants.inputModes.cellColor ? null : n }"
+          :hotkey="inputMode === Constants.inputModes.cellColor ? n : null"
+          @click.stop="() => onVisualNumpadClick(n)"
+        />
+        <BoardCell class="delete"
+          :cell="{ value: '❌' }"
+          @click.stop="() => onVisualNumpadClick(null)"
+        />
       </div>
       <PrettyButton class="reset-button" @click.stop="onClickResetButton">
         Reset this Puzzle
@@ -325,6 +328,13 @@ function onClickPaletteToggleButton() {
       border-radius: 3rem;
 
       &.palette-toggle-button {
+        width: var(--size, 10rem);
+        height: var(--size, 10rem);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding-bottom: 0.6rem;
+
         background-color: var(--color-button);
         font-size: calc(var(--size, 10rem) * 0.55);
 
@@ -346,7 +356,7 @@ function onClickPaletteToggleButton() {
             opacity: 0.3;
 
             &.active { opacity: 1; border-color: #fff4; }
-            &.regular { background-color: green; }
+            &.regular { background-color: #480; }
             &.colorblind { background-color: #08f; }
           }
         }
