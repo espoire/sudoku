@@ -1,6 +1,6 @@
 <script setup>
 import { computed, ref } from 'vue';
-import { getLinearGradientFromColors } from './helpers.js';
+import BoardCell from './BoardCell.vue';
 import { range } from '/app/util/Array.js';
 
 const props = defineProps({
@@ -23,10 +23,6 @@ const size = computed(() => {
   const rems = 100 / Math.max(props.board.size.x, props.board.size.y);
   return `${rems}rem`;
 });
-
-function emitActivateCell(row, column) {
-  emit('activate-cell', row, column);
-}
 </script>
 
 <template>
@@ -34,37 +30,13 @@ function emitActivateCell(row, column) {
         v-if="board && board.size && board.contents"
         :style="{ '--size': size }">
     <div class="board-row" v-for="i in range(board.size.y)" :key="i">
-      <div class="board-cell"
+      <BoardCell 
         v-for="j in range(board.size.x)" :key="j"
-        :class="{
-          given: board.contents[i][j].given,
-          error: board.contents[i][j].error,
-          selected: board.contents[i][j].selected,
-          'thicker-top': i%3 === 0,
-          'thicker-bottom': i%3 === 2,
-          'thicker-left': j%3 === 0,
-          'thicker-right': j%3 === 2,
-        }"
-        :style="{
-          backgroundImage: getLinearGradientFromColors(board.contents[i][j].colors)
-        }"
-        :data-cell="`${i},${j}`"
-        @pointerdown="() => emitActivateCell(i, j)"
-      >
-        <span v-if="board.contents[i][j].value" v-text="board.contents[i][j].value" />
-        <div v-else class="cell-notes">
-          <div class="center-notes">
-            <span class="note" :class="{ error: !n.valid }" v-for="n in board.contents[i][j].notes?.center ?? []" :key="n.value" v-text="n.value" />
-          </div>
-          <div class="corner-notes">
-            <template v-for="n in range(1, 9)" :key="n">
-              <div class="note" v-if="board.contents[i][j].notes?.corner?.some(v => v.value === n)"
-                  :class="[`n${n}`, (!board.contents[i][j].notes?.corner?.find(v => v.value === n).valid) ? 'error' : '']"
-                  v-text="n" />
-            </template>
-          </div>
-        </div>
-      </div>
+        :cell="board.contents[i][j]"
+        :row="i"
+        :column="j"
+        @activate-cell="(row, column) => emit('activate-cell', row, column)"
+      />
     </div>
   </div>
 </template>

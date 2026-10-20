@@ -7,6 +7,7 @@ import Board from './board/Board.js';
 import BoardInteractor from './board/BoardInteractor.js';
 import PuzzleEditInteractor from './board/PuzzleEditInteractor.js';
 import Timer from './Timer.js';
+import Globals from '../Globals.js';
 
 const { modes } = Constants;
 
