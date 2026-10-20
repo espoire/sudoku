@@ -13,12 +13,9 @@ import Interactor from "./Interactor.js";
  * Supports its own cell-multi-selection and notations management.
  */
 export default class BoardInteractor extends Interactor {
-  /** @type {Board} */ board;
-  /** @type {Array<Array<boolean>>} */ selectedCells = [];
   /** @type {Array<Array<Set<number>>>} */ cornerNotes = [];
   /** @type {Array<Array<Set<number>>>} */ centerNotes = [];
   /** @type {Array<Array<CellColorSet>>} */ cellColors = []; 
-  /** @type {{ win: boolean, valid?: boolean, errors?: Array<{ message: string, location: Array<{ row: number, column: number }>}> }} */ cachedValidationResult = null;
   /** @type {Array<Array<Dictionary<number, boolean> | null>>} */ #cachedNotesValidationResult = null;
   /** @type {'digit' | 'corner-note' | 'center-note' | 'cell-color'} */ #inputMode = Constants.inputModes.digit;
   /** @type {'regular' | 'color-blind'} */ #palette = Constants.palettes.regular;

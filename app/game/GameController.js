@@ -26,9 +26,9 @@ export default class GameController {
   }
 
   onAdvanceFromTitleScreen() {
-    // Globals.gameController.onStartPuzzle(puzzleConfigs[5].id);
+    Globals.gameController.onStartPuzzle(puzzleConfigs[5].id);
     // GameController.showPuzzleDirectory();
-    this.showPuzzleEditor();
+    // this.showPuzzleEditor();
   }
 
   static showTitleScreen() {

@@ -7,7 +7,7 @@ import BoardSelector from '../board/BoardSelector.vue';
 import ModalManager from '../../ModalManager.js';
 import { logUiEvent } from '../board/helpers.js';
 
-const props = defineProps({
+defineProps({
   mode: String,
 
   board: {
