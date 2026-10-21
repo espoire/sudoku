@@ -7,7 +7,7 @@ import Board from './board/Board.js';
 import BoardInteractor from './board/BoardInteractor.js';
 import PuzzleEditInteractor from './board/PuzzleEditInteractor.js';
 import Timer from './Timer.js';
-import { randomArrayElement } from '../util/random.js';
+import { selectRandomPuzzleId } from './puzzles.js';
 
 const { modes } = Constants;
 
@@ -43,7 +43,7 @@ export default class GameController {
   }
 
   startPuzzle() {
-    const id = randomArrayElement(puzzleConfigs).id;
+    const id = selectRandomPuzzleId();
     this.onStartPuzzle(id);
   }
 

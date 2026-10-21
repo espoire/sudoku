@@ -1,6 +1,9 @@
+import { randomArrayElement } from "../util/random.js";
+
 const puzzleConfigs = [{
   title: 'Template',
   id: null,
+  exclude: true, // This puzzle won't be provided by the random puzzle selection.
   size: { x: 9, y: 9 },
   given: [
     '         ',
@@ -31,6 +34,7 @@ const puzzleConfigs = [{
 }, {
   title: 'Test EZ Win',
   id: 'test-ez-win',
+  exclude: true, // This puzzle won't be provided by the random puzzle selection.
   size: { x: 9, y: 9 },
   given: [
     ' 23456789',
@@ -46,6 +50,7 @@ const puzzleConfigs = [{
 }, {
   title: 'Test Full',
   id: 'test-full',
+  exclude: true, // This puzzle won't be provided by the random puzzle selection.
   size: { x: 9, y: 9 },
   given: [
     '123456789',
@@ -253,7 +258,7 @@ const puzzleConfigs = [{
     '  5  1   ',
     '32      6',
   ],
-}, {
+// }, {
   // title: 'Artisanal "Daily" Puzzle',
   // id: 'artisanal-daily-puzzle',
   // size: { x: 6, y: 6 },
@@ -268,6 +273,12 @@ const puzzleConfigs = [{
   // constraints: [], // TODO: completion-7s (place only the 7s to complete), king's (same-numerals cannot be adjacent diagonally), alternate boxes (custom box locations)
 }];
 export default puzzleConfigs;
+
+export function selectRandomPuzzleId() {
+  const includedPuzzles = puzzleConfigs.filter(config => !config.exclude);
+  if (includedPuzzles.length === 0) return null;
+  return randomArrayElement(includedPuzzles).id;
+}
 
 /**
  * Initializes a new Sudoku board with the given size and initial numerals.
