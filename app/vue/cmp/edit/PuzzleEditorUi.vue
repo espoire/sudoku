@@ -4,9 +4,9 @@ import Globals from '/app/Globals.js';
 import { randBool, randomArrayElement } from '../../../util/random';
 import { capitalize, toSnakeCase, toTitleCase } from '../../../util/string';
 import { first, range } from '../../../util/Array';
-import BoardSelector from '../board/BoardSelector.vue';
+import BoardSelector from '../play/BoardSelector.vue';
 import ModalManager from '../../ModalManager.js';
-import { logUiEvent } from '../board/helpers.js';
+import { logUiEvent } from '../play/helpers.js';
 
 const props = defineProps({
   mode: String,

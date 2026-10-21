@@ -2,9 +2,9 @@
 import { onMounted, onUnmounted, ref } from 'vue';
 import Constants from '/app/Constants.js';
 import Globals from '/app/Globals.js';
-import DragSelectionController from './DragSelectionController';
+import DragSelectionController from '../play/DragSelectionController.js';
 import BoardRenderer from './BoardRenderer.vue';
-import { logUiEvent } from './helpers.js';
+import { logUiEvent } from '../play/helpers.js';
 import ModalManager from '../../ModalManager.js';
 
 const modes = Constants.modes;

@@ -3,7 +3,7 @@ import { inject } from 'vue';
 import MainMenu from './cmp/menu/MainMenu.vue';
 import SettingsScreen from './cmp/settings/SettingsScreen.vue';
 import Constants from '../Constants.js';
-import SudokuUi from './cmp/board/SudokuUi.vue';
+import SudokuUi from './cmp/play/SudokuUi.vue';
 import PuzzleDirectory from './cmp/directory/PuzzleDirectory.vue';
 import PuzzleEditorUi from './cmp/edit/PuzzleEditorUi.vue';
 
