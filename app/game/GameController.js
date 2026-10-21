@@ -61,7 +61,8 @@ export default class GameController {
   }
 
   onStartPuzzle(id) {
-    this.board = new Board(puzzleConfigs.find(cfg => cfg.id === id));
+    const puzzleConfig = puzzleConfigs.find(cfg => cfg.id === id);
+    this.board = new Board(puzzleConfig);
     this.interactor = new BoardInteractor(this.board);
     this.interactor.updateVue();
     this.timer.restart();

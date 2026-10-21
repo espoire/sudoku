@@ -85,9 +85,9 @@ export function fillClone(arr, template) {
 export function fillFrom(arr, generatorFn) {
   for (let i = 0; i < arr.length; i++) {
     if (Array.isArray(arr[i])) {
-      fillFrom(arr[i], generatorFn);
+      fillFrom(arr[i], generatorFn.bind(null, i));
     } else {
-      arr[i] = generatorFn();
+      arr[i] = generatorFn(i);
     }
   }
 
