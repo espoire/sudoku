@@ -29,12 +29,12 @@ function showUnratedPuzzleDirectory() { GameController.showPuzzleDirectory(); }
   <HeaderBar @back="returnToMainMenu" @settings="openSettingsMenu" />
   <div class="difficulty-select">
     <h1>Select Difficulty</h1>
-    <PrettyButton class="beginner" :disabled="!directory.hasDifficulty[1]" @activate="() => startPuzzle(1)"      >1 - Beginner</PrettyButton>
-    <PrettyButton class="easy"     :disabled="!directory.hasDifficulty[2]" @activate="() => startPuzzle(2)"      >2 - Easy    </PrettyButton>
-    <PrettyButton class="medium"   :disabled="!directory.hasDifficulty[3]" @activate="() => startPuzzle(3)"      >3 - Medium  </PrettyButton>
-    <PrettyButton class="hard"     :disabled="!directory.hasDifficulty[4]" @activate="() => startPuzzle(4)"      >4 - Hard    </PrettyButton>
-    <PrettyButton class="expert"   :disabled="!directory.hasDifficulty[5]" @activate="() => startPuzzle(5)"      >5 - Expert  </PrettyButton>
-    <PrettyButton class="unrated"                                          @activate="showUnratedPuzzleDirectory">Unrated     </PrettyButton>
+    <PrettyButton class="beginner" :disabled="!directory.hasDifficulty[1]" @activate="() => startPuzzle(1)"      :title="!directory.hasDifficulty[1] ? 'No available puzzles of this difficulty.' : null">1 - Beginner</PrettyButton>
+    <PrettyButton class="easy"     :disabled="!directory.hasDifficulty[2]" @activate="() => startPuzzle(2)"      :title="!directory.hasDifficulty[2] ? 'No available puzzles of this difficulty.' : null">2 - Easy    </PrettyButton>
+    <PrettyButton class="medium"   :disabled="!directory.hasDifficulty[3]" @activate="() => startPuzzle(3)"      :title="!directory.hasDifficulty[3] ? 'No available puzzles of this difficulty.' : null">3 - Medium  </PrettyButton>
+    <PrettyButton class="hard"     :disabled="!directory.hasDifficulty[4]" @activate="() => startPuzzle(4)"      :title="!directory.hasDifficulty[4] ? 'No available puzzles of this difficulty.' : null">4 - Hard    </PrettyButton>
+    <PrettyButton class="expert"   :disabled="!directory.hasDifficulty[5]" @activate="() => startPuzzle(5)"      :title="!directory.hasDifficulty[5] ? 'No available puzzles of this difficulty.' : null">5 - Expert  </PrettyButton>
+    <PrettyButton class="unrated"                                          @activate="showUnratedPuzzleDirectory"                                                                                        >Unrated     </PrettyButton>
   </div>
 </template>
 
