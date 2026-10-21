@@ -3,7 +3,6 @@ Shawna needs:
   Play goes to the (NYI) [select a difficulty, get a random puzzle of that difficulty] screen
 
 Puzzle Editor UI
-  Visual Numpad
   Build import JSON puzzle UI
 
 Bug: all the Notes are visually marked wrong

@@ -38,6 +38,11 @@ const emit = defineEmits(['numeral', 'palette-toggle']);
 
 <style lang="scss" scoped>
 .visual-numpad {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-around;
+
   height: 9rem;
   --size: 9rem;
   font-size: calc(var(--size, 10rem) * 0.7);
