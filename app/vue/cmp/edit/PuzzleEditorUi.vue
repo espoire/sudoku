@@ -81,7 +81,7 @@ function copyPuzzle() {
 
   puzzleCode.push('{');
   puzzleCode.push(`  title: '${title.value || defaultTitle.value}',`);
-  puzzleCode.push(`  id: '${id.value || defaultId.value}',`);
+  puzzleCode.push(`  id: '${id.value || placeholderId.value}',`);
   if (difficulty.value) {
     puzzleCode.push(`  difficulty: ${difficulty.value},`);
   }
