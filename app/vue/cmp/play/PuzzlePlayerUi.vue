@@ -40,6 +40,10 @@ const props = defineProps({
 // import { deepClone } from '/app/util/Object.js';
 // console.log(deepClone(props));
 
+function onClickLogo() {
+  GameController.showMainMenu();
+}
+
 function onClickSettingsButton() {
   logUiEvent('onClickSettingsButton');
   GameController.onSettingsClicked();
@@ -129,7 +133,7 @@ function onClickPaletteToggleButton() {
 <template>
   <div class="column-wrap" :class="{ pen: settings.penDigitStyle, noteErrorMarks: settings.noteErrorMarks }">
     <div class="play-page-header">
-      <img class="logo" src="/img/name.min.svg" />
+      <img class="logo" src="/img/name.min.svg" @click.stop="onClickLogo" />
       <div style="flex: 1" />
       <div class="elapsed-time" v-if="settings?.timer" v-text="displayedTime" />
       <img class="settings-button" src="/img/pause-button.min.svg" @click.stop="onClickSettingsButton" />
@@ -202,6 +206,13 @@ function onClickPaletteToggleButton() {
   .logo {
     max-width: 80%;
     max-height: 5.4rem;
+
+    pointer-events: all;
+    transition: scale 0.2s, filter 0.2s;
+    &:hover {
+      filter: brightness(1.2) drop-shadow(0.5rem 0.5rem 0.2rem #fff3);
+      scale: 1.1;
+    }
   }
 
   .elapsed-time {
@@ -212,10 +223,10 @@ function onClickPaletteToggleButton() {
   }
 
   .settings-button {
-    pointer-events: all;
     max-height: 5.4rem;
-    transition: scale 0.2s, filter 0.2s;
 
+    pointer-events: all;
+    transition: scale 0.2s, filter 0.2s;
     &:hover {
       filter: brightness(1.2) drop-shadow(0.5rem 0.5rem 0.2rem #fff3);
       scale: 1.1;

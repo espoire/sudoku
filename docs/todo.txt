@@ -1,3 +1,5 @@
+Add the header bar (sans timer) to the puzzle editor screen
+
 Shawna needs:
   Puzzle Editor UI --> [Back to menu] button
   Play goes to the (NYI) [select a difficulty, get a random puzzle of that difficulty] screen
