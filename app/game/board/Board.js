@@ -25,7 +25,9 @@ export default class Board {
    * @param {string[]} config.constraints An array of constraint descriptors to apply to the board. May reference other data elements on the config. 
    */
   constructor(config) {
-    const { size = { x: 9, y: 9 }, given } = config;
+    let { size, given } = config;
+    if (size == null) size = { x: 9, y: 9 };
+    if (given == null) given = config.givens ?? Array(size.y).fill(' '.repeat(size.x));
 
     this.size = structuredClone(size);
 

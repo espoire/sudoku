@@ -92,7 +92,7 @@ function copyPuzzle() {
   if (props.board.size.x !== 9 || props.board.size.y !== 9) {
     puzzleCode.push(`  size: { x: ${props.board.size.x}, y: ${props.board.size.y} },`);
   }
-  puzzleCode.push(`  givens: [`);
+  puzzleCode.push(`  given: [`);
   givens.forEach(row => {
     puzzleCode.push(`    '${row}',`);
   });
