@@ -34,6 +34,11 @@ export default class Timer {
     this.updateVue();
   }
 
+  restart() {
+    this.reset();
+    this.start();
+  }
+
   /** @returns {number} */
   getElapsedTime() {
     return Timer.getElapsedTime(this);

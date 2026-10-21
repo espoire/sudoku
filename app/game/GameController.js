@@ -51,7 +51,7 @@ export default class GameController {
     this.board = new Board(puzzleConfigs.find(cfg => cfg.id === id));
     this.interactor = new BoardInteractor(this.board);
     this.interactor.updateVue();
-    this.timer.start();
+    this.timer.restart();
     GameController.setMode(modes.play);
   }
 
