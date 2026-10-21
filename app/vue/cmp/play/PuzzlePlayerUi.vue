@@ -10,6 +10,7 @@ import { range } from '/app/util/Array.js';
 import BoardSelector from './BoardSelector.vue';
 import { logUiEvent } from './helpers.js';
 import VisualNumpad from './VisualNumpad.vue';
+import HeaderBar from './HeaderBar.vue';
 
 const props = defineProps({
   settings: Object,
@@ -40,11 +41,11 @@ const props = defineProps({
 // import { deepClone } from '/app/util/Object.js';
 // console.log(deepClone(props));
 
-function onClickLogo() {
+function returnToMainMenu() {
   GameController.showMainMenu();
 }
 
-function onClickSettingsButton() {
+function openSettingsMenu() {
   logUiEvent('onClickSettingsButton');
   GameController.onSettingsClicked();
 }
@@ -81,7 +82,7 @@ onUnmounted(() => {
 function onKeydown(event) {
   logUiEvent('onKeydown', event);
   if (pauseKeys.includes(event.key)) {
-    onClickSettingsButton();
+    openSettingsMenu();
 
   } else if (numerals.includes(event.key)) {
     onNumeralInput(+event.key);
@@ -132,12 +133,7 @@ function onClickPaletteToggleButton() {
 
 <template>
   <div class="column-wrap" :class="{ pen: settings.penDigitStyle, noteErrorMarks: settings.noteErrorMarks }">
-    <div class="play-page-header">
-      <img class="logo" src="/img/name.min.svg" @click.stop="onClickLogo" />
-      <div style="flex: 1" />
-      <div class="elapsed-time" v-if="settings?.timer" v-text="displayedTime" />
-      <img class="settings-button" src="/img/pause-button.min.svg" @click.stop="onClickSettingsButton" />
-    </div>
+    <HeaderBar :timer="settings?.timer ? displayedTime : null" @back="returnToMainMenu" @settings="openSettingsMenu" />
   
     <BoardSelector :board="board" :mode="mode" />
   
@@ -189,49 +185,6 @@ function onClickPaletteToggleButton() {
   flex-direction: column;
   width: 100rem;
   height: 100%;
-}
-
-.play-page-header {
-  display: flex;
-  gap: 5rem;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 2rem;
-  line-height: 1;
-  padding: 2rem;
-  margin-bottom: 2rem;
-  border-bottom: .5rem solid #8886;
-
-  .logo {
-    max-width: 80%;
-    max-height: 5.4rem;
-
-    pointer-events: all;
-    transition: scale 0.2s, filter 0.2s;
-    &:hover {
-      filter: brightness(1.2) drop-shadow(0.5rem 0.5rem 0.2rem #fff3);
-      scale: 1.1;
-    }
-  }
-
-  .elapsed-time {
-    font-size: 3rem;
-    font-weight: bold;
-    line-height: 1;
-    color: #fffa;
-  }
-
-  .settings-button {
-    max-height: 5.4rem;
-
-    pointer-events: all;
-    transition: scale 0.2s, filter 0.2s;
-    &:hover {
-      filter: brightness(1.2) drop-shadow(0.5rem 0.5rem 0.2rem #fff3);
-      scale: 1.1;
-    }
-  }
 }
 
 .controls-footer {
