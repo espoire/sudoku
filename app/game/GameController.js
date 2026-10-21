@@ -8,6 +8,7 @@ import BoardInteractor from './board/BoardInteractor.js';
 import PuzzleEditInteractor from './board/PuzzleEditInteractor.js';
 import Timer from './Timer.js';
 import { selectRandomPuzzleId } from './puzzles.js';
+import RandomTitles from '../vue/cmp/edit/RandomTitles.js';
 
 const { modes } = Constants;
 
@@ -36,6 +37,7 @@ export default class GameController {
   }
 
   showPuzzleEditor() {
+    RandomTitles.pickNew();
     this.board = new Board(puzzleConfigs.find(cfg => cfg.id === null));
     this.interactor = new PuzzleEditInteractor(this.board);
     this.interactor.updateVue();

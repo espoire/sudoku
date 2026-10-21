@@ -42,6 +42,7 @@ const props = defineProps({
 // console.log(deepClone(props));
 
 function returnToMainMenu() {
+  logUiEvent('returnToMainMenu');
   GameController.showMainMenu();
 }
 

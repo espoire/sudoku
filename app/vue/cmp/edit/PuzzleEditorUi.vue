@@ -1,13 +1,15 @@
 <script setup>
 import { computed, onMounted, onUnmounted, ref } from 'vue';
 import Globals from '/app/Globals.js';
-import { randBool, randomArrayElement } from '../../../util/random';
-import { capitalize, toSnakeCase, toTitleCase } from '../../../util/string';
-import { first, range } from '../../../util/Array';
+import GameController from '/app/game/GameController.js';
+import { toSnakeCase, toTitleCase } from '/app/util/string';
+import { range } from '/app/util/Array';
 import BoardSelector from '../play/BoardSelector.vue';
 import ModalManager from '../../ModalManager.js';
 import { logUiEvent } from '../play/helpers.js';
 import VisualNumpad from '../play/VisualNumpad.vue';
+import HeaderBar from '../play/HeaderBar.vue';
+import RandomTitles from './RandomTitles.js';
 
 const props = defineProps({
   mode: String,
@@ -23,32 +25,27 @@ const props = defineProps({
   },
 });
 
+function returnToMainMenu() {
+  logUiEvent('returnToMainMenu');
+  GameController.showMainMenu();
+}
+
+function openSettingsMenu() {
+  logUiEvent('onClickSettingsButton');
+  GameController.onSettingsClicked();
+}
+const defaultTitle = ref(RandomTitles.getTitle());
+const defaultId = ref(RandomTitles.getId());
+
 const title = ref('');
 const id = ref('');
 const notes = ref('');
 const difficulty = ref('');
 
-const vowels = ['a', 'e', 'i', 'o', 'u', 'x'];
-const adjectives = ['aardvark', 'apple', 'awesome', 'banana', 'big', 'bogus', 'cherry', 'colossal', 'choice', 'cool', 'cryptic', 'date', 'dank', 'elderberry', 'endless', 'embodied', 'epic', 'fig', 'fantastic', 'first', 'grape', 'giant', 'great', 'good', 'honeydew', 'huge', 'iris', 'indecent', 'imperishable', 'impossible', 'juice', 'jungle', 'kiwi', 'kingly', 'lemon', 'large', 'lovely', 'legit', 'lean', 'mango', 'massive', 'monkey', 'nectarine', 'null', 'neat', 'number', 'numeric', 'orange', 'okay', 'oversized', 'papaya', 'perfect', 'primo', 'quince', 'raspberry', 'strawberry', 'straight', 'scarlet', 'second', 'subterranean', 'sus', 'tangerine', 'tall', 'talented', 'tenth', 'ugly', 'undefined', 'ultimate', 'vanilla', 'verifiable', 'watermelon', 'whimsical', 'wily', 'xray', 'yam', 'zucchini', 'zany'];
-const nouns = ['advice', 'adventure', 'array', 'animism', 'box', 'boggle', 'blossom', 'business', 'chess', 'chase', 'choice', 'doubt', 'dance', 'devil', 'detour', 'entrancement', 'evening', 'epic', 'find', 'frenzy', 'guess', 'galavant', 'geometry', 'graveyard', 'grid', 'hide', 'hearsay', 'incident', 'jape', 'japes', 'journey', 'key', 'look', 'laughs', 'letter', 'list', 'madness', 'marquee', 'masquerade', 'matrix', 'mystery', 'mysticism', 'night', 'novel', 'opinion', 'order', 'object', 'olive', 'overture', 'puzzle', 'panic', 'picture', 'poetry', 'quest', 'query', 'riddle', 'riot', 'romp', 'story', 'song', 'spell', 'soiree', 'tale', 'trek', 'tour', 'tiles', 'utterance', 'view', 'voyage', 'waltz', 'whirl', 'whim', 'whimsy', 'wilderness', 'yarn', 'zeal'];
-
-const words = [
-  randomArrayElement(adjectives),
-  randomArrayElement(nouns),
-];
-if (randBool(0.3)) {
-  const firstLetter = first(words)[0];
-  words.unshift(randomArrayElement([vowels.includes(firstLetter) ? 'an' : 'a', 'the']));
-}
-
-const defaultTitle = words.map(capitalize).join(' ');
-const defaultId = words.join('-');
-
-const placeholderId = computed(() => title.value ? toSnakeCase(title.value) : defaultId);
+const placeholderId = computed(() => title.value ? toSnakeCase(title.value) : defaultId.value);
 
 function onBlurTitle() { title.value = toTitleCase(title.value); }
 function onBlurId() { id.value = toSnakeCase(id.value); }
-
 
 const numerals = range(0, 9).map(n => `${n}`);
 const clearDigits = [' ', '-', 'Delete', 'Backspace'];
@@ -83,8 +80,8 @@ function copyPuzzle() {
   let puzzleCode = [];
 
   puzzleCode.push('{');
-  puzzleCode.push(`  title: '${title.value || defaultTitle}',`);
-  puzzleCode.push(`  id: '${id.value || defaultId}',`);
+  puzzleCode.push(`  title: '${title.value || defaultTitle.value}',`);
+  puzzleCode.push(`  id: '${id.value || defaultId.value}',`);
   if (difficulty.value) {
     puzzleCode.push(`  difficulty: ${difficulty.value},`);
   }
@@ -113,6 +110,7 @@ function copyPuzzle() {
 
 <template>
   <div class="column-wrap">
+    <HeaderBar :timer="null" @back="returnToMainMenu" @settings="openSettingsMenu" />
     <div class="row title">
       <label for="title">Title</label>
       <input type="text" id="title" class="title-text-input" :placeholder="defaultTitle" v-model="title" @blur="onBlurTitle"/>
@@ -241,6 +239,6 @@ label {
 }
 
 .visual-numpad {
-  margin-top: 5rem;
+  margin-top: 3rem;
 }
 </style>

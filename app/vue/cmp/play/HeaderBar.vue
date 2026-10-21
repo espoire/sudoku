@@ -16,6 +16,7 @@ const emit = defineEmits(['back', 'settings']);
 
 <style lang="scss" scoped>
 .header-bar {
+  width: 100%;
   display: flex;
   gap: 5rem;
   flex-direction: row;
