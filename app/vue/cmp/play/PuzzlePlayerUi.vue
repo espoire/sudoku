@@ -16,6 +16,8 @@ const props = defineProps({
   settings: Object,
   mode: String,
 
+  puzzleId: [String, null],
+
   board: {
     size: {
       x: Number,
@@ -137,6 +139,7 @@ function onClickPaletteToggleButton() {
     <HeaderBar :timer="settings?.timer ? displayedTime : null" @back="returnToMainMenu" @settings="openSettingsMenu" />
   
     <BoardSelector :board="board" :mode="mode" />
+    <div class="current-puzzle-id" v-if="puzzleId" v-text="puzzleId" />
   
     <div class="controls-footer">
       <div class="input-modes">
@@ -186,6 +189,14 @@ function onClickPaletteToggleButton() {
   flex-direction: column;
   width: 100rem;
   height: 100%;
+}
+
+.current-puzzle-id {
+  color: #fffa;
+  font-size: 1.3rem;
+  text-align: right;
+  margin-right: 1rem;
+  line-height: 1;
 }
 
 .controls-footer {

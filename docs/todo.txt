@@ -1,3 +1,9 @@
+Play submenu
+  Lists difficulties 1-5
+  On click one, pick a random puzzle of that difficulty, and launch it
+  Difficulty categories for which we have no puzzles with that rating: grayed-out
+  "Unrated" category, brings up the directory UI, containing only unrated.
+
 Shawna needs:
   Play goes to the (NYI) [select a difficulty, get a random puzzle of that difficulty] screen
 

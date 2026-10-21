@@ -54,6 +54,7 @@ export default class GameController {
     this.interactor = new BoardInteractor(this.board);
     this.interactor.updateVue();
     this.timer.restart();
+    GlobalVueProps.puzzleId = id;
     GameController.setMode(modes.play);
   }
 

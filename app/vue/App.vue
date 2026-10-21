@@ -24,6 +24,7 @@ const props = inject('props');
           :board="props.board" />
       <PuzzlePlayerUi v-if="props.mode === modes.play"
           :settings="props.userSettings" :mode="props.mode"
+          :puzzleId="props.puzzleId"
           :board="props.board"
           :timer="props.timer"
           :inputMode="props.inputMode"

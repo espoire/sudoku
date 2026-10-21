@@ -5,6 +5,9 @@ import Constants from './Constants.js';
 const GlobalVueProps = reactive({
   mode: 'title',
 
+  /** @type {string?} */
+  puzzleId: null,
+
   board: {
     size: { x: 0, y :0 },
     /** @type {Array<Array<{ value: number, given: boolean, error: boolean }>>} */
