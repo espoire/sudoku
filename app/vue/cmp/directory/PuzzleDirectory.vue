@@ -6,7 +6,7 @@ defineProps({
 });
 
 function onClickPuzzleButton(puzzleId) {
-  Globals.gameController.onStartPuzzle(puzzleId);
+  Globals.gameController.startPuzzleById(puzzleId, { permute: false });
 }
 </script>
 

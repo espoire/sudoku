@@ -40,7 +40,7 @@ export function runPuzzleShareEncoderTests() {
 }
 
 function stripMetadata(puzzleConfig) {
-  return { given: puzzleConfig.given };
+  return { given: puzzleConfig.given ?? puzzleConfig.givens };
 }
 
 function validateRoundTrip(encodeFn, decodeFn, puzzleConfig) {

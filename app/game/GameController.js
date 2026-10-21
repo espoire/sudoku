@@ -9,6 +9,7 @@ import PuzzleEditInteractor from './board/PuzzleEditInteractor.js';
 import Timer from './Timer.js';
 import { anyPuzzlesExistWithDifficulty, selectRandomPuzzleId } from './puzzles.js';
 import RandomTitles from '../vue/cmp/edit/RandomTitles.js';
+import PuzzleConfigPermutor from './generator/PuzzleConfigPermutor.js';
 
 const { modes } = Constants;
 
@@ -57,11 +58,13 @@ export default class GameController {
 
   startPuzzle(difficulty = null) {
     const id = selectRandomPuzzleId(difficulty);
-    this.onStartPuzzle(id);
+    this.startPuzzleById(id);
   }
 
-  onStartPuzzle(id) {
-    const puzzleConfig = puzzleConfigs.find(cfg => cfg.id === id);
+  startPuzzleById(id, { permute = true } = {}) {
+    let puzzleConfig = puzzleConfigs.find(cfg => cfg.id === id);
+    if (permute) puzzleConfig = PuzzleConfigPermutor.permute(puzzleConfig);
+
     this.board = new Board(puzzleConfig);
     this.interactor = new BoardInteractor(this.board);
     this.interactor.updateVue();

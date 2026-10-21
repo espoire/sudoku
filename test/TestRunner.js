@@ -1,4 +1,5 @@
 import Settings from '../app/Settings.js';
+import { runPuzzleConfigPermutorTests } from './game/generator/PuzzleConfigPermutor.test.js';
 import { runPuzzleShareEncoderTests } from './game/PuzzleShareEncoder.test.js';
 import { runArrayUtilityTests, visualInspectionTestRotateRectangularArray } from './util/ArrayTest.js';
 import { testDeepEquals } from './util/ObjectTest.js';
@@ -13,6 +14,8 @@ export function runTests() {
   Settings.test = {};
 
   runPuzzleShareEncoderTests();
+  runPuzzleConfigPermutorTests();
+
   visualInspectionTestRotateRectangularArray(true);
   testDeepEquals();
   runArrayUtilityTests();

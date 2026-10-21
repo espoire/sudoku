@@ -285,7 +285,7 @@ export function warnAfterDate(date, ...warnings) {
 }
 
 export function environmentIsDev() {
-  return window.origin.startsWith('http://localhost') || window.origin.includes('127.0.0.1') || window.origin.includes('192.168.');
+  return window.origin.startsWith('http://localhost') || window.origin.startsWith('https://localhost') || window.origin.includes('127.0.0.1') || window.origin.includes('192.168.');
 }
 
 // credit to Timothy Huang for this regex test:
