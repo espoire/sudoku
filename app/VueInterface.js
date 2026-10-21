@@ -21,6 +21,16 @@ const GlobalVueProps = reactive({
     elapsedTimeAtPause: 0,
   },
 
+  directory: {
+    hasDifficulty: {
+      1: false,
+      2: false,
+      3: false,
+      4: false,
+      5: false,
+    },
+  },
+
   /** @type {'digit' | 'corner-note' | 'center-note' | 'cell-color'} The current input mode for the UI. */
   inputMode: Constants.inputModes.digit,
 

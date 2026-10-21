@@ -6,6 +6,7 @@ import Constants from '../Constants.js';
 import PuzzlePlayerUi from './cmp/play/PuzzlePlayerUi.vue';
 import PuzzleDirectory from './cmp/directory/PuzzleDirectory.vue';
 import PuzzleEditorUi from './cmp/edit/PuzzleEditorUi.vue';
+import DifficultySelect from './cmp/directory/DifficultySelect.vue';
 
 const modes = Constants.modes;
 
@@ -18,6 +19,7 @@ const props = inject('props');
     <div class="mainColumn">
       <SettingsScreen v-if="props.mode === modes.settings" :settings="props.userSettings" />
       <MainMenu v-if="props.mode === modes.menu" />
+      <DifficultySelect v-if="props.mode === modes.difficultySelect" :directory="props.directory" />
       <PuzzleDirectory v-if="props.mode === modes.directory" :puzzles="props.puzzles" />
       <PuzzleEditorUi v-if="props.mode === modes.edit"
           :mode="props.mode"

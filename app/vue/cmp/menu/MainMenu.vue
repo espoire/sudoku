@@ -1,7 +1,7 @@
 <script setup>
 import Globals from '../../../Globals';
-function onClickPlay() { Globals.gameController.startPuzzle(); }
-function onClickCreate() { Globals.gameController.showPuzzleEditor(); }
+function showDifficultySelect() { Globals.gameController.showDifficultySelect(); }
+function showPuzzleEditor() { Globals.gameController.showPuzzleEditor(); }
 </script>
 
 <template>
@@ -10,11 +10,11 @@ function onClickCreate() { Globals.gameController.showPuzzleEditor(); }
       <img class="logo" src="/img/name-shadowed.min.svg" />
     </div>
     <div class="button-wrap">
-      <button id="startGame" @click="onClickPlay">Play</button>
+      <button id="startGame" @click="showDifficultySelect">Play</button>
       <div id="startGameFinger">👆</div>
     </div>
     <div class="button-wrap">
-      <button id="editPuzzle" @click="onClickCreate">Create</button>
+      <button id="editPuzzle" @click="showPuzzleEditor">Create</button>
     </div>
   </div>
 </template>

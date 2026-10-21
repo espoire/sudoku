@@ -1,13 +1,13 @@
 import GlobalVueProps from '../VueInterface.js';
 import Settings from '../Settings.js';
-import puzzleConfigs from './puzzles.js';
+import puzzleConfigs, { getAllPuzzlesWithDifficulty } from './puzzles.js';
 import Constants from '../Constants.js';
 import UserSettingsManager from '../UserSettingsManager.js';
 import Board from './board/Board.js';
 import BoardInteractor from './board/BoardInteractor.js';
 import PuzzleEditInteractor from './board/PuzzleEditInteractor.js';
 import Timer from './Timer.js';
-import { selectRandomPuzzleId } from './puzzles.js';
+import { anyPuzzlesExistWithDifficulty, selectRandomPuzzleId } from './puzzles.js';
 import RandomTitles from '../vue/cmp/edit/RandomTitles.js';
 
 const { modes } = Constants;
@@ -32,7 +32,8 @@ export default class GameController {
   }
 
   static showPuzzleDirectory() {
-    GlobalVueProps.puzzles = puzzleConfigs.map(cfg => ({ id: cfg.id, title: cfg.title }));
+    const puzzles = getAllPuzzlesWithDifficulty(null);
+    GlobalVueProps.puzzles = puzzles.map(cfg => ({ id: cfg.id, title: cfg.title }));
     GameController.setMode(modes.directory);
   }
 
@@ -44,8 +45,18 @@ export default class GameController {
     GameController.setMode(modes.edit);
   }
 
-  startPuzzle() {
-    const id = selectRandomPuzzleId();
+  showDifficultySelect() {
+    const vm = GlobalVueProps.directory.hasDifficulty;
+
+    for (let i = 1; i <= 5; i++) {
+      vm[i] = anyPuzzlesExistWithDifficulty(i);
+    }
+
+    GameController.setMode(modes.difficultySelect);
+  }
+
+  startPuzzle(difficulty = null) {
+    const id = selectRandomPuzzleId(difficulty);
     this.onStartPuzzle(id);
   }
 

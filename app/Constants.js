@@ -8,6 +8,7 @@ const Constants = {
     menu: 'menu',
     settings: 'settings',
     play: 'play',
+    difficultySelect: 'difficulty-select',
     directory: 'directory',
     edit: 'edit',
   }),

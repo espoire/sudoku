@@ -274,10 +274,26 @@ const puzzleConfigs = [{
 }];
 export default puzzleConfigs;
 
-export function selectRandomPuzzleId() {
+export function selectRandomPuzzleId(difficulty) {
+  const all = getAllPuzzlesWithDifficulty(difficulty);
+  if (!all?.length) return null;
+  return randomArrayElement(all).id;
+}
+
+export function anyPuzzlesExistWithDifficulty(difficulty) {
+  const includedPuzzles = puzzleConfigs.filter(config => !config.exclude);
+  if (includedPuzzles.length === 0) return false;
+
+  return includedPuzzles.some(config => config.difficulty === difficulty);
+}
+
+export function getAllPuzzlesWithDifficulty(difficulty) {
   const includedPuzzles = puzzleConfigs.filter(config => !config.exclude);
   if (includedPuzzles.length === 0) return null;
-  return randomArrayElement(includedPuzzles).id;
+
+  if (difficulty === undefined) return includedPuzzles;
+  if (difficulty === null) return includedPuzzles.filter(config => config.difficulty == null);
+  return includedPuzzles.filter(config => config.difficulty === difficulty);
 }
 
 /**

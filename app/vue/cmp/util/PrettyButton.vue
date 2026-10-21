@@ -1,5 +1,16 @@
+<script setup>
+const props = defineProps({
+  disabled: [Boolean, null],
+});
+const emit = defineEmits(['activate']);
+
+function activate() {
+  if (!props.disabled) emit('activate');
+}
+</script>
+
 <template>
-  <div class="buttonWrap">
+  <div class="buttonWrap" :class="{ disabled }" @click="activate">
     <slot name="special" />
     <div class="buttonBorder">
       <div class="button">
@@ -41,6 +52,18 @@
   color: #fff;
   line-height: 1;
   white-space: nowrap;
+}
+
+.disabled .buttonBorder {
+  cursor: not-allowed;
+  opacity: 0.4;
+  filter: grayscale(0.8);
+
+  &:hover {
+    left: 0;
+    top: 0;
+    filter: grayscale(0.8);
+  }
 }
 
 .button {
