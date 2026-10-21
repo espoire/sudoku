@@ -1,8 +1,9 @@
-Put the colors in!
+Shawna needs:
+  Puzzle Editor UI --> [Back to menu] button
+  Play goes to the (NYI) [select a difficulty, get a random puzzle of that difficulty] screen
 
 Puzzle Editor UI
   Visual Numpad
-  Wire up copy-as-JSON button
   Build import JSON puzzle UI
 
 Bug: all the Notes are visually marked wrong

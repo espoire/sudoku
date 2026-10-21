@@ -5,11 +5,10 @@
   "type": "module",
   "scripts": {
     "depcruise": "depcruise app --validate",
-    "dev": "vite --host",
-
+    "dev": "vite --host localhost",
+    "lan": "vite --host",
     "build": "run-s depcruise type-check \"build-only {@}\" --",
     "build:comment": "run-s = 'run all (npm scripts) sequentially'. Run: depcruise, (abort if any errors,) then type-check (type-check args tell it to run `npm run build-only` if successful), then build-only which actually builds the app. The `--` at the end passes any args given to `npm run build` on to `vite build`",
-
     "preview": "vite preview",
     "staging": "vite preview",
     "build-only": "vite build",
@@ -35,6 +34,7 @@
     "sass": "^1.72.0",
     "typescript": "~5.4.0",
     "vite": "^7.0.6",
+    "vite-plugin-mkcert": "^2.1.0",
     "vue-tsc": "^2.0.6"
   },
   "license": "ISC"

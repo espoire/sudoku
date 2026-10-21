@@ -5,7 +5,7 @@ import enumeration from './util/enum.js';
 const Constants = {
   /** @readonly @enum {string} */
   modes: enumeration({
-    title: 'title',
+    menu: 'menu',
     settings: 'settings',
     play: 'play',
     directory: 'directory',

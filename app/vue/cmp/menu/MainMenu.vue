@@ -1,22 +1,20 @@
 <script setup>
 import Globals from '../../../Globals';
-
-defineProps(['userSettings']);
-
-function onClickStart() {
-  Globals.gameController.onAdvanceFromTitleScreen()
-}
+function onClickPlay() { Globals.gameController.startPuzzle(); }
+function onClickCreate() { Globals.gameController.showPuzzleEditor(); }
 </script>
 
 <template>
-  <!-- <AmbushBanner /> Uncomment / replace for easy Vue component testing. -->
   <div class="titleScreen">
     <div class="logoWrap">
       <img class="logo" src="/img/name-shadowed.min.svg" />
     </div>
-    <div class="buttons">
-      <button id="startGame" @click="onClickStart">Begin</button>
+    <div class="button-wrap">
+      <button id="startGame" @click="onClickPlay">Play</button>
       <div id="startGameFinger">👆</div>
+    </div>
+    <div class="button-wrap">
+      <button id="editPuzzle" @click="onClickCreate">Create</button>
     </div>
   </div>
 </template>
@@ -32,6 +30,8 @@ function onClickStart() {
     position: relative;
     font-weight: bold;
     text-align: center;
+    margin-top: 20rem;
+    margin-bottom: 20rem;
   }
   
   .logo {
@@ -39,12 +39,12 @@ function onClickStart() {
     max-width: 80%;
   }
 
-  .buttons {
-    flex-grow: 1;
+  .button-wrap {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    margin-bottom: 5rem;
 
     button {
       font-size: 8rem;
@@ -56,8 +56,11 @@ function onClickStart() {
       background-color: var(--color-background-mute);
       letter-spacing: 0.15rem;
 
+      transition: scale 0.2s, opacity 0.2s;
+
       &:hover {
         scale: 1.1;
+        opacity: 1;
       }
 
       &.iconOnly {
@@ -69,7 +72,15 @@ function onClickStart() {
 
       &#startGame {
         --wobble-turn: 5deg;
-        animation: wobble 2s ease-in-out -1s infinite alternate;
+        animation: wobble 2s ease-in-out infinite alternate;
+      }
+
+      &#editPuzzle {
+        font-size: 6rem;
+        opacity: 0.8;
+        --wobble-turn: 5deg;
+        animation: wobble 2s ease-in-out infinite alternate-reverse;
+        &:hover { opacity: 1; }
       }
     }
 
@@ -77,8 +88,8 @@ function onClickStart() {
       position: relative;
       font-size: 7rem;
       color: var(--color-heading);
-      left: 1.4em;
-      top: -0.6em;
+      left: 1.2em;
+      top: -0.8em;
       pointer-events: none;
       animation: tapHereFinger 5s linear infinite;
     }

@@ -1,6 +1,6 @@
 <script setup>
 import { inject } from 'vue';
-import TitleScreen from './cmp/title/TitleScreen.vue';
+import MainMenu from './cmp/menu/MainMenu.vue';
 import SettingsScreen from './cmp/settings/SettingsScreen.vue';
 import Constants from '../Constants.js';
 import SudokuUi from './cmp/board/SudokuUi.vue';
@@ -17,7 +17,7 @@ const props = inject('props');
   <div class="vueAppWrap" :class="{ 'theme-dark': props.userSettings.darkMode }">
     <div class="mainColumn">
       <SettingsScreen v-if="props.mode === modes.settings" :settings="props.userSettings" />
-      <TitleScreen v-if="props.mode === modes.title" :userSettings="props.userSettings" />
+      <MainMenu v-if="props.mode === modes.menu" />
       <PuzzleDirectory v-if="props.mode === modes.directory" :puzzles="props.puzzles" />
       <PuzzleEditorUi v-if="props.mode === modes.edit"
           :mode="props.mode"

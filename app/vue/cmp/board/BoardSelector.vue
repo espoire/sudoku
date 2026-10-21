@@ -1,6 +1,7 @@
 <script setup>
 import { onMounted, onUnmounted, ref } from 'vue';
 import Constants from '/app/Constants.js';
+import Globals from '/app/Globals.js';
 import DragSelectionController from './DragSelectionController';
 import BoardRenderer from './BoardRenderer.vue';
 import { logUiEvent } from './helpers.js';

@@ -7,7 +7,7 @@ import Board from './board/Board.js';
 import BoardInteractor from './board/BoardInteractor.js';
 import PuzzleEditInteractor from './board/PuzzleEditInteractor.js';
 import Timer from './Timer.js';
-import Globals from '../Globals.js';
+import { randomArrayElement } from '../util/random.js';
 
 const { modes } = Constants;
 
@@ -15,7 +15,7 @@ export default class GameController {
   static #modeBeforeSettings = null;
 
   /** @type {modes} */
-  mode = modes.title;
+  mode = modes.menu;
 
   /** @type {Board} */ board = null;
   /** @type {BoardInteractor | PuzzleEditInteractor} */ interactor = null;
@@ -23,17 +23,11 @@ export default class GameController {
 
   begin() {
     UserSettingsManager.syncVue();
-    GameController.showTitleScreen();
+    GameController.showMainMenu();
   }
 
-  onAdvanceFromTitleScreen() {
-    Globals.gameController.onStartPuzzle(puzzleConfigs[5].id);
-    // GameController.showPuzzleDirectory();
-    // this.showPuzzleEditor();
-  }
-
-  static showTitleScreen() {
-    GameController.setMode(modes.title);
+  static showMainMenu() {
+    GameController.setMode(modes.menu);
   }
 
   static showPuzzleDirectory() {
@@ -46,6 +40,11 @@ export default class GameController {
     this.interactor = new PuzzleEditInteractor(this.board);
     this.interactor.updateVue();
     GameController.setMode(modes.edit);
+  }
+
+  startPuzzle() {
+    const id = randomArrayElement(puzzleConfigs).id;
+    this.onStartPuzzle(id);
   }
 
   onStartPuzzle(id) {
