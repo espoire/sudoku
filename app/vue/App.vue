@@ -3,7 +3,7 @@ import { inject } from 'vue';
 import MainMenu from './cmp/menu/MainMenu.vue';
 import SettingsScreen from './cmp/settings/SettingsScreen.vue';
 import Constants from '../Constants.js';
-import SudokuUi from './cmp/play/SudokuUi.vue';
+import PuzzlePlayerUi from './cmp/play/PuzzlePlayerUi.vue';
 import PuzzleDirectory from './cmp/directory/PuzzleDirectory.vue';
 import PuzzleEditorUi from './cmp/edit/PuzzleEditorUi.vue';
 
@@ -22,7 +22,7 @@ const props = inject('props');
       <PuzzleEditorUi v-if="props.mode === modes.edit"
           :mode="props.mode"
           :board="props.board" />
-      <SudokuUi v-if="props.mode === modes.play"
+      <PuzzlePlayerUi v-if="props.mode === modes.play"
           :settings="props.userSettings" :mode="props.mode"
           :board="props.board"
           :timer="props.timer"

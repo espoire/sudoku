@@ -56,7 +56,7 @@ function onKeydown(event) {
 
 function onUnhandledClick() {
   logUiEvent('onUnhandledClick');
-  if (!ModalManager.isOnTop('SudokuUi.vue') || props.mode === modes.settings) return;
+  if (!ModalManager.isOnTop('PuzzlePlayerUi.vue') || props.mode === modes.settings) return;
   Globals.gameController.interactor.clearSelection();
 }
   

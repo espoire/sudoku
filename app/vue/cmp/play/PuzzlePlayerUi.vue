@@ -63,13 +63,13 @@ const numerals = range(0, 9).map(n => `${n}`);
 const clearDigits = [' ', '-', 'Delete', 'Backspace'];
 const pauseKeys = ['Pause', 'Escape'];
 onMounted(() => {
-  ModalManager.registerPeer('BoardSelector.vue', 'SudokuUi.vue', { onKeydown });
+  ModalManager.registerPeer('BoardSelector.vue', 'PuzzlePlayerUi.vue', { onKeydown });
   updateElapsedTime();
   updateElapsedTimeInterval = setInterval(updateElapsedTime, 100);
   resumeTimer();
 });
 onUnmounted(() => {
-  ModalManager.unregister('SudokuUi.vue');
+  ModalManager.unregister('PuzzlePlayerUi.vue');
   pauseTimer();
   clearInterval(updateElapsedTimeInterval);
 });
