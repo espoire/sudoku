@@ -1,9 +1,3 @@
-Play submenu
-  On click one, pick a random puzzle of that difficulty, and launch it
-
-Shawna needs:
-  Play goes to the (NYI) [select a difficulty, get a random puzzle of that difficulty] screen
-
 Puzzle Permuter
   Swap digits and/or rows/cols of boxes and/or rotate
 
