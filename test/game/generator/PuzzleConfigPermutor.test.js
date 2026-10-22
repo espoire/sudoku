@@ -1,5 +1,7 @@
 import PuzzleConfigPermutor from "../../../app/game/generator/PuzzleConfigPermutor.js";
-import { memberwiseEquals } from "../../../app/util/Array.js";
+import { array, fillFrom, memberwiseEquals } from "../../../app/util/Array.js";
+import { randomArrayElement } from "../../../app/util/random.js";
+import { sort } from "../../../app/util/sort.js";
 import { errorMaybe, runFunctionalTests } from "../../TestHelpers.js";
 
 export function runPuzzleConfigPermutorTests() {
@@ -9,6 +11,8 @@ export function runPuzzleConfigPermutorTests() {
     test_substituteDigits,
     test_mirror,
     test_rotate,
+
+    test_multiplePermutation,
   ]);
 }
 
@@ -306,5 +310,56 @@ function test_substituteDigits() {
   }
 
   errorMaybe('PuzzleConfigPermutor.substituteDigits', errors);
+  return errors;
+}
+
+
+/**
+ * Runs a combined test of the PuzzleConfigPermutor,
+ * applying all permutations via .permuteGivensMap() to a sample input and
+ * verifying the results still contain the same different counts of digits.
+ * 
+ * That is, if the input contained 7 9s, 4 5s, 2 6s, and 1 each of 1s 2s and 4s,
+ * then the output should contain 7 of [some digit], 4 of [some digit],
+ * 2 of [some digit], and 1 of three different [some digit]s.
+ */
+function test_multiplePermutation() {
+  const errors = [];
+
+  const input = array(9, 9);
+  fillFrom(input, () => randomArrayElement([' ', 1, 2, 3, 4, 5, 6, 7, 8, 9]));
+
+  const permuted = PuzzleConfigPermutor.permuteGivensMap(input);
+
+  const inputDigitCounts = Array(10).fill(0);
+  for (const row of input) {
+    for (const cell of row) {
+      inputDigitCounts[cell]++;
+    }
+  }
+
+  const permutedDigitCounts = Array(10).fill(0);
+  for (const row of permuted) {
+    for (const cell of row) {
+      permutedDigitCounts[cell]++;
+    }
+  }
+
+  const sortedInputCounts = structuredClone(inputDigitCounts).sort(sort.numeric.descending);
+  const sortedPermutedCounts = structuredClone(permutedDigitCounts).sort(sort.numeric.descending);
+
+  if (!memberwiseEquals(sortedInputCounts, sortedPermutedCounts)) {
+    errors.push(`Digit count mismatch: input: [${sortedInputCounts}], permuted: [${sortedPermutedCounts}]`);
+  // } else {
+  //   console.log(`Digit counts match:`);
+  //   console.log(`  input: ${prettyFormat2DRectArray(input)}`);
+  //   console.log(`  input count: [${inputDigitCounts}]`);
+  //   console.log(`  input sorted count: [${sortedInputCounts}]`);
+  //   console.log(`  permuted: ${prettyFormat2DRectArray(permuted)}`);
+  //   console.log(`  permuted count: [${permutedDigitCounts}]`);
+  //   console.log(`  permuted sorted count: [${sortedPermutedCounts}]`);
+  }
+
+  errorMaybe('PuzzleConfigPermutor.multiplePermutation', errors);
   return errors;
 }

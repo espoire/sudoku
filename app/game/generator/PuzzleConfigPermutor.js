@@ -15,16 +15,21 @@ export default class PuzzleConfigPermutor {
     let givensMap = array(9, 9);
     fillFrom(givensMap, (y, x) => given?.[y]?.[x] ?? ' ');
 
-    givensMap = PuzzleConfigPermutor.shuffleBoxColumns(givensMap);
-    givensMap = PuzzleConfigPermutor.shuffleBoxRows(givensMap);
-    givensMap = PuzzleConfigPermutor.rotate(givensMap);
-    givensMap = PuzzleConfigPermutor.mirror(givensMap);
-    givensMap = PuzzleConfigPermutor.substituteDigits(givensMap);
+    givensMap = PuzzleConfigPermutor.permuteGivensMap(givensMap);
 
     return {
       ...config,
       given: givensMap.map(row => row.join('')),
     };
+  }
+
+  static permuteGivensMap(givensMap) {
+    givensMap = PuzzleConfigPermutor.shuffleBoxColumns(givensMap);
+    givensMap = PuzzleConfigPermutor.shuffleBoxRows(givensMap);
+    givensMap = PuzzleConfigPermutor.rotate(givensMap);
+    givensMap = PuzzleConfigPermutor.mirror(givensMap);
+    givensMap = PuzzleConfigPermutor.substituteDigits(givensMap);
+    return givensMap;
   }
 
   static shuffleBoxColumns(givensMap) {
