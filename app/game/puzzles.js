@@ -19,6 +19,7 @@ const puzzleConfigs = [{
 }, {
   title: 'Test Puzzle #1',
   id: 'test-puzzle-1',
+  difficulty: 2,
   size: { x: 9, y: 9 },
   given: [
     '  6814 97',
