@@ -2,13 +2,15 @@ Multi-selection by holding ctrl+click to add additional cells-selected when you 
 Remove-from-selection by ctrl+click a cell already selected, and drag behavior becomes removal if started thusly
 
 Bug: "Bar of Soap" --> Insert all 1s --> Delete all via [Delete] key --> Given 1s still show as invalid
+Bug: inserting a zillion center notes into the same cell overflows the cell, with clipping
 
 If you have only one type of numeral selected (e.g. some 9s, whether given or user-entered) (and optionally any number of empty cells) then visually-accentuate the rest of that digit throughout the board
   Setting to disable this feature
 
-Show remaining count of each numeral to place, on the visual numpad
+Save user's user-settings, and auto-restore on session reload
+Save user's current puzzle progress, and enable resuming from a conditionally-visible "Continue" button in the main menu
 
-Bug: inserting a zillion center notes into the same cell overflows the cell, with clipping
+Show remaining count of each numeral to place, on the visual numpad
 
 Puzzle Editor UI
   Build import JSON puzzle UI

@@ -12,7 +12,7 @@ import Interactor from "./Interactor.js";
  * Wraps and mediates access to a Board data object.
  * Supports its own cell-multi-selection and notations management.
  */
-export default class BoardInteractor extends Interactor {
+export default class PuzzlePlayInteractor extends Interactor {
   /** @type {Array<Array<Set<number>>>} */ cornerNotes = [];
   /** @type {Array<Array<Set<number>>>} */ centerNotes = [];
   /** @type {Array<Array<CellColorSet>>} */ cellColors = []; 

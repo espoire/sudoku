@@ -4,7 +4,7 @@ import puzzleConfigs, { getAllPuzzlesWithDifficulty } from './puzzles.js';
 import Constants from '../Constants.js';
 import UserSettingsManager from '../UserSettingsManager.js';
 import Board from './board/Board.js';
-import BoardInteractor from './board/BoardInteractor.js';
+import PuzzlePlayInteractor from './board/PuzzlePlayInteractor.js';
 import PuzzleEditInteractor from './board/PuzzleEditInteractor.js';
 import Timer from './Timer.js';
 import { anyPuzzlesExistWithDifficulty, selectRandomPuzzleId } from './puzzles.js';
@@ -20,7 +20,7 @@ export default class GameController {
   mode = modes.menu;
 
   /** @type {Board} */ board = null;
-  /** @type {BoardInteractor | PuzzleEditInteractor} */ interactor = null;
+  /** @type {PuzzlePlayInteractor | PuzzleEditInteractor} */ interactor = null;
   /** @type {Timer} */ timer = new Timer();
 
   begin() {
@@ -66,7 +66,7 @@ export default class GameController {
     if (!Settings.test?.suppressPuzzlePermute) puzzleConfig = PuzzleConfigPermutor.permute(puzzleConfig);
 
     this.board = new Board(puzzleConfig);
-    this.interactor = new BoardInteractor(this.board);
+    this.interactor = new PuzzlePlayInteractor(this.board);
     this.interactor.updateVue();
     this.timer.restart();
     GlobalVueProps.puzzleId = id;
