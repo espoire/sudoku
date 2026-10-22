@@ -29,12 +29,13 @@ function showUnratedPuzzleDirectory() { GameController.showPuzzleDirectory(); }
   <HeaderBar @back="returnToMainMenu" @settings="openSettingsMenu" />
   <div class="difficulty-select">
     <h1>Select Difficulty</h1>
-    <PrettyButton class="beginner" :disabled="!directory.hasDifficulty[1]" @activate="() => startPuzzle(1)"      :title="!directory.hasDifficulty[1] ? 'No available puzzles of this difficulty.' : null">1 - Beginner</PrettyButton>
-    <PrettyButton class="easy"     :disabled="!directory.hasDifficulty[2]" @activate="() => startPuzzle(2)"      :title="!directory.hasDifficulty[2] ? 'No available puzzles of this difficulty.' : null">2 - Easy    </PrettyButton>
-    <PrettyButton class="medium"   :disabled="!directory.hasDifficulty[3]" @activate="() => startPuzzle(3)"      :title="!directory.hasDifficulty[3] ? 'No available puzzles of this difficulty.' : null">3 - Medium  </PrettyButton>
-    <PrettyButton class="hard"     :disabled="!directory.hasDifficulty[4]" @activate="() => startPuzzle(4)"      :title="!directory.hasDifficulty[4] ? 'No available puzzles of this difficulty.' : null">4 - Hard    </PrettyButton>
-    <PrettyButton class="expert"   :disabled="!directory.hasDifficulty[5]" @activate="() => startPuzzle(5)"      :title="!directory.hasDifficulty[5] ? 'No available puzzles of this difficulty.' : null">5 - Expert  </PrettyButton>
-    <PrettyButton class="unrated"                                          @activate="showUnratedPuzzleDirectory"                                                                                        >Unrated     </PrettyButton>
+    <PrettyButton class="basic"     :disabled="!directory.hasDifficulty[1]" @activate="() => startPuzzle(1)"      :title="!directory.hasDifficulty[1] ? 'No available puzzles of this difficulty.' : null">1 - Basic </PrettyButton>
+    <PrettyButton class="easy"      :disabled="!directory.hasDifficulty[2]" @activate="() => startPuzzle(2)"      :title="!directory.hasDifficulty[2] ? 'No available puzzles of this difficulty.' : null">2 - Easy     </PrettyButton>
+    <PrettyButton class="medium"    :disabled="!directory.hasDifficulty[3]" @activate="() => startPuzzle(3)"      :title="!directory.hasDifficulty[3] ? 'No available puzzles of this difficulty.' : null">3 - Medium   </PrettyButton>
+    <PrettyButton class="hard"      :disabled="!directory.hasDifficulty[4]" @activate="() => startPuzzle(4)"      :title="!directory.hasDifficulty[4] ? 'No available puzzles of this difficulty.' : null">4 - Hard     </PrettyButton>
+    <PrettyButton class="challenge" :disabled="!directory.hasDifficulty[5]" @activate="() => startPuzzle(5)"      :title="!directory.hasDifficulty[5] ? 'No available puzzles of this difficulty.' : null">5 - Challenge</PrettyButton>
+    <PrettyButton class="expert"    :disabled="!directory.hasDifficulty[6]" @activate="() => startPuzzle(6)"      :title="!directory.hasDifficulty[6] ? 'No available puzzles of this difficulty.' : null">6 - Expert   </PrettyButton>
+    <PrettyButton class="unrated"                                          @activate="showUnratedPuzzleDirectory"                                                                                        >Unrated      </PrettyButton>
   </div>
 </template>
 
@@ -58,23 +59,27 @@ function showUnratedPuzzleDirectory() { GameController.showPuzzleDirectory(); }
     font-size: 6rem;
     cursor: pointer;
 
-    &.beginner {
-      background-color: #a8e6cf44;
+    &.basic {
+      background-color: #aed4;
     }
     &.easy {
-      background-color: #dcedc144;
+      background-color: #afa4;
     }
     &.medium {
-      background-color: #ffd3b644;
+      background-color: #ef94;
     }
     &.hard {
-      background-color: #ffaaa544;
+      background-color: #fc94;
+    }
+    &.challenge {
+      background-color: #fa94;
     }
     &.expert {
-      background-color: #ff8b9444;
+      background-color: #d8d4;
     }
+
     &.unrated {
-      background-color: #cccccc44;
+      background-color: #ccc4;
       margin-top: 5rem;
     }
   }

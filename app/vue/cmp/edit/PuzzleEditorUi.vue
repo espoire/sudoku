@@ -127,11 +127,12 @@ function copyPuzzle() {
       <label for="difficulty">Difficulty</label>
       <select id="difficulty" class="difficulty-select" v-model="difficulty">
         <option value=""></option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
+        <option value="1">1 - Basic</option>
+        <option value="2">2 - Easy</option>
+        <option value="3">3 - Medium</option>
+        <option value="4">4 - Hard</option>
+        <option value="5">5 - Challenge</option>
+        <option value="6">6 - Expert</option>
       </select>
     </div>
     
