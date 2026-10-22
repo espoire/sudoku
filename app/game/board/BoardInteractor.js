@@ -75,8 +75,11 @@ export default class BoardInteractor extends Interactor {
   handleNumeralInput(value) {
     const selection = this.listSelection();
 
+    let wasEntryChange = false;
+
     if (value == null) {
       // Explicit delete: clear selected cells regardless of input mode, using a priority order
+      wasEntryChange = true;
 
       // If any editable selected cells contain a value, clear values
       const editable = selection.filter(({ row, column }) => this.board.canEdit(row, column));
@@ -110,6 +113,7 @@ export default class BoardInteractor extends Interactor {
       }
     } else switch (this.#inputMode) {
       case Constants.inputModes.digit: {
+        wasEntryChange = true;
         if (value === 0) value = null;
 
         // If input is a digit and ALL editable selected cells already contain that digit, instead delete the value from all selected cells.
@@ -221,8 +225,30 @@ export default class BoardInteractor extends Interactor {
       } break;
     }
 
+    if (wasEntryChange && Settings.user.autoDeleteErroneousNotes) {
+      this.deleteAllNotesWithErrors();
+    }
+
     // Update the UI with the new board state & validations.
     this.updateVue();
+  }
+
+  deleteAllNotesWithErrors() {
+    if (!this.#cachedNotesValidationResult) return;
+
+    for (let row = 0; row < this.board.size.y; row++) {
+      for (let column = 0; column < this.board.size.x; column++) {
+        const cellValidation = this.#cachedNotesValidationResult[row]?.[column];
+        if (!cellValidation) continue;
+
+        for (const note in cellValidation) {
+          if (!cellValidation[note]) {
+            this.cornerNotes[row][column].delete(+note);
+            this.centerNotes[row][column].delete(+note);
+          }
+        }
+      }
+    }
   }
 
   #validateNotes() {

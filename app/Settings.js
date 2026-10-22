@@ -23,6 +23,7 @@ const Settings = {
     timer: true,
     showTimerTenths: false,
     noteErrorMarks: true,
+    autoDeleteErroneousNotes: false,
     // mouseoverInput: false,
   },
 };

@@ -71,17 +71,16 @@ function onKeydown(event) {
           :labels="{ off: 'Hide', on: 'Show' }"
           :on="settings.timer"
           @toggle="toggle('timer')" />
-      </div>
-
-      <!-- Puzzle timer format toggle -->
-      <div :class="{ irrelevant: !settings.timer }">
-        <label for="showTimerTenthsToggle">Timer Format</label>
+        <label class="minor" :class="{ irrelevant: !settings.timer }" for="showTimerTenthsToggle">Format</label>
         <ToggleSwitch
           id="showTimerTenthsToggle"
+          :class="{ irrelevant: !settings.timer }"
           :labels="{ off: '0:00', on: '0:00.0' }"
           :on="settings.showTimerTenths"
           @toggle="toggle('showTimerTenths')" />
       </div>
+
+      <!-- Puzzle timer format toggle -->
 
       <!-- User-entered digit style toggle -->
       <div>
@@ -99,10 +98,22 @@ function onKeydown(event) {
         <label for="userNotesErrorMarkingToggle">Corner- and Center-Notes Rule Conflicts</label>
         <ToggleSwitch
           id="userNotesErrorMarkingToggle"
-          :labels="{ off: 'Do Not Check', on: 'Mark in Red' }"
+          :labels="{ off: 'Do Not Check', on: 'Check' }"
           :on="settings.noteErrorMarks"
           @toggle="toggle('noteErrorMarks')" />
+        <ToggleSwitch
+          id="autoDeleteErroneousNotesToggle"
+          :class="{ irrelevant: !settings.noteErrorMarks }"
+          :labels="{ off: 'Only Mark in Red', on: 'Delete' }"
+          :on="settings.autoDeleteErroneousNotes"
+          @toggle="toggle('autoDeleteErroneousNotes')" />
+        <span class="hint" :class="{ irrelevant: !settings.noteErrorMarks }">
+          If set to delete, notes conflicting with the rules <br />
+          will be removed when placing any non-note digits.
+        </span>
       </div>
+
+      <!-- Auto-delete erroneous notes toggle -->
 
       <!-- Mouseover input toggle -->
       <!-- <div>
@@ -150,15 +161,30 @@ function onKeydown(event) {
     margin-top: 5rem;
     font-weight: bold;
     color: var(--color-heading);
+
+    transition: opacity 0.2s;
+
+    &.minor {
+      margin-top: 0.5rem;
+      line-height: 1;
+      font-size: 2rem;
+      color: var(--color-text);
+    }
   }
 
   .hint {
     font-size: 60%;
     font-style: italic;
     opacity: 0.7;
-    margin-top: -0.5rem;
-    line-height: 1.2;
+    margin-top: 0.5rem;
+    line-height: 1.1;
     text-align: center;
+
+    transition: opacity 0.2s;
+
+    &.irrelevant {
+      opacity: 0.2;
+    }
   }
 }
 
@@ -218,7 +244,15 @@ function onKeydown(event) {
   opacity: 0.4;
 
   & label {
-    opacity: 0.6;
+    opacity: 0.6;    
   }
+
+  &.minor {
+    opacity: 0.3;
+  }
+}
+
+.switch-wrap {
+  transition: opacity 0.2s;
 }
 </style>

@@ -13,6 +13,7 @@ const specialOptionsTypes = {
   timer: 'boolean',
   showTimerTenths: 'boolean',
   noteErrorMarks: 'boolean',
+  autoDeleteErroneousNotes: 'boolean',
   // mouseoverInput: 'boolean',
 };
 
