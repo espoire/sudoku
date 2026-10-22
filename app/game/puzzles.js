@@ -274,7 +274,7 @@ const puzzleConfigs = [{
 }, {
   title: 'LT1',
   id: 'lt1',
-  difficulty: 1,
+  difficulty: 2,
   givens: [
     '6 3 1 5  ',
     '   7  382',
@@ -289,7 +289,7 @@ const puzzleConfigs = [{
 }, {
   title: 'Bg1',
   id: 'bg1',
-  difficulty: 1,
+  difficulty: 2,
   givens: [
     ' 2 7  8  ',
     '  8 94   ',
@@ -304,7 +304,7 @@ const puzzleConfigs = [{
 }, {
   title: 'Bg2',
   id: 'bg2',
-  difficulty: 1,
+  difficulty: 2,
   givens: [
     '78  614  ',
     '   38 9  ',
@@ -319,7 +319,7 @@ const puzzleConfigs = [{
 }, {
   title: '241',
   id: '241',
-  difficulty: 1,
+  difficulty: 2,
   givens: [
     '  4 37951',
     ' 5       ',
@@ -334,7 +334,7 @@ const puzzleConfigs = [{
 }, {
   title: '242',
   id: '242',
-  difficulty: 1,
+  difficulty: 2,
   givens: [
     '5   7    ',
     ' 193 27 6',
@@ -349,7 +349,7 @@ const puzzleConfigs = [{
 }, {
   title: 'Ms1',
   id: 'ms1',
-  difficulty: 1,
+  difficulty: 2,
   givens: [
     '3   657 2',
     '7    35  ',
@@ -364,7 +364,7 @@ const puzzleConfigs = [{
 }, {
   title: 'Bgm1',
   id: 'bgm1',
-  difficulty: 2,
+  difficulty: 3,
   notes: 'this is a really fun medium puzzle',
   givens: [
     '     1   ',
@@ -380,7 +380,7 @@ const puzzleConfigs = [{
 }, {
   title: 'Ltm1',
   id: 'ltm1',
-  difficulty: 2,
+  difficulty: 3,
   givens: [
     '    41  3',
     ' 4   8 9 ',
@@ -395,7 +395,7 @@ const puzzleConfigs = [{
 }, {
   title: 'Ltm2',
   id: 'ltm2',
-  difficulty: 2,
+  difficulty: 3,
   givens: [
     '  9  4   ',
     '3 7    9 ',
@@ -410,7 +410,7 @@ const puzzleConfigs = [{
 }, {
   title: 'Lth1',
   id: 'lth1',
-  difficulty: 3,
+  difficulty: 4,
   givens: [
     '6     9 2',
     '         ',
@@ -425,7 +425,7 @@ const puzzleConfigs = [{
 }, {
   title: 'Lth2',
   id: 'lth2',
-  difficulty: 3,
+  difficulty: 4,
   givens: [
     '  3   9  ',
     '     1   ',
@@ -440,7 +440,7 @@ const puzzleConfigs = [{
 }, {
   title: 'Bgm3',
   id: 'bgm3',
-  difficulty: 3,
+  difficulty: 4,
   givens: [
     '  5 79628',
     '        7',
