@@ -437,6 +437,21 @@ const puzzleConfigs = [{
     '  8  64  ',
     '9   8  35',
   ],
+}, {
+  title: 'Bgm3',
+  id: 'bgm3',
+  difficulty: 3,
+  givens: [
+    '  5 79628',
+    '        7',
+    '     6 4 ',
+    ' 59 1  6 ',
+    ' 6 8  479',
+    '48       ',
+    '2 3    8 ',
+    ' 76  3  5',
+    '       9 ',
+  ],
 }];
 export default puzzleConfigs;
 
