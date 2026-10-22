@@ -6,6 +6,7 @@ import DragSelectionController from '../play/DragSelectionController.js';
 import BoardRenderer from './BoardRenderer.vue';
 import { logUiEvent } from '../play/helpers.js';
 import ModalManager from '../../ModalManager.js';
+import KeyboardHelper from '../../../util/KeyboardHelper.js';
 
 const modes = Constants.modes;
 
@@ -50,6 +51,22 @@ function onKeydown(event) {
   // [Ctrl+A] Select all cells
   } else if (event.ctrlKey && event.key === 'a') {
     Globals.gameController.interactor.selectAllCells();
+    return false; // Mark event handled, so earlier peers in ModalManager won't receive it.
+
+  } else if (KeyboardHelper.isUp(event)) {
+    Globals.gameController.interactor.moveSelection('up');
+    return false; // Mark event handled, so earlier peers in ModalManager won't receive it.
+
+  } else if (KeyboardHelper.isDown(event)) {
+    Globals.gameController.interactor.moveSelection('down');
+    return false; // Mark event handled, so earlier peers in ModalManager won't receive it.
+
+  } else if (KeyboardHelper.isLeft(event)) {
+    Globals.gameController.interactor.moveSelection('left');
+    return false; // Mark event handled, so earlier peers in ModalManager won't receive it.
+
+  } else if (KeyboardHelper.isRight(event)) {
+    Globals.gameController.interactor.moveSelection('right');
     return false; // Mark event handled, so earlier peers in ModalManager won't receive it.
   }
 }

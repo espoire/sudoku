@@ -1,8 +1,8 @@
 const keys = {
-  left: ['ArrowLeft', 'a', 'A', '4'],
-  right: ['ArrowRight', 'd', 'D', '6'],
-  up: ['ArrowUp', 'w', 'W', '8'],
-  down: ['ArrowDown', 's', 'S', '2'],
+  left: ['ArrowLeft', 'a', 'A'],
+  right: ['ArrowRight', 'd', 'D'],
+  up: ['ArrowUp', 'w', 'W'],
+  down: ['ArrowDown', 's', 'S'],
 };
 
 export default class KeyboardHelper {

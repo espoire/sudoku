@@ -1,6 +1,14 @@
 /** @typedef {import('./board/Board.js').default} Board */
+import { randomArrayElement } from '../../util/random.js';
 import GlobalVueProps from '../../VueInterface.js';
 import { create2DArray } from './helpers.js';
+
+const directionVector = {
+  up: { row: -1, column: 0 },
+  down: { row: 1, column: 0 },
+  left: { row: 0, column: -1 },
+  right: { row: 0, column: 1 },
+};
 
 export default class Interactor {
   /** @type {Board} */ board;
@@ -108,6 +116,37 @@ export default class Interactor {
         this.selectedCells[row][column] = state;
       }
     }
+
+    this.updateVue();
+  }
+
+  /**
+   * Moves the current selection in the specified direction, or starts a new selection if none exists.
+   * @param {'up' | 'left' | 'down' | 'right'} direction The direction to move the selection.
+   */
+  moveSelection(direction) {
+    
+    // Start a new selection if no selected cell exists.
+    if (!this.hasAnySelection()) {
+      const centerRowIndex = Math.floor(this.board.size.y / 2);
+      const centerColumnIndex = Math.floor(this.board.size.x / 2);
+      this.selectedCells[centerRowIndex][centerColumnIndex] = true;
+    }
+
+    // Move the selection in the specified direction.
+
+    
+    // Choose a single selected cell (randomly for now),
+    const { row, column } = randomArrayElement(this.listSelection());
+    
+    // then deselect all,
+    this.clearSelection();
+    
+    // and select its neighbor in the indicated direction,
+    // wrapping around edges.
+    const newRow = (row + directionVector[direction].row + this.board.size.y) % this.board.size.y;
+    const newColumn = (column + directionVector[direction].column + this.board.size.x) % this.board.size.x;
+    this.selectedCells[newRow][newColumn] = true;
 
     this.updateVue();
   }
