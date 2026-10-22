@@ -22,6 +22,8 @@ const props = defineProps({
       type: Array, // 2d array of Cell descriptor objects: { value: number, given: boolean, selected: boolean, notes: { corner: { value: number, valid: boolean }[], center: { value: number, valid: boolean }[] }, colors: string[] }
     },
   },
+
+  suppressKeyboard: [Boolean, null],
 });
 
 const boardComponent = ref(null);
@@ -39,6 +41,7 @@ onUnmounted(() => {
 
 function onKeydown(event) {
   logUiEvent('onKeydown', event);
+  if (props.suppressKeyboard) return;
 
   // [Escape] Clear selection if any
   if (event.key === 'Escape') {

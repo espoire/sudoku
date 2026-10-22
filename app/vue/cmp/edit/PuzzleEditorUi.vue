@@ -58,6 +58,7 @@ onUnmounted(() => {
 
 function onKeydown(event) {
   logUiEvent('onKeydown', event);
+  if (isAnyInputFocused.value) return;
   
   if (numerals.includes(event.key)) {
     onNumeralInput(+event.key);
@@ -115,6 +116,17 @@ function rerollRandomTitle() {
   defaultTitle.value = RandomTitles.getTitle();
   defaultId.value = RandomTitles.getId();
 }
+
+const focusedInputs = ref(new Set());
+const isAnyInputFocused = computed(() => focusedInputs.value.size > 0);
+
+function onFocusInput(inputName) {
+  focusedInputs.value.add(inputName);
+}
+
+function onBlurInput(inputName) {
+  focusedInputs.value.delete(inputName);
+}
 </script>
 
 <template>
@@ -122,19 +134,19 @@ function rerollRandomTitle() {
     <HeaderBar :timer="null" @back="returnToMainMenu" @settings="openSettingsMenu" />
     <div class="row title">
       <label for="title">Title</label>
-      <input type="text" id="title" class="title-text-input" :placeholder="defaultTitle" v-model="title" @blur="onBlurTitle"/>
+      <input type="text" id="title" class="title-text-input" :placeholder="defaultTitle" v-model="title" @focus="onFocusInput('title')" @blur="() => { onBlurTitle(); onBlurInput('title') }"/>
     </div>
     <div class="row id">
       <label for="id">ID</label>
-      <input type="text" id="id" class="id-text-input" :placeholder="placeholderId" v-model="id" @blur="onBlurId"/>
+      <input type="text" id="id" class="id-text-input" :placeholder="placeholderId" v-model="id" @focus="onFocusInput('id')" @blur="() => { onBlurId(); onBlurInput('id') }"/>
     </div>
     <div class="row notes">
       <label for="notes">Notes</label>
-      <textarea id="notes" class="notes-text-area" v-model="notes"></textarea>
+      <textarea id="notes" class="notes-text-area" v-model="notes" @focus="onFocusInput('notes')" @blur="() => { onBlurInput('notes') }"></textarea>
     </div>
     <div class="row difficulty">
       <label for="difficulty">Difficulty</label>
-      <select id="difficulty" class="difficulty-select" v-model="difficulty">
+      <select id="difficulty" class="difficulty-select" v-model="difficulty" @focus="onFocusInput('difficulty')" @blur="() => { onBlurInput('difficulty') }">
         <option value=""></option>
         <option value="1">1 - Basic</option>
         <option value="2">2 - Easy</option>
@@ -145,7 +157,7 @@ function rerollRandomTitle() {
       </select>
     </div>
     
-    <BoardSelector :board="board" :mode="mode" />
+    <BoardSelector :board="board" :mode="mode" :suppressKeyboard="isAnyInputFocused" />
 
     <div class="copy-finished">
       <div id="sudoku-puzzle-editor-copy-puzzle-button" class="copy-puzzle-button" @click="copyPuzzle">Copy as Code</div>

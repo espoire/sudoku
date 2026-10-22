@@ -1,5 +1,3 @@
-Don't move the selection (per arrow key press) when focus is on a textual input element (like the Editor notes field)
-
 Bug: all the Notes are visually marked wrong
 Bug: "Bar of Soap" --> Insert all 1s --> Delete all via [Delete] key --> Given 1s still show as invalid
 
