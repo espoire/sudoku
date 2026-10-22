@@ -7,6 +7,8 @@ const Settings = {
     // Meta
     // disableTestMode: true,
 
+    suppressPuzzlePermute: true,
+
     log: {
       uiEventHandling: false,
       modalEventRouting: false,
