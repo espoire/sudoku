@@ -67,6 +67,7 @@ const puzzleConfigs = [{
 }, {
   title: "Ahriman's Eye",
   id: 'test-puzzle-2',
+  difficulty: 2,
   size: { x: 9, y: 9 },
   given: [
     '53  7    ',
