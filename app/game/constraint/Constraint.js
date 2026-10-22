@@ -44,11 +44,11 @@ export default class Constraint {
    * Checks whether inserting the given value at the specified cell would violate this constraint.
    * @param {Board} board 
    * @param {{ row: number, column: number, value: number }} note 
-   * @returns {boolean}
+   * @returns {boolean} False if inserting the value would violate this constraint, true otherwise.
    */
   checkNote(board, note) {
     if (typeof this.#checkNoteFn === 'function') return this.#checkNoteFn(board, note);
-    return false;
+    return true;
   }
 
   /**

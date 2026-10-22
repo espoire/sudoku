@@ -231,7 +231,8 @@ export default class BoardInteractor extends Interactor {
       return;
     }
 
-    this.#cachedNotesValidationResult = this.board.validateNotes(this.#prepareNotesSummary());
+    const notesSummary = this.#prepareNotesSummary();
+    this.#cachedNotesValidationResult = this.board.validateNotes(notesSummary);
   }
 
   /**

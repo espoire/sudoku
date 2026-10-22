@@ -1,4 +1,3 @@
-Bug: all the Notes are visually marked wrong
 Bug: "Bar of Soap" --> Insert all 1s --> Delete all via [Delete] key --> Given 1s still show as invalid
 
 If you have only one type of numeral selected (e.g. some 9s, whether given or user-entered) (and optionally any number of empty cells) then visually-accentuate the rest of that digit throughout the board
@@ -8,6 +7,8 @@ Visually-accentuate all cells in the same row or column as the "active" cell
   Setting to disable this feature
 
 Show remaining count of each numeral to place, on the visual numpad
+
+Bug: inserting a zillion center notes into the same cell overflows the cell, with clipping
 
 Puzzle Editor UI
   Build import JSON puzzle UI
