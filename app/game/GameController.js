@@ -61,9 +61,9 @@ export default class GameController {
     this.startPuzzleById(id);
   }
 
-  startPuzzleById(id, { permute = true } = {}) {
+  startPuzzleById(id) {
     let puzzleConfig = puzzleConfigs.find(cfg => cfg.id === id);
-    if (permute) puzzleConfig = PuzzleConfigPermutor.permute(puzzleConfig);
+    puzzleConfig = PuzzleConfigPermutor.permute(puzzleConfig);
 
     this.board = new Board(puzzleConfig);
     this.interactor = new BoardInteractor(this.board);

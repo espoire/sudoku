@@ -24,31 +24,14 @@ export default class PuzzleConfigPermutor {
   }
 
   static permuteGivensMap(givensMap) {
-    givensMap = PuzzleConfigPermutor.shuffleBoxColumns(givensMap);
     givensMap = PuzzleConfigPermutor.shuffleBoxRows(givensMap);
+    givensMap = PuzzleConfigPermutor.shuffleBoxColumns(givensMap);
+    givensMap = PuzzleConfigPermutor.shuffleRowsWithinBoxGroups(givensMap);
+    givensMap = PuzzleConfigPermutor.shuffleColumnsWithinBoxGroups(givensMap);
     givensMap = PuzzleConfigPermutor.rotate(givensMap);
     givensMap = PuzzleConfigPermutor.mirror(givensMap);
     givensMap = PuzzleConfigPermutor.substituteDigits(givensMap);
     return givensMap;
-  }
-
-  static shuffleBoxColumns(givensMap) {
-    // Shuffle each column of 3x3 boxes.
-
-    const columnOrder = [0, 1, 2];
-    arrShuffleInPlace(columnOrder);
-
-    const newGivensMap = array(givensMap.length, givensMap[0].length);
-    for (let newBoxColumnIndex = 0; newBoxColumnIndex < 3; newBoxColumnIndex++) {
-      const oldBoxColumnIndex = columnOrder[newBoxColumnIndex];
-      for (let row = 0; row < 9; row++) {
-        for (let col = 0; col < 3; col++) {
-          newGivensMap[row][newBoxColumnIndex * 3 + col] = givensMap[row][oldBoxColumnIndex * 3 + col];
-        }
-      }
-    }
-
-    return newGivensMap;
   }
 
   static shuffleBoxRows(givensMap) {
@@ -70,12 +53,75 @@ export default class PuzzleConfigPermutor {
     return newGivensMap;
   }
 
+  static shuffleBoxColumns(givensMap) {
+    // Shuffle each column of 3x3 boxes.
+
+    const columnOrder = [0, 1, 2];
+    arrShuffleInPlace(columnOrder);
+
+    const newGivensMap = array(givensMap.length, givensMap[0].length);
+    for (let newBoxColumnIndex = 0; newBoxColumnIndex < 3; newBoxColumnIndex++) {
+      const oldBoxColumnIndex = columnOrder[newBoxColumnIndex];
+      for (let row = 0; row < 9; row++) {
+        for (let col = 0; col < 3; col++) {
+          newGivensMap[row][newBoxColumnIndex * 3 + col] = givensMap[row][oldBoxColumnIndex * 3 + col];
+        }
+      }
+    }
+
+    return newGivensMap;
+  }
+
+  /**
+   * Shuffles rows 1-3, shuffles rows 4-6, and shuffles rows 7-9 within their respective 3-row groups.
+   * @param {(number | ' ')[][]} givensMap The current Sudoku puzzle configuration.
+   */
+  static shuffleRowsWithinBoxGroups(givensMap) {
+    const newGivensMap = array(givensMap.length, givensMap[0].length);
+
+    for (let boxGroup = 0; boxGroup < 3; boxGroup++) {
+      const rowOrder = [0, 1, 2];
+      arrShuffleInPlace(rowOrder);
+      for (let newRow = 0; newRow < 3; newRow++) {
+        const oldRow = rowOrder[newRow];
+        for (let col = 0; col < 9; col++) {
+          newGivensMap[boxGroup * 3 + newRow][col] = givensMap[boxGroup * 3 + oldRow][col];
+        }
+      }
+    }
+
+    return newGivensMap;
+  }
+
+  /**
+   * Shuffles columns 1-3, shuffles columns 4-6, and shuffles columns 7-9 within their respective 3-column groups.
+   * @param {(number | ' ')[][]} givensMap The current Sudoku puzzle configuration.
+   */
+  static shuffleColumnsWithinBoxGroups(givensMap) {
+    const newGivensMap = array(givensMap.length, givensMap[0].length);
+
+    for (let boxGroup = 0; boxGroup < 3; boxGroup++) {
+      const columnOrder = [0, 1, 2];
+      arrShuffleInPlace(columnOrder);
+      for (let newCol = 0; newCol < 3; newCol++) {
+        const oldCol = columnOrder[newCol];
+        for (let row = 0; row < 9; row++) {
+          newGivensMap[row][boxGroup * 3 + newCol] = givensMap[row][boxGroup * 3 + oldCol];
+        }
+      }
+    }
+
+    return newGivensMap;
+  }
+
   static rotate(givensMap) {
     let result = givensMap;
+
     const rotations = randInt(0, 3);
     for (let i = 0; i < rotations; i++) {
       result = PuzzleConfigPermutor.#rotate90(result);
     }
+
     return result;
   }
 
@@ -88,12 +134,12 @@ export default class PuzzleConfigPermutor {
         newGivensMap[x][8 - y] = givensMap[y][x];
       }
     }
+
     return newGivensMap;
   }
 
   static mirror(givensMap) {
     // Mirror the puzzle vertically, maybe.
-
     if (randBool(0.5)) return givensMap;
 
     const newGivensMap = array(givensMap.length, givensMap[0].length);
@@ -102,6 +148,7 @@ export default class PuzzleConfigPermutor {
         newGivensMap[y][x] = givensMap[8 - y][x];
       }
     }
+
     return newGivensMap;
   }
 

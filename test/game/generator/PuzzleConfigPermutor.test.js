@@ -8,6 +8,8 @@ export function runPuzzleConfigPermutorTests() {
   runFunctionalTests('PuzzleConfigPermutor', [
     test_shuffleBoxRows,
     test_shuffleBoxColumns,
+    test_shuffleRowsWithinBoxGroups,
+    test_shuffleColumnsWithinBoxGroups,
     test_substituteDigits,
     test_mirror,
     test_rotate,
@@ -198,6 +200,20 @@ function test_shuffleBoxColumns() {
   ];
   
   return _expect(permuted, expectedOptions, 'shuffleBoxColumns');
+}
+
+function test_shuffleRowsWithinBoxGroups() {
+  const input = structuredClone(blockyInput);
+  const permuted = PuzzleConfigPermutor.shuffleRowsWithinBoxGroups(input);
+
+  return _expect(permuted, [input], 'shuffleRowsWithinBoxGroups');
+}
+
+function test_shuffleColumnsWithinBoxGroups() {
+  const input = structuredClone(blockyInput);
+  const permuted = PuzzleConfigPermutor.shuffleColumnsWithinBoxGroups(input);
+
+  return _expect(permuted, [input], 'shuffleColumnsWithinBoxGroups');
 }
 
 function test_rotate() {
