@@ -454,6 +454,7 @@ const puzzleConfigs = [{
   ],
 }];
 export default puzzleConfigs;
+window.expose('puzzleConfigs', puzzleConfigs)
 
 export function selectRandomPuzzleId(difficulty) {
   const all = getAllPuzzlesWithDifficulty(difficulty);
