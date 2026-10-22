@@ -26,6 +26,10 @@ const props = defineProps({
     contents: {
       type: Array, // 2d array of Cell descriptor objects: { value: number, given: boolean, selected: boolean, notes: { corner: { value: number, valid: boolean }[], center: { value: number, valid: boolean }[] }, colors: string[] }
     },
+    active: {
+      type: Object, // { row: number, column: number } representing the active cell, or null if no cell is active.
+      default: null
+    },
   },
 
   timer: {
@@ -138,7 +142,7 @@ function onClickPaletteToggleButton() {
   <div class="column-wrap" :class="{ pen: settings.penDigitStyle, noteErrorMarks: settings.noteErrorMarks }">
     <HeaderBar :timer="settings?.timer ? displayedTime : null" @back="returnToMainMenu" @settings="openSettingsMenu" />
   
-    <BoardSelector :board="board" :mode="mode" />
+    <BoardSelector :settings="settings" :board="board" :mode="mode" />
     <div class="current-puzzle-id" v-if="puzzleId" v-text="puzzleId" />
   
     <div class="controls-footer">

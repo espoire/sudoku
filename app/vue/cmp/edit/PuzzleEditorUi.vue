@@ -12,6 +12,7 @@ import HeaderBar from '../play/HeaderBar.vue';
 import RandomTitles from './RandomTitles.js';
 
 const props = defineProps({
+  settings: Object,
   mode: String,
 
   board: {
@@ -21,6 +22,10 @@ const props = defineProps({
     },
     contents: {
       type: Array, // 2d array of Cell descriptor objects: { value: number, given: boolean, selected: boolean, notes: { corner: { value: number, valid: boolean }[], center: { value: number, valid: boolean }[] }, colors: string[] }
+    },
+    active: {
+      type: Object, // { row: number, column: number } representing the active cell, or null if no cell is active.
+      default: null
     },
   },
 });
@@ -157,7 +162,7 @@ function onBlurInput(inputName) {
       </select>
     </div>
     
-    <BoardSelector :board="board" :mode="mode" :suppressKeyboard="isAnyInputFocused" />
+    <BoardSelector :settings="settings" :board="board" :mode="mode" :suppressKeyboard="isAnyInputFocused" />
 
     <div class="copy-finished">
       <div id="sudoku-puzzle-editor-copy-puzzle-button" class="copy-puzzle-button" @click="copyPuzzle">Copy as Code</div>

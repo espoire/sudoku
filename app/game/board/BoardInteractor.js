@@ -294,5 +294,6 @@ export default class BoardInteractor extends Interactor {
         colors: this.cellColors[rowIndex][columnIndex].colors,
       }))
     );
+    vm.active = this.activeCell ? { ...this.activeCell } : null;
   }
 }

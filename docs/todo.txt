@@ -1,9 +1,9 @@
+Multi-selection by holding ctrl+click to add additional cells-selected when you already have one or more selected
+Remove-from-selection by ctrl+click a cell already selected, and drag behavior becomes removal if started thusly
+
 Bug: "Bar of Soap" --> Insert all 1s --> Delete all via [Delete] key --> Given 1s still show as invalid
 
 If you have only one type of numeral selected (e.g. some 9s, whether given or user-entered) (and optionally any number of empty cells) then visually-accentuate the rest of that digit throughout the board
-  Setting to disable this feature
-
-Visually-accentuate all cells in the same row or column as the "active" cell
   Setting to disable this feature
 
 Show remaining count of each numeral to place, on the visual numpad
@@ -51,8 +51,6 @@ Support an existing Sudoku import format
 Visual numpad
   Option for "layout like a PC numpad"
 
-Multi-selection by holding ctrl+click to add additional cells-selected when you already have one or more selected
-Remove-from-selection by ctrl+click a cell already selected, and drag behavior becomes removal if started thusly
 Option for "if no cells selected, but one is hovered, relay keyboard inputs (e.g. numerals, delete) to the hovered cell" a la WoW mouseover macros
 
 Highlight errors in red

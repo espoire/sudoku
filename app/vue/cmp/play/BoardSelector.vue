@@ -11,6 +11,7 @@ import KeyboardHelper from '../../../util/KeyboardHelper.js';
 const modes = Constants.modes;
 
 const props = defineProps({
+  settings: Object,
   mode: String,
 
   board: {
@@ -20,6 +21,10 @@ const props = defineProps({
     },
     contents: {
       type: Array, // 2d array of Cell descriptor objects: { value: number, given: boolean, selected: boolean, notes: { corner: { value: number, valid: boolean }[], center: { value: number, valid: boolean }[] }, colors: string[] }
+    },
+    active: {
+      type: Object, // { row: number, column: number } representing the active cell, or null if no cell is active.
+      default: null
     },
   },
 
@@ -97,6 +102,7 @@ function handleDoubleClick(event) {
 
 <template>
   <BoardRenderer ref="boardComponent"
+      :settings="settings"
       :board="board"
       @activate-cell="onActivateCell"
       @pointerdown="(event) => dragger.start(event)"

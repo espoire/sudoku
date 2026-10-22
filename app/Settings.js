@@ -24,6 +24,7 @@ const Settings = {
     showTimerTenths: false,
     noteErrorMarks: true,
     autoDeleteErroneousNotes: false,
+    highlightActiveCellAndRowAndColumn: true,
     // mouseoverInput: false,
   },
 };

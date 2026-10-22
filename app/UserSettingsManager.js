@@ -14,6 +14,7 @@ const specialOptionsTypes = {
   showTimerTenths: 'boolean',
   noteErrorMarks: 'boolean',
   autoDeleteErroneousNotes: 'boolean',
+  highlightActiveCellAndRowAndColumn: 'boolean',
   // mouseoverInput: 'boolean',
 };
 

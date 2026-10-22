@@ -12,6 +12,7 @@ const directionVector = {
 
 export default class Interactor {
   /** @type {Board} */ board;
+  /** @type {{ row: number, column: number }?} */ activeCell = null;
   /** @type {Array<Array<boolean>>} */ selectedCells = [];
   /** @type {{ win: boolean, valid?: boolean, errors?: Array<{ message: string, location: Array<{ row: number, column: number }>}> }} */ cachedValidationResult = null;
   
@@ -37,6 +38,7 @@ export default class Interactor {
     const selection = this.listSelection();
     if (selection.length === 1 && selection[0].row === row && selection[0].column === column) {
       this.selectedCells[row][column] = false;
+      this.activeCell = null;
       this.updateVue();
       return;
     }
@@ -44,11 +46,13 @@ export default class Interactor {
     // Else, replace the current selection with the newly activated cell.
     this.clearSelection();
     this.selectedCells[row][column] = !this.selectedCells[row][column];
+    this.activeCell = { row, column };
     this.updateVue();
   }
   
   handleCellDragEnter(row, column) {
     this.selectedCells[row][column] = true;
+    this.activeCell = { row, column };
     this.updateVue();
   }
 
@@ -127,17 +131,17 @@ export default class Interactor {
   moveSelection(direction) {
     
     // Start a new selection if no selected cell exists.
-    if (!this.hasAnySelection()) {
+    if (!this.hasAnySelection() && !this.activeCell) {
       const centerRowIndex = Math.floor(this.board.size.y / 2);
       const centerColumnIndex = Math.floor(this.board.size.x / 2);
       this.selectedCells[centerRowIndex][centerColumnIndex] = true;
+      this.activeCell = { row: centerRowIndex, column: centerColumnIndex };
     }
 
     // Move the selection in the specified direction.
-
     
     // Choose a single selected cell (randomly for now),
-    const { row, column } = randomArrayElement(this.listSelection());
+    const { row, column } = this.activeCell ?? randomArrayElement(this.listSelection());
     
     // then deselect all,
     this.clearSelection();
@@ -147,6 +151,7 @@ export default class Interactor {
     const newRow = (row + directionVector[direction].row + this.board.size.y) % this.board.size.y;
     const newColumn = (column + directionVector[direction].column + this.board.size.x) % this.board.size.x;
     this.selectedCells[newRow][newColumn] = true;
+    this.activeCell = { row: newRow, column: newColumn };
 
     this.updateVue();
   }
@@ -155,6 +160,7 @@ export default class Interactor {
    * Updates the Vue.js reactive board model with the current state of the board and selection.
    */
   updateVue() {
+
     const vm = GlobalVueProps.board;
     vm.size.x = this.board.size.x;
     vm.size.y = this.board.size.y;
@@ -165,5 +171,6 @@ export default class Interactor {
         error: this.cachedValidationResult?.errors?.some(e => e.location.some(l => l.row === rowIndex && l.column === columnIndex)) ?? false,
       }))
     );
+    vm.active = this.activeCell ? { ...this.activeCell } : null;
   }
 }

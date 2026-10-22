@@ -56,9 +56,10 @@ function onKeydown(event) {
 
       <!-- Dark/light mode toggle -->
       <div>
-        <label for="darkModeToggle">Dark Mode</label>
+        <label for="darkModeToggle">Theme</label>
         <ToggleSwitch
           id="darkModeToggle"
+          :labels="{ off: 'Light', on: 'Dark' }"
           :on="settings.darkMode"
           @toggle="toggle('darkMode')" />
       </div>
@@ -71,6 +72,7 @@ function onKeydown(event) {
           :labels="{ off: 'Hide', on: 'Show' }"
           :on="settings.timer"
           @toggle="toggle('timer')" />
+        <!-- Puzzle timer format toggle -->
         <label class="minor" :class="{ irrelevant: !settings.timer }" for="showTimerTenthsToggle">Format</label>
         <ToggleSwitch
           id="showTimerTenthsToggle"
@@ -80,7 +82,15 @@ function onKeydown(event) {
           @toggle="toggle('showTimerTenths')" />
       </div>
 
-      <!-- Puzzle timer format toggle -->
+      <!-- Highlight active cell and row/column toggle -->
+      <div>
+        <label for="highlightActiveCellAndRowAndColumnToggle">Highlight Cursor Row <span class="smaller">&</span> Column</label>
+        <ToggleSwitch
+          id="highlightActiveCellAndRowAndColumnToggle"
+          :labels="{ off: 'Off', on: 'Highlight' }"
+          :on="settings.highlightActiveCellAndRowAndColumn"
+          @toggle="toggle('highlightActiveCellAndRowAndColumn')" />
+      </div>
 
       <!-- User-entered digit style toggle -->
       <div>
@@ -237,7 +247,7 @@ function onKeydown(event) {
 }
 
 .smaller {
-  font-size: 80%;
+  font-size: 70%;
 }
 
 .irrelevant {

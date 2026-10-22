@@ -22,7 +22,7 @@ const props = inject('props');
       <DifficultySelect v-if="props.mode === modes.difficultySelect" :directory="props.directory" />
       <PuzzleDirectory v-if="props.mode === modes.directory" :puzzles="props.puzzles" />
       <PuzzleEditorUi v-if="props.mode === modes.edit"
-          :mode="props.mode"
+          :settings="props.userSettings" :mode="props.mode"
           :board="props.board" />
       <PuzzlePlayerUi v-if="props.mode === modes.play"
           :settings="props.userSettings" :mode="props.mode"
