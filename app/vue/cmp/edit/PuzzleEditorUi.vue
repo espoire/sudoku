@@ -105,6 +105,15 @@ function copyPuzzle() {
     copy(puzzleCode.join('\n'));
   }
   console.log('Puzzle copied to clipboard', puzzleCode.join('\n'));
+
+  rerollRandomTitle();
+}
+
+function rerollRandomTitle() {
+  RandomTitles.pickNew();
+
+  defaultTitle.value = RandomTitles.getTitle();
+  defaultId.value = RandomTitles.getId();
 }
 </script>
 
