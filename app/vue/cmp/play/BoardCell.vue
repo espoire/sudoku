@@ -43,7 +43,7 @@ defineProps({
   >
     <span v-if="cell.value" v-text="cell.value" />
     <div v-else class="cell-notes">
-      <div class="center-notes">
+      <div class="center-notes" :style="{ fontSize: `${Math.min(45, 240/(cell.notes?.center ?? []).length)}%` }">
         <span class="note" :class="{ error: !n.valid }" v-for="n in cell.notes?.center ?? []" :key="n.value" v-text="n.value" />
       </div>
       <div class="corner-notes">
@@ -123,7 +123,7 @@ defineProps({
     left: 50%;
     top: 52.5%;
     translate: -50% -50%;
-    font-size: 50%;
+    font-size: 45%;
     font-weight: 550;    // Slight bold
     line-height: 1;
 

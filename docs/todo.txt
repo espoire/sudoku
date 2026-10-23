@@ -1,6 +1,3 @@
-Bug: inserting a zillion center notes into the same cell overflows the cell, with clipping
-  Also, base size slightly too big
-
 Multi-selection by holding ctrl+click to add additional cells-selected when you already have one or more selected
 Remove-from-selection by ctrl+click a cell already selected, and drag behavior becomes removal if started thusly
 
