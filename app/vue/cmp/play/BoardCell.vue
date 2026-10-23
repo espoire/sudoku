@@ -39,7 +39,7 @@ defineProps({
       backgroundImage: getLinearGradientFromColors(cell.colors)
     }"
     :data-cell="row != null && column != null ? `${row},${column}` : ''"
-    @pointerdown="() => emit('activate-cell', row, column)"
+    @pointerdown="(event) => emit('activate-cell', row, column, event.ctrlKey)"
   >
     <span v-if="cell.value" v-text="cell.value" />
     <div v-else class="cell-notes">

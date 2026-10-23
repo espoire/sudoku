@@ -84,10 +84,10 @@ function onUnhandledClick() {
   if (!ModalManager.isOnTop('PuzzlePlayerUi.vue') || props.mode === modes.settings) return;
   Globals.gameController.interactor.clearSelection();
 }
-  
-function onActivateCell(row, column) {
-  logUiEvent('onActivateCell', row, column);
-  Globals.gameController.interactor.handleCellActivation(row, column);
+
+function onActivateCell(row, column, ctrlKey) {
+  logUiEvent('onActivateCell', row, column, ctrlKey);
+  Globals.gameController.interactor.handleCellActivation(row, column, ctrlKey);
 }
 
 function handleDoubleClick(event) {

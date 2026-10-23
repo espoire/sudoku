@@ -32,8 +32,9 @@ export default class Interactor {
    * Handles user input for clicking on a cell.
    * @param {number} row The row index of the cell.
    * @param {number} column The column index of the cell.
+   * @param {boolean} [controlMode=false] If true, toggles the selectedness of the target cell instead of replacing the whole selection.
    */
-  handleCellActivation(row, column) {
+  handleCellActivation(row, column, controlMode = false) {
     // If the target cell is the ONLY selected cell, deselect it instead of selecting it again.
     const selection = this.listSelection();
     if (selection.length === 1 && selection[0].row === row && selection[0].column === column) {
@@ -43,8 +44,10 @@ export default class Interactor {
       return;
     }
 
-    // Else, replace the current selection with the newly activated cell.
-    this.clearSelection();
+    // If the user didn't hold [Ctrl], replace the current selection with the newly activated cell.
+    if (!controlMode) this.clearSelection();
+
+    // Else just toggle the selection state of the target cell.
     this.selectedCells[row][column] = !this.selectedCells[row][column];
     this.activeCell = { row, column };
     this.updateVue();

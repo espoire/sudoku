@@ -44,7 +44,7 @@ const size = computed(() => {
           :cell="board.contents[i][j]"
           :row="i"
           :column="j"
-          @activate-cell="(row, column) => emit('activate-cell', row, column)"
+          @activate-cell="(...args) => emit('activate-cell', ...args)"
         />
         <div class="cellTintOverlay" />
       </div>

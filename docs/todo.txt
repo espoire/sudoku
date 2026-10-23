@@ -1,6 +1,3 @@
-Multi-selection by holding ctrl+click to add additional cells-selected when you already have one or more selected
-Remove-from-selection by ctrl+click a cell already selected, and drag behavior becomes removal if started thusly
-
 If you have only one type of numeral selected (e.g. some 9s, whether given or user-entered) (and optionally any number of empty cells) then visually-accentuate the rest of that digit throughout the board
   Setting to disable this feature
 
