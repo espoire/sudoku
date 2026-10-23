@@ -220,7 +220,7 @@ export default class PuzzlePlayInteractor extends Interactor {
       } else {
         this.#validateNotes();
       }
-      if (Settings.user.autoDeleteErroneousNotes) this.deleteAllNotesWithErrors();
+      if (Settings.user.deleteBadNotes) this.deleteAllNotesWithErrors();
     }
 
     // Update the UI with the new board state & validations.
@@ -246,7 +246,7 @@ export default class PuzzlePlayInteractor extends Interactor {
   }
 
   #validateNotes() {
-    if (!Settings.user.noteErrorMarks) {
+    if (!Settings.user.checkBadNotes) {
       this.cachedNotesValidationResult = null;
       return;
     }

@@ -9,13 +9,13 @@ const userSettings = Settings.user;
 const specialOptionsTypes = {
   isMobile: 'boolean',
   darkMode: 'boolean',
-  penDigitStyle: 'boolean',
+  digitStyle: 'boolean',
   timer: 'boolean',
-  showTimerTenths: 'boolean',
-  noteErrorMarks: 'boolean',
-  autoDeleteErroneousNotes: 'boolean',
-  highlightActiveCellAndRowAndColumn: 'boolean',
-  highlightRestOfSameNumberWhenSelectionHasOnlyOneNumberType: 'boolean',
+  timerTenths: 'boolean',
+  checkBadNotes: 'boolean',
+  deleteBadNotes: 'boolean',
+  highlightRowColumn: 'boolean',
+  accentuateSameNumber: 'boolean',
   // mouseoverInput: 'boolean',
 };
 

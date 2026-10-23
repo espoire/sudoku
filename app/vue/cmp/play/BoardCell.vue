@@ -131,7 +131,7 @@ defineProps({
       color: #44cc;
 
       &.error {
-        .noteErrorMarks & { color: var(--color-error-text); }
+        .checkBadNotes & { color: var(--color-error-text); }
       }
     }
   }
@@ -154,7 +154,7 @@ defineProps({
       color: #44cc;
 
       &.error {
-        .noteErrorMarks & { color: var(--color-error-text); }
+        .checkBadNotes & { color: var(--color-error-text); }
       }
 
       &.n1 {

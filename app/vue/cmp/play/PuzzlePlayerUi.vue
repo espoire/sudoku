@@ -66,7 +66,7 @@ const displayedTime = ref('');
 let updateElapsedTimeInterval;
 function updateElapsedTime() {
   const millis = Timer.getElapsedTime(props.timer);
-  displayedTime.value = Timer.format(millis, props.settings?.showTimerTenths ?? true);
+  displayedTime.value = Timer.format(millis, props.settings?.timerTenths ?? true);
 }
 function pauseTimer() { Globals.gameController.timer.pause(); }
 function resumeTimer() { Globals.gameController.timer.resume(); }
@@ -139,7 +139,7 @@ function onClickPaletteToggleButton() {
 </script>
 
 <template>
-  <div class="column-wrap" :class="{ pen: settings.penDigitStyle, noteErrorMarks: settings.noteErrorMarks }">
+  <div class="column-wrap" :class="{ pen: settings.digitStyle, checkBadNotes: settings.checkBadNotes }">
     <HeaderBar :timer="settings?.timer ? displayedTime : null" @back="returnToMainMenu" @settings="openSettingsMenu" />
   
     <BoardSelector :settings="settings" :board="board" :mode="mode" />

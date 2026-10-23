@@ -10,7 +10,7 @@ import KeyboardHelper from '../../../util/KeyboardHelper.js';
 
 defineProps(['settings']);
 const toggle = UserSettingsManager.toggleSetting;
-const set = UserSettingsManager.setSetting;
+// const set = UserSettingsManager.setSetting;
 const settingsListEl = ref(null);
 
 function doSave() {
@@ -73,43 +73,43 @@ function onKeydown(event) {
           :on="settings.timer"
           @toggle="toggle('timer')" />
         <!-- Puzzle timer format toggle -->
-        <label class="minor" :class="{ irrelevant: !settings.timer }" for="showTimerTenthsToggle">Format</label>
+        <label class="minor" :class="{ irrelevant: !settings.timer }" for="timerTenthsToggle">Format</label>
         <ToggleSwitch
-          id="showTimerTenthsToggle"
+          id="timerTenthsToggle"
           :class="{ irrelevant: !settings.timer }"
           :labels="{ off: '0:00', on: '0:00.0' }"
-          :on="settings.showTimerTenths"
-          @toggle="toggle('showTimerTenths')" />
+          :on="settings.timerTenths"
+          @toggle="toggle('timerTenths')" />
       </div>
 
       <!-- Highlight active cell and row/column toggle -->
       <div>
-        <label for="highlightActiveCellAndRowAndColumnToggle">Highlight Cursor Row <span class="smaller">&</span> Column</label>
+        <label for="highlightRowColumnToggle">Highlight Cursor Row <span class="smaller">&</span> Column</label>
         <ToggleSwitch
-          id="highlightActiveCellAndRowAndColumnToggle"
+          id="highlightRowColumnToggle"
           :labels="{ off: 'Off', on: 'Highlight' }"
-          :on="settings.highlightActiveCellAndRowAndColumn"
-          @toggle="toggle('highlightActiveCellAndRowAndColumn')" />
+          :on="settings.highlightRowColumn"
+          @toggle="toggle('highlightRowColumn')" />
       </div>
 
       <!-- Highlight the rest of the same number as selected toggle -->
       <div>
-        <label for="highlightRestOfSameNumberWhenSelectionHasOnlyOneNumberTypeToggle">Highlight Rest of Selected Number</label>
+        <label for="accentuateSameNumberToggle">Highlight Rest of Selected Number</label>
         <ToggleSwitch
-          id="highlightRestOfSameNumberWhenSelectionHasOnlyOneNumberTypeToggle"
+          id="accentuateSameNumberToggle"
           :labels="{ off: 'Off', on: 'Highlight' }"
-          :on="settings.highlightRestOfSameNumberWhenSelectionHasOnlyOneNumberType"
-          @toggle="toggle('highlightRestOfSameNumberWhenSelectionHasOnlyOneNumberType')" />
+          :on="settings.accentuateSameNumber"
+          @toggle="toggle('accentuateSameNumber')" />
       </div>
 
       <!-- User-entered digit style toggle -->
       <div>
-        <label for="penDigitStyleToggle">My Digit Style</label>
+        <label for="digitStyleToggle">My Digit Style</label>
         <ToggleSwitch
-          id="penDigitStyleToggle"
+          id="digitStyleToggle"
           :labels="{ off: 'Pencil', on: 'Pen' }"
-          :on="settings.penDigitStyle"
-          @toggle="toggle('penDigitStyle')" />
+          :on="settings.digitStyle"
+          @toggle="toggle('digitStyle')" />
         <span class="hint">Pen-style marks look just like the puzzle-given digits.</span>
       </div>
 
@@ -119,15 +119,15 @@ function onKeydown(event) {
         <ToggleSwitch
           id="userNotesErrorMarkingToggle"
           :labels="{ off: 'Do Not Check', on: 'Check' }"
-          :on="settings.noteErrorMarks"
-          @toggle="toggle('noteErrorMarks')" />
+          :on="settings.checkBadNotes"
+          @toggle="toggle('checkBadNotes')" />
         <ToggleSwitch
-          id="autoDeleteErroneousNotesToggle"
-          :class="{ irrelevant: !settings.noteErrorMarks }"
+          id="deleteBadNotesToggle"
+          :class="{ irrelevant: !settings.checkBadNotes }"
           :labels="{ off: 'Only Mark in Red', on: 'Delete' }"
-          :on="settings.autoDeleteErroneousNotes"
-          @toggle="toggle('autoDeleteErroneousNotes')" />
-        <span class="hint" :class="{ irrelevant: !settings.noteErrorMarks }">
+          :on="settings.deleteBadNotes"
+          @toggle="toggle('deleteBadNotes')" />
+        <span class="hint" :class="{ irrelevant: !settings.checkBadNotes }">
           If set to delete, notes conflicting with the rules <br />
           will be removed when placing any non-note digits.
         </span>

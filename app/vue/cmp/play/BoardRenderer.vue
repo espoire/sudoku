@@ -38,9 +38,9 @@ const size = computed(() => {
     <div class="board-row" v-for="i in range(board.size.y)" :key="i">
       <div class="cell-wrap" v-for="j in range(board.size.x)" :key="j"
           :class="{
-            active:          settings.highlightActiveCellAndRowAndColumn && (board.active?.row === i && board.active?.column === j),
-            sameRowOrColumn: settings.highlightActiveCellAndRowAndColumn && (board.active?.row === i || board.active?.column === j),
-            accentuated: settings.highlightRestOfSameNumberWhenSelectionHasOnlyOneNumberType && (board.accentuate != null && board.accentuate === board.contents[i][j].value),
+            active:          settings.highlightRowColumn && (board.active?.row === i && board.active?.column === j),
+            sameRowOrColumn: settings.highlightRowColumn && (board.active?.row === i || board.active?.column === j),
+            accentuated: settings.accentuateSameNumber && (board.accentuate != null && board.accentuate === board.contents[i][j].value),
           }">
         <BoardCell
           :cell="board.contents[i][j]"
