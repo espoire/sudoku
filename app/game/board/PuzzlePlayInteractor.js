@@ -16,7 +16,6 @@ export default class PuzzlePlayInteractor extends Interactor {
   /** @type {Array<Array<Set<number>>>} */ cornerNotes = [];
   /** @type {Array<Array<Set<number>>>} */ centerNotes = [];
   /** @type {Array<Array<CellColorSet>>} */ cellColors = []; 
-  /** @type {Array<Array<Dictionary<number, boolean> | null>>} */ #cachedNotesValidationResult = null;
   /** @type {'digit' | 'corner-note' | 'center-note' | 'cell-color'} */ #inputMode = Constants.inputModes.digit;
   /** @type {'regular' | 'color-blind'} */ #palette = Constants.palettes.regular;
 
@@ -79,12 +78,12 @@ export default class PuzzlePlayInteractor extends Interactor {
 
     if (value == null) {
       // Explicit delete: clear selected cells regardless of input mode, using a priority order
-      wasEntryChange = true;
 
       // If any editable selected cells contain a value, clear values
       const editable = selection.filter(({ row, column }) => this.board.canEdit(row, column));
       const anyEditableContainValue = editable.some(({ row, column }) => this.board.getValue(row, column) != null);
       if (anyEditableContainValue) {
+        wasEntryChange = true;
         for (const { row, column } of editable) {
           this.board.setValue(row, column, null);
         }
@@ -129,18 +128,6 @@ export default class PuzzlePlayInteractor extends Interactor {
         for (const { row, column } of editable) {
           const changed = this.board.setValue(row, column, value);
           wroteAny ||= changed;
-        }
-
-        // If any successful changes, re-validate
-        let validationResult = null;
-        if (wroteAny) {
-          validationResult = this.board.checkWin();
-          this.cachedValidationResult = validationResult;
-          if (validationResult.win) {
-            setTimeout(() => alert("Win! 🎉"), 0); // To give Vue time to rerender with the new correct digit(s) before declaring victory
-          } else {
-            this.#validateNotes();
-          }
         }
       } break;
       case Constants.inputModes.cornerNote: {
@@ -225,8 +212,15 @@ export default class PuzzlePlayInteractor extends Interactor {
       } break;
     }
 
-    if (wasEntryChange && Settings.user.autoDeleteErroneousNotes) {
-      this.deleteAllNotesWithErrors();
+    if (wasEntryChange) {
+      const validationResult = this.board.checkWin();
+      this.cachedValidationResult = validationResult;
+      if (validationResult.win) {
+        setTimeout(() => alert("Win! 🎉"), 0); // To give Vue time to rerender with the new correct digit(s) before declaring victory
+      } else {
+        this.#validateNotes();
+      }
+      if (Settings.user.autoDeleteErroneousNotes) this.deleteAllNotesWithErrors();
     }
 
     // Update the UI with the new board state & validations.
@@ -234,11 +228,11 @@ export default class PuzzlePlayInteractor extends Interactor {
   }
 
   deleteAllNotesWithErrors() {
-    if (!this.#cachedNotesValidationResult) return;
+    if (!this.cachedNotesValidationResult) return;
 
     for (let row = 0; row < this.board.size.y; row++) {
       for (let column = 0; column < this.board.size.x; column++) {
-        const cellValidation = this.#cachedNotesValidationResult[row]?.[column];
+        const cellValidation = this.cachedNotesValidationResult[row]?.[column];
         if (!cellValidation) continue;
 
         for (const note in cellValidation) {
@@ -253,12 +247,12 @@ export default class PuzzlePlayInteractor extends Interactor {
 
   #validateNotes() {
     if (!Settings.user.noteErrorMarks) {
-      this.#cachedNotesValidationResult = null;
+      this.cachedNotesValidationResult = null;
       return;
     }
 
     const notesSummary = this.#prepareNotesSummary();
-    this.#cachedNotesValidationResult = this.board.validateNotes(notesSummary);
+    this.cachedNotesValidationResult = this.board.validateNotes(notesSummary);
   }
 
   /**
@@ -287,8 +281,8 @@ export default class PuzzlePlayInteractor extends Interactor {
         error: this.cachedValidationResult?.errors?.some(e => e.location.some(l => l.row === rowIndex && l.column === columnIndex)) ?? false,
         ...(this.board.getValue(rowIndex, columnIndex) == null) ? {
           notes: {
-            corner: Array.from(this.cornerNotes[rowIndex][columnIndex]).sort(sort.numeric.ascending).map(n => ({ value: n, valid: this.#cachedNotesValidationResult?.[rowIndex]?.[columnIndex]?.[n] })),
-            center: Array.from(this.centerNotes[rowIndex][columnIndex]).sort(sort.numeric.ascending).map(n => ({ value: n, valid: this.#cachedNotesValidationResult?.[rowIndex]?.[columnIndex]?.[n] })),
+            corner: Array.from(this.cornerNotes[rowIndex][columnIndex]).sort(sort.numeric.ascending).map(n => ({ value: n, valid: this.cachedNotesValidationResult?.[rowIndex]?.[columnIndex]?.[n] })),
+            center: Array.from(this.centerNotes[rowIndex][columnIndex]).sort(sort.numeric.ascending).map(n => ({ value: n, valid: this.cachedNotesValidationResult?.[rowIndex]?.[columnIndex]?.[n] })),
           },
         } : {},
         colors: this.cellColors[rowIndex][columnIndex].colors,
