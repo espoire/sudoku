@@ -1,20 +1,24 @@
 <script setup>
 import { onMounted, onUnmounted, ref } from 'vue';
-import Globals from '../../../Globals.js';
 import GameController from '../../../game/GameController.js';
 import ToggleSwitch from '../util/ToggleSwitch.vue';
 import PrettyButton from '../util/PrettyButton.vue';
 import UserSettingsManager from '../../../UserSettingsManager.js';
 import ModalManager from '../../ModalManager.js';
 import KeyboardHelper from '../../../util/KeyboardHelper.js';
+import SaveDataManager from '../../../SaveDataManager.js';
 
 defineProps(['settings']);
-const toggle = UserSettingsManager.toggleSetting;
 // const set = UserSettingsManager.setSetting;
 const settingsListEl = ref(null);
 
+function toggle(setting) {
+  UserSettingsManager.toggleSetting(setting);
+  doSave();
+}
+
 function doSave() {
-  Globals.saveFile?.save({ force: true }); // Bypass dev-test save prevention; if we manually change a setting, we want it saved.
+  SaveDataManager.saveUserSettings();
 }
 
 function onClickReturnButton() {

@@ -4,11 +4,13 @@ import Globals from './Globals.js';
 import { environmentIsDev } from './util/Util.js';
 import GameController from './game/GameController.js';
 import { runTests } from '../test/TestRunner.js';
+import SaveDataManager from './SaveDataManager.js';
 
 if (environmentIsDev()) runTests();
 
 const game = new GameController();
 initGlobals(game);
+SaveDataManager.loadUserSettings();
 setTimeout(() => game.begin()); // Delay to allow initial rendering, component mounting, etc.
 
 function initGlobals(game) {

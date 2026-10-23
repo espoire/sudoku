@@ -1,4 +1,3 @@
-Save user's user-settings, and auto-restore on session reload
 Save user's current puzzle progress, and enable resuming from a conditionally-visible "Continue" button in the main menu
 
 Undo/Redo
