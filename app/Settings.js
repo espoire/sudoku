@@ -25,6 +25,7 @@ const Settings = {
     noteErrorMarks: true,
     autoDeleteErroneousNotes: false,
     highlightActiveCellAndRowAndColumn: true,
+    highlightRestOfSameNumberWhenSelectionHasOnlyOneNumberType: true,
     // mouseoverInput: false,
   },
 };

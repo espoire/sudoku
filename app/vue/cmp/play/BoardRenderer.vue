@@ -17,6 +17,7 @@ const props = defineProps({
       type: Object, // { row: number, column: number } representing the active cell, or null if no cell is active.
       default: null
     },
+    accentuate: [Number, null],
   },
 });
 const emit = defineEmits(['activate-cell']);
@@ -39,6 +40,7 @@ const size = computed(() => {
           :class="{
             active:          settings.highlightActiveCellAndRowAndColumn && (board.active?.row === i && board.active?.column === j),
             sameRowOrColumn: settings.highlightActiveCellAndRowAndColumn && (board.active?.row === i || board.active?.column === j),
+            accentuated: settings.highlightRestOfSameNumberWhenSelectionHasOnlyOneNumberType && (board.accentuate != null && board.accentuate === board.contents[i][j].value),
           }">
         <BoardCell
           :cell="board.contents[i][j]"
@@ -82,6 +84,10 @@ const size = computed(() => {
   width: 100%;
   height: 100%;
   pointer-events: none;
+}
+
+.accentuated .cellTintOverlay {
+  background-color: #08f4;
 }
 
 .sameRowOrColumn .cellTintOverlay {

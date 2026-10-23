@@ -12,6 +12,8 @@ const GlobalVueProps = reactive({
     size: { x: 0, y :0 },
     /** @type {{ row: number, column: number }?} */
     active: null,
+    /** @type {number | null} */
+    accentuate: null,
     /** @type {Array<Array<{ value: number, given: boolean, error: boolean }>>} */
     contents: [],
   },

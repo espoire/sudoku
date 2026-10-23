@@ -160,10 +160,32 @@ export default class Interactor {
   }
 
   /**
+   * Based on the current selection and the board state, maybe return a number, all instances of which are to be accentuated in the UI.
+   * If the selection contains exactly one numeral (excluding notes, empty cells, duplicates; INcluding givens), return that numeral.
+   * @returns {number | null} The number to be accentuated, or null if none.
+   */
+  getAccentuatedNumber() {
+    let ret = null;
+
+    const selection = this.listSelection();
+    for (const { row, column } of selection) {
+      const cell = this.board.cells[row][column];
+      if (cell.value == null) continue;
+
+      if (ret == null || ret === cell.value) {
+        ret = cell.value;
+      } else {
+        return null;
+      }
+    }
+
+    return ret;
+  }
+
+  /**
    * Updates the Vue.js reactive board model with the current state of the board and selection.
    */
   updateVue() {
-
     const vm = GlobalVueProps.board;
     vm.size.x = this.board.size.x;
     vm.size.y = this.board.size.y;
@@ -175,5 +197,6 @@ export default class Interactor {
       }))
     );
     vm.active = this.activeCell ? { ...this.activeCell } : null;
+    vm.accentuate = this.getAccentuatedNumber();
   }
 }

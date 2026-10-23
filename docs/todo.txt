@@ -1,6 +1,3 @@
-If you have only one type of numeral selected (e.g. some 9s, whether given or user-entered) (and optionally any number of empty cells) then visually-accentuate the rest of that digit throughout the board
-  Setting to disable this feature
-
 Save user's user-settings, and auto-restore on session reload
 Save user's current puzzle progress, and enable resuming from a conditionally-visible "Continue" button in the main menu
 

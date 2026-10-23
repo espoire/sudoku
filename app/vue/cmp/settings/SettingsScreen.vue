@@ -92,6 +92,16 @@ function onKeydown(event) {
           @toggle="toggle('highlightActiveCellAndRowAndColumn')" />
       </div>
 
+      <!-- Highlight the rest of the same number as selected toggle -->
+      <div>
+        <label for="highlightRestOfSameNumberWhenSelectionHasOnlyOneNumberTypeToggle">Highlight Rest of Selected Number</label>
+        <ToggleSwitch
+          id="highlightRestOfSameNumberWhenSelectionHasOnlyOneNumberTypeToggle"
+          :labels="{ off: 'Off', on: 'Highlight' }"
+          :on="settings.highlightRestOfSameNumberWhenSelectionHasOnlyOneNumberType"
+          @toggle="toggle('highlightRestOfSameNumberWhenSelectionHasOnlyOneNumberType')" />
+      </div>
+
       <!-- User-entered digit style toggle -->
       <div>
         <label for="penDigitStyleToggle">My Digit Style</label>

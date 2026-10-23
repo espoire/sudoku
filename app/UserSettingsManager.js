@@ -15,6 +15,7 @@ const specialOptionsTypes = {
   noteErrorMarks: 'boolean',
   autoDeleteErroneousNotes: 'boolean',
   highlightActiveCellAndRowAndColumn: 'boolean',
+  highlightRestOfSameNumberWhenSelectionHasOnlyOneNumberType: 'boolean',
   // mouseoverInput: 'boolean',
 };
 
