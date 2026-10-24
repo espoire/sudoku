@@ -1,7 +1,9 @@
 /** @typedef {import('./board/Board.js').default} Board */
 import Constants from "../../Constants.js";
+import SaveDataManager from "../../save/SaveDataManager.js";
 import { trim2dArray } from "../../save/util.js";
 import Settings from "../../Settings.js";
+import UserSettingsManager from "../../UserSettingsManager.js";
 import { sort } from "../../util/sort.js";
 import GlobalVueProps from "../../VueInterface.js";
 import Timer from "../Timer.js";
@@ -21,7 +23,7 @@ export default class PuzzlePlayInteractor extends Interactor {
   /** @type {Array<Array<Set<number>>>} */ centerNotes = [];
   /** @type {Array<Array<CellColorSet>>} */ cellColors = []; 
   /** @type {'digit' | 'corner-note' | 'center-note' | 'cell-color'} */ #inputMode = Constants.inputModes.digit;
-  /** @type {'regular' | 'color-blind'} */ #palette = Constants.palettes.regular;
+  /** @type {'regular' | 'color-blind'} */ #palette = Settings.user.userHighlightPalette;
   /** @type {boolean} */ wasWin = false;
 
   constructor(board) {
@@ -70,8 +72,14 @@ export default class PuzzlePlayInteractor extends Interactor {
   togglePalette() {
     if (this.#inputMode !== Constants.inputModes.cellColor) return;
     this.#palette = (this.#palette === 'regular' ? 'color-blind' : 'regular');
+
+    // Update the Vue
     const vm = GlobalVueProps;
     vm.palette = this.#palette;
+
+    // Save to user settings
+    UserSettingsManager.setSetting('userHighlightPalette', this.#palette);
+    SaveDataManager.saveUserSettings();
   }
 
   /**

@@ -3,12 +3,14 @@ import Settings, { defaultUserSettings } from './Settings.js';
 import GlobalVueProps from './VueInterface.js';
 import { deepSet, dereference } from './util/object.js';
 import { warnInDev } from './util/Util.js';
+import Constants from './Constants.js';
 
 const userSettings = Settings.user;
 
 const specialOptionsTypes = {
   isMobile: 'boolean',
   darkMode: 'boolean',
+  userHighlightPalette: [Constants.palettes.regular, Constants.palettes.colorBlind],
   digitStyle: 'boolean',
   timer: 'boolean',
   timerTenths: 'boolean',

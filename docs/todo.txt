@@ -1,7 +1,5 @@
 Save current edit-puzzle state, and auto-resume if entering edit mode
 
-Save user's current (cell highlight) palette (reg or colorblind) as a user setting.
-
 Undo/Redo
 
 Show remaining count of each numeral to place, on the visual numpad

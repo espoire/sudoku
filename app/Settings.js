@@ -1,3 +1,4 @@
+import Constants from './Constants.js';
 import { deepClone } from './util/object.js';
 import { deepFreeze, environmentIsDev, educatedGuessIfEnvironmentIsMobile } from './util/Util.js';
 
@@ -20,6 +21,7 @@ const Settings = {
     isMobile: educatedGuessIfEnvironmentIsMobile(),
     darkMode: false,
     digitStyle: false,
+    userHighlightPalette: Constants.palettes.regular,
     timer: true,
     timerTenths: false,
     checkBadNotes: true,
