@@ -4,6 +4,7 @@ import { trim2dArray } from "../../save/util.js";
 import Settings from "../../Settings.js";
 import { sort } from "../../util/sort.js";
 import GlobalVueProps from "../../VueInterface.js";
+import Timer from "../Timer.js";
 import Board from "./Board.js";
 import { CellColorSet } from "./CellColor.js";
 import { create2DArray } from "./helpers.js";
@@ -15,6 +16,7 @@ import Interactor from "./Interactor.js";
  * Supports its own cell-multi-selection and notations management.
  */
 export default class PuzzlePlayInteractor extends Interactor {
+  /** @type {Timer} */ timer = new Timer();
   /** @type {Array<Array<Set<number>>>} */ cornerNotes = [];
   /** @type {Array<Array<Set<number>>>} */ centerNotes = [];
   /** @type {Array<Array<CellColorSet>>} */ cellColors = []; 
@@ -31,6 +33,7 @@ export default class PuzzlePlayInteractor extends Interactor {
 
   resetPuzzle() {
     super.resetPuzzle();
+    this.timer.reset();
     this.cornerNotes = create2DArray(this.board.size.y, this.board.size.x, () => new Set());
     this.centerNotes = create2DArray(this.board.size.y, this.board.size.x, () => new Set());
     this.cellColors = create2DArray(this.board.size.y, this.board.size.x, () => new CellColorSet());
@@ -222,7 +225,10 @@ export default class PuzzlePlayInteractor extends Interactor {
       const validationResult = this.board.checkWin();
       this.cachedValidationResult = validationResult;
       if (validationResult.win) {
-        if (!this.wasWin) setTimeout(() => alert("Win! 🎉"), 0); // To give Vue time to rerender with the new correct digit(s) before declaring victory
+        if (!this.wasWin) {
+          this.timer.stop();
+          setTimeout(() => alert("Win! 🎉"), 0); // To give Vue time to rerender with the new correct digit(s) before declaring victory
+        }
         this.wasWin = true;
       } else {
         this.#validateNotes();
@@ -305,6 +311,7 @@ export default class PuzzlePlayInteractor extends Interactor {
       cornerNotes: trim2dArray(this.cornerNotes.map(row => row.map(cell => cell.size ? [...cell] : null))),
       centerNotes: trim2dArray(this.centerNotes.map(row => row.map(cell => cell.size ? [...cell] : null))),
       cellColors: trim2dArray(this.cellColors.map(row => row.map(cell => cell.toSaveDataObject()))),
+      timer: Math.floor(this.timer.getElapsedTime()  / 100), // tenths
     };
   }
 
@@ -317,6 +324,7 @@ export default class PuzzlePlayInteractor extends Interactor {
   static rehydrate(data) {
     const board = Board.rehydrate(data);
     const interactor = new PuzzlePlayInteractor(board);
+    interactor.timer.setInitialTime(data.timer * 100); // convert back to milliseconds
     interactor.cornerNotes = create2DArray(board.size.y, board.size.x, (row, col) => new Set(data.cornerNotes?.[row]?.[col]));
     interactor.centerNotes = create2DArray(board.size.y, board.size.x, (row, col) => new Set(data.centerNotes?.[row]?.[col]));
     interactor.cellColors = create2DArray(board.size.y, board.size.x, (row, col) => CellColorSet.rehydrate(data.cellColors?.[row]?.[col]));

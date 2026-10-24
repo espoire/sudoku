@@ -68,8 +68,8 @@ function updateElapsedTime() {
   const millis = Timer.getElapsedTime(props.timer);
   displayedTime.value = Timer.format(millis, props.settings?.timerTenths ?? true);
 }
-function pauseTimer() { Globals.gameController.timer.pause(); }
-function resumeTimer() { Globals.gameController.timer.resume(); }
+function pauseTimer() { Globals.gameController.interactor.timer.pause(); }
+function resumeTimer() { Globals.gameController.interactor.timer.resume(); }
 
 const numerals = range(0, 9).map(n => `${n}`);
 const clearDigits = [' ', '-', 'Delete', 'Backspace'];
@@ -119,7 +119,6 @@ function onVisualNumpadClick(value) {
 function onClickResetButton() {
   logUiEvent('onClickResetButton');
   Globals.gameController.interactor.resetPuzzle();
-  Globals.gameController.timer.reset();
 }
 
 function onClickInputModeButton(mode) {

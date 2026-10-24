@@ -1,6 +1,7 @@
 import GlobalVueProps from "../VueInterface.js";
 
 export default class Timer {
+  /** @type {number} */ initialTime = 0;
   /** @type {number?} */ startTime = null;
   /** @type {number} */ totalPausesLength = 0;
   /** @type {boolean} */ paused = false;
@@ -55,17 +56,25 @@ export default class Timer {
     this.start();
   }
 
-  /** @returns {number} */
+  setInitialTime(time) {
+    this.initialTime = time;
+  }
+
+  /** @returns {number} The elapsed time in milliseconds. */
   getElapsedTime() {
     return Timer.getElapsedTime(this);
   }
 
-  static getElapsedTime({startTime, totalPausesLength, paused = false, elapsedTimeAtPause = null}) {
+  /**
+   * Gets the elapsed time for the given timer state.
+   * @returns {number} The elapsed time in milliseconds.
+   */
+  static getElapsedTime({startTime, initialTime = 0, totalPausesLength, paused = false, elapsedTimeAtPause = null}) {
     if (startTime == null) return 0;
     if (paused && elapsedTimeAtPause != null) return elapsedTimeAtPause;
 
     const now = performance.now();
-    return now - startTime - totalPausesLength;
+    return now - startTime - totalPausesLength + initialTime;
   }
 
   /**
@@ -122,6 +131,7 @@ export default class Timer {
   toVue() {
     return {
       startTime: this.startTime,
+      initialTime: this.initialTime,
       totalPausesLength: this.totalPausesLength,
       paused: this.paused,
       elapsedTimeAtPause: this.elapsedTimeAtPause,

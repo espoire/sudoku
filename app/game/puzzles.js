@@ -38,7 +38,7 @@ const puzzleConfigs = [{
 }, {
   title: 'Test EZ Win',
   id: 'test-ez-win',
-  exclude: true, // This puzzle won't be provided by the random puzzle selection.
+  // exclude: true, // This puzzle won't be provided by the random puzzle selection.
   size: { x: 9, y: 9 },
   given: [
     ' 23456789',

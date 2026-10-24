@@ -6,7 +6,6 @@ import UserSettingsManager from '../UserSettingsManager.js';
 import Board from './board/Board.js';
 import PuzzlePlayInteractor from './board/PuzzlePlayInteractor.js';
 import PuzzleEditInteractor from './board/PuzzleEditInteractor.js';
-import Timer from './Timer.js';
 import { anyPuzzlesExistWithDifficulty, selectRandomPuzzleId } from './puzzles.js';
 import RandomTitles from '../vue/cmp/edit/RandomTitles.js';
 import PuzzleConfigPermutor from './generator/PuzzleConfigPermutor.js';
@@ -23,7 +22,6 @@ export default class GameController {
 
   /** @type {Board} */ board = null;
   /** @type {PuzzlePlayInteractor | PuzzleEditInteractor} */ interactor = null;
-  /** @type {Timer} */ timer = new Timer();
 
   begin() {
     UserSettingsManager.syncVue();
@@ -83,8 +81,8 @@ export default class GameController {
     this.board = new Board(puzzleConfig);
     this.interactor = new PuzzlePlayInteractor(this.board);
     this.interactor.updateVue();
-    this.timer.restart();
     GlobalVueProps.puzzleId = id;
+    this.interactor.timer.start();
     GameController.setMode(modes.play);
   }
 
@@ -92,8 +90,8 @@ export default class GameController {
     this.board = savedGameInteractor.board;
     this.interactor = savedGameInteractor;
     this.interactor.updateVue();
-    this.timer.restart(); // TODO save/load this too
     GlobalVueProps.puzzleId = this.board.id;
+    this.interactor.timer.start();
     GameController.setMode(modes.play);
   }
 
@@ -113,7 +111,6 @@ export default class GameController {
 
   handleNumeralInput(value) {
     if (this.interactor) this.interactor.handleNumeralInput(value);
-    if (this.interactor.wasWin) this.timer.stop();
     if (GlobalVueProps.mode === modes.play) SaveDataManager.saveGameState(this.interactor);
     if (GlobalVueProps.mode === modes.edit) SaveDataManager.saveEditState(this.interactor);
   }
