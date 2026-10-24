@@ -23,7 +23,8 @@ export default class Interactor {
 
   resetPuzzle() {
     this.board.reset();
-    this.clearSelection();
+    this.#setAllCellsSelection(false);
+    this.activeCell = null;
     this.cachedValidationResult = null;
     this.updateVue();
   }
@@ -45,7 +46,7 @@ export default class Interactor {
     }
 
     // If the user didn't hold [Ctrl], replace the current selection with the newly activated cell.
-    if (!controlMode) this.clearSelection();
+    if (!controlMode) this.#setAllCellsSelection(false);
 
     // Else just toggle the selection state of the target cell.
     this.selectedCells[row][column] = !this.selectedCells[row][column];
@@ -60,7 +61,7 @@ export default class Interactor {
   }
 
   selectAllMatchingValues(row, column) {
-    this.clearSelection();
+    this.#setAllCellsSelection(false);
 
     const value = this.board.cells[row][column].value;
     if (value == null) return;
@@ -111,10 +112,12 @@ export default class Interactor {
    */
   clearSelection() {
     this.#setAllCellsSelection(false);
+    this.updateVue();
   }
 
   selectAllCells() {
     this.#setAllCellsSelection(true);
+    this.updateVue();
   }
 
   #setAllCellsSelection(state) {
@@ -124,7 +127,7 @@ export default class Interactor {
       }
     }
 
-    this.updateVue();
+    this.activeCell = null;
   }
 
   /**
@@ -147,7 +150,7 @@ export default class Interactor {
     const { row, column } = this.activeCell ?? randomArrayElement(this.listSelection());
     
     // then deselect all,
-    this.clearSelection();
+    this.#setAllCellsSelection(false);
     
     // and select its neighbor in the indicated direction,
     // wrapping around edges.
