@@ -1,5 +1,6 @@
 <script setup>
 import { computed, onMounted, onUnmounted, ref } from 'vue';
+import Constants from '/app/Constants.js';
 import Globals from '/app/Globals.js';
 import GameController from '/app/game/GameController.js';
 import { toSnakeCase, toTitleCase } from '/app/util/string';
@@ -89,7 +90,7 @@ function copyPuzzle() {
   puzzleCode.push(`  title: '${title.value || defaultTitle.value}',`);
   puzzleCode.push(`  id: '${id.value || placeholderId.value}',`);
   if (difficulty.value) {
-    puzzleCode.push(`  difficulty: ${difficulty.value},`);
+    puzzleCode.push(`  difficulty: difficulty.${Constants.difficultyNames[difficulty.value]},`);
   }
   if (notes.value) {
     const quote = notes.value.includes("\n") ? `\`` : `'`; 

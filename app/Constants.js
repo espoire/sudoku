@@ -35,6 +35,15 @@ const Constants = {
     challenge5: 5,
     expert6: 6,
   },
+
+  difficultyNames: {
+    1: 'basic1',
+    2: 'easy2',
+    3: 'medium3',
+    4: 'hard4',
+    5: 'challenge5',
+    6: 'expert6',
+  },
 };
 
 deepFreeze(Constants);
