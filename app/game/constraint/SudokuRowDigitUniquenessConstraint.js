@@ -2,6 +2,8 @@
 /** @typedef {import('./Constraint.js').ConstraintCheckResult} ConstraintCheckResult */
 
 export default class SudokuRowDigitUniquenessConstraint {
+  static id = 'sudokuRow';
+
   /**
    * @param {Board} board
    * @returns {ConstraintCheckResult} A detailed result for checking the whole board.

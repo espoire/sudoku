@@ -1,4 +1,4 @@
-/** @typedef {import('./board/Board.js').default} Board */
+/** @typedef {import('./Board.js').default} Board */
 import { randomArrayElement } from '../../util/random.js';
 import GlobalVueProps from '../../VueInterface.js';
 import { create2DArray } from './helpers.js';
@@ -198,5 +198,9 @@ export default class Interactor {
     );
     vm.active = this.activeCell ? { ...this.activeCell } : null;
     vm.accentuate = this.getAccentuatedNumber();
+  }
+
+  toSaveDataObject() {
+    return this.board.toSaveDataObject();
   }
 }

@@ -18,7 +18,8 @@ const props = inject('props');
   <div class="vueAppWrap" :class="{ 'theme-dark': props.userSettings.darkMode }">
     <div class="mainColumn">
       <SettingsScreen v-if="props.mode === modes.settings" :settings="props.userSettings" />
-      <MainMenu v-if="props.mode === modes.menu" />
+      <MainMenu v-if="props.mode === modes.menu"
+          :enableContinue="props.enableContinue" />
       <DifficultySelect v-if="props.mode === modes.difficultySelect" :directory="props.directory" />
       <PuzzleDirectory v-if="props.mode === modes.directory" :puzzles="props.puzzles" />
       <PuzzleEditorUi v-if="props.mode === modes.edit"

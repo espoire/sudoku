@@ -1,8 +1,10 @@
 /** @typedef {import('./board/Board.js').default} Board */
 import Constants from "../../Constants.js";
+import { trim2dArray } from "../../save/util.js";
 import Settings from "../../Settings.js";
 import { sort } from "../../util/sort.js";
 import GlobalVueProps from "../../VueInterface.js";
+import Board from "./Board.js";
 import { CellColorSet } from "./CellColor.js";
 import { create2DArray } from "./helpers.js";
 import Interactor from "./Interactor.js";
@@ -290,5 +292,29 @@ export default class PuzzlePlayInteractor extends Interactor {
     );
     vm.active = this.activeCell ? { ...this.activeCell } : null;
     vm.accentuate = this.getAccentuatedNumber();
+  }
+
+  toSaveDataObject() {
+    return {
+      ...super.toSaveDataObject(),
+      cornerNotes: trim2dArray(this.cornerNotes.map(row => row.map(cell => cell.size ? [...cell] : null))),
+      centerNotes: trim2dArray(this.centerNotes.map(row => row.map(cell => cell.size ? [...cell] : null))),
+      cellColors: trim2dArray(this.cellColors.map(row => row.map(cell => cell.toSaveDataObject()))),
+    };
+  }
+
+  /**
+   * Rehydrates a gameplay state from a saved data object.
+   * 
+   * @param {Object} data The saved data object to rehydrate from.
+   * @returns {PuzzlePlayInteractor} The rehydrated PuzzlePlayInteractor instance.
+   */
+  static rehydrate(data) {
+    const board = Board.rehydrate(data);
+    const interactor = new PuzzlePlayInteractor(board);
+    interactor.cornerNotes = create2DArray(board.size.y, board.size.x, (row, col) => new Set(data.cornerNotes?.[row]?.[col]));
+    interactor.centerNotes = create2DArray(board.size.y, board.size.x, (row, col) => new Set(data.centerNotes?.[row]?.[col]));
+    interactor.cellColors = create2DArray(board.size.y, board.size.x, (row, col) => CellColorSet.rehydrate(data.cellColors?.[row]?.[col]));
+    return interactor;
   }
 }

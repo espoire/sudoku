@@ -75,7 +75,7 @@ function onKeydown(event) {
 
 function onNumeralInput(value) {
   logUiEvent('onNumeralInput', value);
-  Globals.gameController.interactor.handleNumeralInput(value);
+  Globals.gameController.handleNumeralInput(value);
 }
 
 function copyPuzzle() {

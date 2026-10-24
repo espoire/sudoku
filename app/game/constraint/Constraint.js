@@ -15,6 +15,7 @@ export default class Constraint {
   static sudokuBox = (board) => new Constraint(SudokuBoxDigitUniquenessConstraintGenerator.generate(board.size));
   static allCellsFilled = new Constraint(AllCellsFilledCompletionConstraint);
 
+  /** @type {string} */ #id;
   /** @type {(board: Board) => ConstraintCheckResult} */ #checkFn;
   /** @type {(board: Board, note: { row: number, column: number, value: number }) => boolean} */ #checkNoteFn;
   /** @type {(board: Board) => boolean} */ #checkCompleteFn;
@@ -24,7 +25,8 @@ export default class Constraint {
    * @param {(board: Board, note: { row: number, column: number, value: number }) => boolean} checkNote The function to check the constraint for a specific cell.
    * @param {(board: Board) => boolean} checkComplete The function to check the completion condition of the constraint.
    */
-  constructor({ check, checkNote, checkComplete }) {
+  constructor({ id, check, checkNote, checkComplete }) {
+    this.#id = id;
     this.#checkFn = check;
     this.#checkNoteFn = checkNote;
     this.#checkCompleteFn = checkComplete;
@@ -77,5 +79,9 @@ export default class Constraint {
     }
 
     return { valid, errors };
+  }
+
+  toSaveDataObject() {
+    return this.#id;
   }
 }

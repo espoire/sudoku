@@ -20,7 +20,7 @@ const nameMap = {
 
 export default class ConstraintLoader {
   /**
-   * @param {string[]} boardConstraintsConfigArray
+   * @param {{ constraints?: string[], constraint?: string, size?: { x: number, y: number } }} boardConstraintsConfigArray
    * @returns {Constraint[]} An array of loaded constraint instances.
    */
   static load(boardConfig) {

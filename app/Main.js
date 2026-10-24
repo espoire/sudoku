@@ -4,7 +4,7 @@ import Globals from './Globals.js';
 import { environmentIsDev } from './util/Util.js';
 import GameController from './game/GameController.js';
 import { runTests } from '../test/TestRunner.js';
-import SaveDataManager from './SaveDataManager.js';
+import SaveDataManager from './save/SaveDataManager.js';
 
 if (environmentIsDev()) runTests();
 

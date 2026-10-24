@@ -6,7 +6,7 @@ import PrettyButton from '../util/PrettyButton.vue';
 import UserSettingsManager from '../../../UserSettingsManager.js';
 import ModalManager from '../../ModalManager.js';
 import KeyboardHelper from '../../../util/KeyboardHelper.js';
-import SaveDataManager from '../../../SaveDataManager.js';
+import SaveDataManager from '../../../save/SaveDataManager.js';
 
 defineProps(['settings']);
 // const set = UserSettingsManager.setSetting;

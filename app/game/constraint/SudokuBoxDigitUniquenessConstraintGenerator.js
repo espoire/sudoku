@@ -62,6 +62,7 @@ export default class SudokuBoxDigitUniquenessConstraintGenerator {
     };
 
     return {
+      id: 'sudokuBox',
       check,
       checkNote,
     };

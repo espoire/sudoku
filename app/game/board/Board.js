@@ -1,8 +1,10 @@
 /** @typedef {import("../constraint/Constraint.js").default} Constraint */
 
+import { trim2dArray } from "../../save/util.js";
 import { array, fillFrom } from "../../util/Array.js";
 import Constraint from "../constraint/Constraint.js";
 import ConstraintLoader from "../constraint/ConstraintLoader.js";
+import puzzleConfigs from "../puzzles.js";
 
 /** Data & logic class for the Sudoku board.
  * Supports variable sizes, including standard 9x9 and smaller variants.
@@ -12,6 +14,7 @@ import ConstraintLoader from "../constraint/ConstraintLoader.js";
  * User-notation to be tracked in a future class: the board-interactor state/controller. The board interactor will wrap this board state class, and use its public methods to alter/query the board state.
  */
 export default class Board {
+  /** @type {string?} */ id = null;
   /** @type {{ x: number, y: number }} */ size;
   /** @type {Cell[][]} */ cells;
   /** @type {Constraint[]} */ constraints = [];
@@ -19,15 +22,17 @@ export default class Board {
   /**
    * Initializes a new Sudoku board with the given size and initial numerals.
    * @param {*} config The parameter object.
-   * @param {string} config.title The title of the puzzle.
+   * @param {string} config.id The unique identifier of the puzzle, if any.
    * @param {{ x: number, y: number }} config.size
    * @param {string[]} config.given A list of strings each representing a board row. Numerals are used for given values, and spaces represent non-given (empty) cells.
    * @param {string[]} config.constraints An array of constraint descriptors to apply to the board. May reference other data elements on the config. 
    */
   constructor(config) {
-    let { size, given } = config;
+    let { id, size, given } = config;
     if (size == null) size = { x: 9, y: 9 };
     if (given == null) given = config.givens ?? Array(size.y).fill(' '.repeat(size.x));
+
+    if (id) this.id = id;
 
     this.size = structuredClone(size);
 
@@ -158,6 +163,70 @@ export default class Board {
         return validation;
       })
     );
+  }
+
+  /**
+   * @returns {Array<Array<number|null>>} A 2D array representing the current entries on the board -- that is, user-entered values.
+   */
+  getEntriesMap() {
+    return trim2dArray(this.cells.map(row => row.map(cell => (!cell.locked ? cell.value : null))));
+  }
+
+  getGivensMap() {
+    return trim2dArray(this.cells.map(row => row.map(cell => (cell.locked ? cell.value : null))));
+  }
+
+  toSaveDataObject() {
+    const ret = {};
+
+    if (this.id) {
+      ret.id = this.id;
+    } else {
+      ret.size = structuredClone(this.size);
+      ret.givens = this.getGivensMap();
+      ret.constraints = this.constraints.map(constraint => constraint.toSaveDataObject());
+    }
+    ret.entries = this.getEntriesMap();
+
+    return ret;
+  }
+
+  static rehydrate(data) {
+    let { id, size, constraints, givens, entries } = data;
+
+    let board;
+    if (id) {
+      const config = puzzleConfigs.find(config => config.id === id);
+      if (config) {
+        board = new Board(config);
+      }
+    }
+
+    if (!board) {
+      board = new Board({ size, constraints });
+
+      // Givens don't match the internal puzzle setup format, so we need to manually apply them.
+      for (let row = 0; row < givens?.length; row++) {
+        for (let col = 0; col < givens?.[row]?.length; col++) {
+          const value = givens?.[row]?.[col];
+          if (value != null) {
+            board.cells[row][col].lock(value);
+          }
+        }
+      }
+    }
+
+    // Apply user-entered entries to the board.
+    for (let row = 0; row < entries?.length; row++) {
+      for (let col = 0; col < entries?.[row]?.length; col++) {
+        const value = entries?.[row]?.[col];
+        if (value != null) {
+          board.cells[row][col].value = value;
+        }
+      }
+    }
+
+    return board;
   }
 }
 

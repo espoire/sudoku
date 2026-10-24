@@ -10,6 +10,8 @@ import Timer from './Timer.js';
 import { anyPuzzlesExistWithDifficulty, selectRandomPuzzleId } from './puzzles.js';
 import RandomTitles from '../vue/cmp/edit/RandomTitles.js';
 import PuzzleConfigPermutor from './generator/PuzzleConfigPermutor.js';
+import SaveDataManager from '../save/SaveDataManager.js';
+import { errorOrThrow } from '../util/Util.js';
 
 const { modes } = Constants;
 
@@ -29,6 +31,8 @@ export default class GameController {
   }
 
   static showMainMenu() {
+    const vm = GlobalVueProps;
+    vm.enableContinue = SaveDataManager.hasSavedGame();
     GameController.setMode(modes.menu);
   }
 
@@ -56,6 +60,17 @@ export default class GameController {
     GameController.setMode(modes.difficultySelect);
   }
 
+  loadSavedPlayPuzzle() {
+    const savedGameInteractor = SaveDataManager.loadGameState();
+    if (!savedGameInteractor) {
+      errorOrThrow('Save game load failed.');
+      GlobalVueProps.enableContinue = false;
+      return;
+    }
+
+    this.resumePuzzle(savedGameInteractor);
+  }
+
   startPuzzle(difficulty = null) {
     const id = selectRandomPuzzleId(difficulty);
     this.startPuzzleById(id);
@@ -73,6 +88,15 @@ export default class GameController {
     GameController.setMode(modes.play);
   }
 
+  resumePuzzle(savedGameInteractor) {
+    this.board = savedGameInteractor.board;
+    this.interactor = savedGameInteractor;
+    this.interactor.updateVue();
+    this.timer.restart(); // TODO save/load this too
+    GlobalVueProps.puzzleId = this.board.id;
+    GameController.setMode(modes.play);
+  }
+
   static onSettingsClicked() {
     GameController.#modeBeforeSettings = GlobalVueProps.mode;
     GameController.setMode(modes.settings);
@@ -85,5 +109,11 @@ export default class GameController {
   static setMode(mode) {
     if (Settings.test?.log?.uiModeChanges) console.log(`Setting mode to ${mode}`);
     GlobalVueProps.mode = mode;
+  }
+
+  handleNumeralInput(value) {
+    if (this.interactor) this.interactor.handleNumeralInput(value);
+    if (GlobalVueProps.mode === modes.play) SaveDataManager.saveGameState(this.interactor);
+    if (GlobalVueProps.mode === modes.edit) SaveDataManager.saveEditState(this.interactor);
   }
 }

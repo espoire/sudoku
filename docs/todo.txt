@@ -1,4 +1,7 @@
-Save user's current puzzle progress, and enable resuming from a conditionally-visible "Continue" button in the main menu
+Save/load puzzle timer state
+Save current edit-puzzle state, and auto-resume if entering edit mode
+
+Save user's current (cell highlight) palette (reg or colorblind) as a user setting.
 
 Undo/Redo
 

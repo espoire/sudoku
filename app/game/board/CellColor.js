@@ -89,4 +89,17 @@ export class CellColorSet {
   #sort() {
     this.#colors.sort((a, b) => a.sortOrder - b.sortOrder);
   }
+
+  toSaveDataObject() {
+    return (this.#colors.length) ? this.#colors.map(c => c.id) : null;
+  }
+
+  /**
+   * @param {string[] | null} data A list of string color IDs, or null to indicate an empty set.
+   */
+  static rehydrate(data) {
+    const set = new CellColorSet();
+    for (const id of data ?? []) set.add(id);
+    return set;
+  }
 }

@@ -1,7 +1,10 @@
 <script setup>
 import Globals from '../../../Globals';
+function loadSavedPlayPuzzle() { Globals.gameController.loadSavedPlayPuzzle(); }
 function showDifficultySelect() { Globals.gameController.showDifficultySelect(); }
 function showPuzzleEditor() { Globals.gameController.showPuzzleEditor(); }
+
+defineProps({ enableContinue: [Boolean, null] });
 </script>
 
 <template>
@@ -9,9 +12,13 @@ function showPuzzleEditor() { Globals.gameController.showPuzzleEditor(); }
     <div class="logoWrap">
       <img class="logo" src="/img/name-shadowed.min.svg" />
     </div>
+    <div class="button-wrap" v-if="enableContinue">
+      <button id="loadGame" @click="loadSavedPlayPuzzle">Continue</button>
+      <div id="startGameFinger">👆</div>
+    </div>
     <div class="button-wrap">
       <button id="startGame" @click="showDifficultySelect">Play</button>
-      <div id="startGameFinger">👆</div>
+      <div id="startGameFinger" v-if="!enableContinue">👆</div>
     </div>
     <div class="button-wrap">
       <button id="editPuzzle" @click="showPuzzleEditor">Create</button>
@@ -68,6 +75,11 @@ function showPuzzleEditor() { Globals.gameController.showPuzzleEditor(); }
         padding: 0.5em;
         background: none;
         border: none;
+      }
+
+      &#loadGame {
+        --wobble-turn: 5deg;
+        animation: wobble 2s ease-in-out infinite alternate-reverse;
       }
 
       &#startGame {

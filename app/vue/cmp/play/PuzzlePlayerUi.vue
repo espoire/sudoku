@@ -59,7 +59,7 @@ function openSettingsMenu() {
 
 function onNumeralInput(value) {
   logUiEvent('onNumeralInput', value);
-  Globals.gameController.interactor.handleNumeralInput(value);
+  Globals.gameController.handleNumeralInput(value);
 }
 
 const displayedTime = ref('');
