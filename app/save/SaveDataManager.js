@@ -23,6 +23,12 @@ export default class SaveDataManager {
   }
 
   static saveGameState(interactor) {
+    if (interactor.wasWin) {
+      localStorage.removeItem('continue');
+      console.log('%c Game won! Progress cleared.', SaveDataManager.consoleTextStyle);
+      return;
+    }
+
     const payload = interactor.toSaveDataObject();
     trimObject(payload);
     localStorage.setItem('continue', JSON.stringify(payload));

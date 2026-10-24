@@ -20,6 +20,7 @@ export default class PuzzlePlayInteractor extends Interactor {
   /** @type {Array<Array<CellColorSet>>} */ cellColors = []; 
   /** @type {'digit' | 'corner-note' | 'center-note' | 'cell-color'} */ #inputMode = Constants.inputModes.digit;
   /** @type {'regular' | 'color-blind'} */ #palette = Constants.palettes.regular;
+  /** @type {boolean} */ wasWin = false;
 
   constructor(board) {
     super(board);
@@ -33,6 +34,7 @@ export default class PuzzlePlayInteractor extends Interactor {
     this.cornerNotes = create2DArray(this.board.size.y, this.board.size.x, () => new Set());
     this.centerNotes = create2DArray(this.board.size.y, this.board.size.x, () => new Set());
     this.cellColors = create2DArray(this.board.size.y, this.board.size.x, () => new CellColorSet());
+    this.wasWin = false;
     this.updateVue();
   }
 
@@ -74,6 +76,8 @@ export default class PuzzlePlayInteractor extends Interactor {
    * @param {number?} value The number the user pressed, or null for a command to clear the selected cells.
    */
   handleNumeralInput(value) {
+    if (this.wasWin) return;
+
     const selection = this.listSelection();
 
     let wasEntryChange = false;
@@ -218,7 +222,8 @@ export default class PuzzlePlayInteractor extends Interactor {
       const validationResult = this.board.checkWin();
       this.cachedValidationResult = validationResult;
       if (validationResult.win) {
-        setTimeout(() => alert("Win! 🎉"), 0); // To give Vue time to rerender with the new correct digit(s) before declaring victory
+        if (!this.wasWin) setTimeout(() => alert("Win! 🎉"), 0); // To give Vue time to rerender with the new correct digit(s) before declaring victory
+        this.wasWin = true;
       } else {
         this.#validateNotes();
       }

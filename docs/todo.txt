@@ -1,4 +1,5 @@
-Delete saved game data, when save would be a complete finished puzzle
+Freeze timer when win puzzle
+
 Save/load puzzle timer state
 Save current edit-puzzle state, and auto-resume if entering edit mode
 
