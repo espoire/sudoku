@@ -113,6 +113,7 @@ export default class GameController {
 
   handleNumeralInput(value) {
     if (this.interactor) this.interactor.handleNumeralInput(value);
+    if (this.interactor.wasWin) this.timer.stop();
     if (GlobalVueProps.mode === modes.play) SaveDataManager.saveGameState(this.interactor);
     if (GlobalVueProps.mode === modes.edit) SaveDataManager.saveEditState(this.interactor);
   }
