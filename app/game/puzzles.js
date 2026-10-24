@@ -86,6 +86,7 @@ const puzzleConfigs = [{
 }, {
   title: 'Test Puzzle #3',
   id: 'test-puzzle-3',
+  difficulty: difficulty.expert6, // TODO needs solvability verification
   size: { x: 9, y: 9 },
   given: [
     '168   9 2',
@@ -116,7 +117,7 @@ const puzzleConfigs = [{
 }, {
   title: 'Test Puzzle #5',
   id: 'test-puzzle-5',
-  difficulty: difficulty.medium,
+  difficulty: difficulty.medium3,
   size: { x: 9, y: 9 },
   given: [
     '9854 1   ',
@@ -132,7 +133,7 @@ const puzzleConfigs = [{
 }, {
   title: 'Test Puzzle #6',
   id: 'test-puzzle-6',
-  difficulty: difficulty.medium,
+  difficulty: difficulty.medium3,
   size: { x: 9, y: 9 },
   given: [
     ' 3     4 ',
@@ -163,6 +164,7 @@ const puzzleConfigs = [{
 }, {
   title: 'Test Puzzle #8',
   id: 'test-puzzle-8',
+  difficulty: difficulty.easy2,
   size: { x: 9, y: 9 },
   given: [
     '8 134  2 ',
@@ -178,6 +180,7 @@ const puzzleConfigs = [{
 }, {
   title: 'Test Puzzle #9',
   id: 'test-puzzle-9',
+  difficulty: difficulty.easy2,
   size: { x: 9, y: 9 },
   given: [
     '9 31   4 ',
@@ -193,6 +196,7 @@ const puzzleConfigs = [{
 }, {
   title: 'The Egg',
   id: 'test-puzzle-10',
+  difficulty: difficulty.easy2,
   size: { x: 9, y: 9 },
   given: [
     '  17 29  ',
@@ -208,6 +212,7 @@ const puzzleConfigs = [{
 }, {
   title: 'Bar of Soap',
   id: 'test-puzzle-11',
+  difficulty: difficulty.hard4,
   size: { x: 9, y: 9 },
   given: [
     '    376  ',
@@ -223,6 +228,7 @@ const puzzleConfigs = [{
 }, {
   title: 'Bull',
   id: 'test-puzzle-12',
+  difficulty: difficulty.hard4,
   size: { x: 9, y: 9 },
   given: [
     '  9   8  ',
@@ -238,6 +244,7 @@ const puzzleConfigs = [{
 }, {
   title: 'Cinch',
   id: 'test-puzzle-13',
+  difficulty: difficulty.expert6, // TODO needs solvability verification
   size: { x: 9, y: 9 },
   given: [
     '5  2   4 ',
@@ -253,6 +260,7 @@ const puzzleConfigs = [{
 }, {
   title: 'Test Puzzle #14',
   id: 'test-puzzle-14',
+  difficulty: difficulty.challenge5,
   size: { x: 9, y: 9 },
   given: [
     '7  1 8   ',
@@ -473,6 +481,51 @@ const puzzleConfigs = [{
     ' 3 7  4 6',
     '8 72     ',
     '  438    ',
+  ],
+}, {
+  title: 'Lth23',
+  id: 'lth23',
+  difficulty: 4,
+  given: [
+    '8  2   3 ',
+    '  3    6 ',
+    '    1  4 ',
+    '  8  5   ',
+    '  7 8 6  ',
+    '9  37   1',
+    '52      3',
+    ' 9 142   ',
+    '         ',
+  ],
+}, {
+  title: 'Ltb1',
+  id: 'ltb1',
+  difficulty: 1,
+  given: [
+    '  72   1 ',
+    '  4 16 38',
+    '2    86 7',
+    ' 5 849   ',
+    '4 8  7   ',
+    '  1 23 5 ',
+    ' 3598    ',
+    '1 9   5 3',
+    '6  3  1 9',
+  ],
+}, {
+  title: 'Ltm24',
+  id: 'ltm24',
+  difficulty: 4,
+  given: [
+    '    5 7  ',
+    '  6 9  14',
+    '1 7     2',
+    '   61 93 ',
+    '  8     7',
+    '    2 5  ',
+    '         ',
+    '7 2   3  ',
+    '  398 4  ',
   ],
 }];
 export default puzzleConfigs;

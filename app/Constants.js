@@ -27,14 +27,14 @@ const Constants = {
     colorBlind: 'color-blind',
   }),
 
-  difficulty: enumeration({
-    basic: 1,
-    easy: 2,
-    medium: 3,
-    hard: 4,
-    challenge: 5,
-    expert: 6,
-  }),
+  difficulty: {
+    basic1: 1,
+    easy2: 2,
+    medium3: 3,
+    hard4: 4,
+    challenge5: 5,
+    expert6: 6,
+  },
 };
 
 deepFreeze(Constants);

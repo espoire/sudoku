@@ -53,8 +53,8 @@ export default class GameController {
   showDifficultySelect() {
     const vm = GlobalVueProps.directory.hasDifficulty;
 
-    for (let i = 1; i <= 5; i++) {
-      vm[i] = anyPuzzlesExistWithDifficulty(i);
+    for (const difficultyNumeral of Object.values(Constants.difficulty)) {
+      vm[difficultyNumeral] = anyPuzzlesExistWithDifficulty(difficultyNumeral);
     }
 
     GameController.setMode(modes.difficultySelect);
