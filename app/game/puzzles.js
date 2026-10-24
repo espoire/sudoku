@@ -498,8 +498,8 @@ const puzzleConfigs = [{
     '         ',
   ],
 }, {
-  title: 'Ltb1',
-  id: 'ltb1',
+  title: 'Ltb2',
+  id: 'ltb2',
   difficulty: 1,
   given: [
     '  72   1 ',
@@ -526,6 +526,21 @@ const puzzleConfigs = [{
     '         ',
     '7 2   3  ',
     '  398 4  ',
+  ],
+}, {
+  title: 'Ltx1',
+  id: 'ltx1',
+  difficulty: 4,
+  given: [
+    '   12 65 ',
+    ' 7       ',
+    '4      18',
+    '38   6   ',
+    '715  9   ',
+    '6  3    5',
+    '   5  8  ',
+    '  18   7 ',
+    '     2  3',
   ],
 }];
 export default puzzleConfigs;
@@ -590,6 +605,8 @@ function validateAllPuzzleConfigs(puzzleConfigs) {
   const count = puzzleConfigs.length;
   let pass = 0, warned = 0, fail = 0;
 
+  const usedIds = new Set();
+
   for (const config of puzzleConfigs) {
     try {
       const warnings = validatePuzzleConfig(config);
@@ -597,6 +614,12 @@ function validateAllPuzzleConfigs(puzzleConfigs) {
         warned++;
         console.warn(`Puzzle definition warnings: "${config.title}":`, warnings);
       }
+      
+      if (usedIds.has(config.id)) {
+        throw new Error(`Duplicate puzzle ID: "${config.id}"`);
+      }
+      usedIds.add(config.id);
+
       pass++;
     } catch (error) {
       console.error(`Puzzle definition validation error: "${config.title}":`, error);
