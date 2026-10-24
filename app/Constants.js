@@ -26,6 +26,15 @@ const Constants = {
     regular: 'regular',
     colorBlind: 'color-blind',
   }),
+
+  difficulty: enumeration({
+    basic: 1,
+    easy: 2,
+    medium: 3,
+    hard: 4,
+    challenge: 5,
+    expert: 6,
+  }),
 };
 
 deepFreeze(Constants);

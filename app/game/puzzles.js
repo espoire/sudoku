@@ -1,4 +1,7 @@
+import Constants from "../Constants.js";
 import { randomArrayElement } from "../util/random.js";
+
+const difficulty = Constants.difficulty;
 
 const puzzleConfigs = [{
   title: 'Template',
@@ -113,6 +116,7 @@ const puzzleConfigs = [{
 }, {
   title: 'Test Puzzle #5',
   id: 'test-puzzle-5',
+  difficulty: difficulty.medium,
   size: { x: 9, y: 9 },
   given: [
     '9854 1   ',
@@ -128,6 +132,7 @@ const puzzleConfigs = [{
 }, {
   title: 'Test Puzzle #6',
   id: 'test-puzzle-6',
+  difficulty: difficulty.medium,
   size: { x: 9, y: 9 },
   given: [
     ' 3     4 ',
@@ -453,6 +458,21 @@ const puzzleConfigs = [{
     '2 3    8 ',
     ' 76  3  5',
     '       9 ',
+  ],
+}, {
+  title: 'Ltb1',
+  id: 'ltb1',
+  difficulty: 1,
+  given: [
+    '    1   8',
+    '528 4 3  ',
+    ' 7  3854 ',
+    ' 6  2  34',
+    '4   7  69',
+    '3824 6  7',
+    ' 3 7  4 6',
+    '8 72     ',
+    '  438    ',
   ],
 }];
 export default puzzleConfigs;
