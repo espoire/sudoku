@@ -362,6 +362,8 @@ export default class PuzzlePlayInteractor extends Interactor {
     );
     vm.active = this.activeCell ? { ...this.activeCell } : null;
     vm.accentuate = this.getAccentuatedNumber();
+    
+    GlobalVueProps.inputMode = this.#inputMode;
   }
 
   toSaveDataObject() {
