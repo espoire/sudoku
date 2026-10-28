@@ -1,3 +1,7 @@
+Bug: Switch the notes/highlight mode, then return to main menu, then start/resume a puzzle
+  UI still shows old input mode
+  Actual logic has reset to Entries input mode
+
 Save current edit-puzzle state, and auto-resume if entering edit mode
 
 Undo/Redo

@@ -94,39 +94,9 @@ export default class PuzzlePlayInteractor extends Interactor {
     let wasEntryChange = false;
 
     if (value == null) {
-      // Explicit delete: clear selected cells regardless of input mode, using a priority order
+      const modeApplied = this.#handleDelete();
+      if (modeApplied === 'entries') wasEntryChange = true;
 
-      // If any editable selected cells contain a value, clear values
-      const editable = selection.filter(({ row, column }) => this.board.canEdit(row, column));
-      const anyEditableContainValue = editable.some(({ row, column }) => this.board.getValue(row, column) != null);
-      if (anyEditableContainValue) {
-        wasEntryChange = true;
-        for (const { row, column } of editable) {
-          this.board.setValue(row, column, null);
-        }
-      } else {
-
-        // Else if any noteable selected cells contain a center-note and/or corner-note, clear those notes
-
-        // (Since noteable := no value, and we must have no values to have reached this `else` case, noteable === editable)
-        const anyEditableContainNotes = editable.some(({ row, column }) => {
-          const hasCornerNotes = this.cornerNotes[row][column].size > 0;
-          const hasCenterNotes = this.centerNotes[row][column].size > 0;
-          return hasCornerNotes || hasCenterNotes;
-        });
-        if (anyEditableContainNotes) {
-          for (const { row, column } of editable) {
-            this.cornerNotes[row][column].clear();
-            this.centerNotes[row][column].clear();
-          }
-        } else {
-
-          // Else if any background-color related user colors are present, clear those
-          for (const { row, column } of selection) {
-            this.cellColors[row][column].clear();
-          }
-        }
-      }
     } else switch (this.#inputMode) {
       case Constants.inputModes.digit: {
         wasEntryChange = true;
@@ -246,6 +216,87 @@ export default class PuzzlePlayInteractor extends Interactor {
 
     // Update the UI with the new board state & validations.
     this.updateVue();
+  }
+
+  /**
+   * Handles an explicit delete input, discarding entries, notes, or colors from the selected cells based on priority.
+   * 
+   * Priority order:
+   * - Usually: entries → notes → colors
+   * - If the current input mode is cellColor / "Highlight": colors → entries → notes
+   * 
+   * Only the first applicable deletion mode in the priority order will be applied.
+   * 
+   * @returns {'entries' | 'notes' | 'colors' | null} The deletion mode that was applied, or null if no deletion occurred.
+   */
+  #handleDelete() {
+    // Explicit delete: clear selected cells using a priority order
+
+    const priority = this.#inputMode === Constants.inputModes.cellColor ? ['colors', 'entries', 'notes'] : ['entries', 'notes', 'colors'];
+    const operationMap = {
+      entries: this.#attemptDeleteEntries.bind(this),
+      notes: this.#attemptDeleteNotes.bind(this),
+      colors: this.#attemptDeleteColors.bind(this),
+    };
+
+    while (priority.length > 0) {
+      const deletionMode = priority.shift();
+      const operationFn = operationMap[deletionMode];
+      if (!operationFn) continue;
+
+      const changeWasApplied = operationFn();
+      if (changeWasApplied) {
+        console.log(`Deletion applied: ${deletionMode}`);
+        return deletionMode;
+      }
+    }
+
+    return null;
+  }
+
+  #attemptDeleteEntries() {
+    // If any editable selected cells contain a value, clear values
+    const selection = this.listSelection();
+    const editable = selection.filter(({ row, column }) => this.board.canEdit(row, column));
+    const anyEditableContainValue = editable.some(({ row, column }) => this.board.getValue(row, column) != null);
+    if (!anyEditableContainValue) return false;
+
+    for (const { row, column } of editable) {
+      this.board.setValue(row, column, null);
+    }
+    return true;
+  }
+
+  #attemptDeleteNotes() {
+    // If any noteable selected cells contain a center-note and/or corner-note, clear those notes
+
+    // (Since noteable := no value, and we must have no values to have reached this `else` case, noteable === editable)
+    const selection = this.listSelection();
+    const noteable = selection.filter(({ row, column }) => this.board.canEdit(row, column) && this.board.getValue(row, column) == null);
+    const anyNoteableContainNotes = noteable.some(({ row, column }) => {
+      const hasCornerNotes = this.cornerNotes[row][column].size > 0;
+      const hasCenterNotes = this.centerNotes[row][column].size > 0;
+      return hasCornerNotes || hasCenterNotes;
+    });
+    if (!anyNoteableContainNotes) return false;
+
+    for (const { row, column } of noteable) {
+      this.cornerNotes[row][column].clear();
+      this.centerNotes[row][column].clear();
+    }
+    return true;
+  }
+
+  #attemptDeleteColors() {
+    // If any background-color related user colors are present, clear those
+    const selection = this.listSelection();
+    const anySelectedContainColors = selection.some(({ row, column }) => this.cellColors[row][column].size > 0);
+    if (!anySelectedContainColors) return false;
+
+    for (const { row, column } of selection) {
+      this.cellColors[row][column].clear();
+    }
+    return true;
   }
 
   deleteAllNotesWithErrors() {

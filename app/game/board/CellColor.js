@@ -43,6 +43,7 @@ export default class CellColor {
 
 export class CellColorSet {
   #colors = [];
+  get size() { return this.#colors.length; }
 
   /** @returns {boolean} Whether the color was successfully added */
   add(colorOrId) {
