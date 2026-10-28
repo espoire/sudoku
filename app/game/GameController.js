@@ -89,6 +89,7 @@ export default class GameController {
   resumePuzzle(savedGameInteractor) {
     this.board = savedGameInteractor.board;
     this.interactor = savedGameInteractor;
+    this.interactor.checkWin(); // To rehydrate the note-validation state
     this.interactor.updateVue();
     GlobalVueProps.puzzleId = this.board.id;
     this.interactor.timer.start();

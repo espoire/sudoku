@@ -199,23 +199,26 @@ export default class PuzzlePlayInteractor extends Interactor {
       } break;
     }
 
-    if (wasEntryChange) {
-      const validationResult = this.board.checkWin();
-      this.cachedValidationResult = validationResult;
-      if (validationResult.win) {
-        if (!this.wasWin) {
-          this.timer.stop();
-          setTimeout(() => alert("Win! 🎉"), 0); // To give Vue time to rerender with the new correct digit(s) before declaring victory
-        }
-        this.wasWin = true;
-      } else {
-        this.#validateNotes();
-      }
-      if (Settings.user.deleteBadNotes) this.deleteAllNotesWithErrors();
-    }
+    // If the user changed anything, check if they won.
+    if (wasEntryChange) this.checkWin();
 
     // Update the UI with the new board state & validations.
     this.updateVue();
+  }
+
+  checkWin() {
+    const validationResult = this.board.checkWin();
+    this.cachedValidationResult = validationResult;
+    if (validationResult.win) {
+      if (!this.wasWin) {
+        this.timer.stop();
+        setTimeout(() => alert("Win! 🎉"), 0); // To give Vue time to rerender with the new correct digit(s) before declaring victory
+      }
+      this.wasWin = true;
+    } else {
+      this.#validateNotes();
+    }
+    if (Settings.user.deleteBadNotes) this.deleteAllNotesWithErrors();
   }
 
   /**
