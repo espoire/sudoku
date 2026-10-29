@@ -1,4 +1,11 @@
 Undo/Redo
+  [Undo] and [Redo] buttons near bottom of screen
+  Game keeps old savegame states
+  [Undo] "loads" the previous savegame, if applicable
+  [Redo] "loads" the next savegame, if applicable
+  These buttons not visible when not applicable
+  Savegame saves the whole undo/redo state sequence
+  No forking, if you Undo, then do something, it overwrites and discards the Redo future state sequence
 
 Save current edit-puzzle state, and auto-resume if entering edit mode
 

@@ -84,37 +84,6 @@ const puzzleConfigs = [{
     '    8  79',
   ],
 }, {
-  title: 'Test Puzzle #3',
-  id: 'test-puzzle-3',
-  difficulty: difficulty.expert6, // TODO needs solvability verification
-  size: { x: 9, y: 9 },
-  given: [
-    '168   9 2',
-    '   3 1   ',
-    ' 3 62    ',
-    '  9   1 6',
-    '  1   37 ',
-    ' 435    9',
-    '   8 26  ',
-    '   9 5 23',
-    '2 6 3 7  ',
-  ],
-}, {
-  title: 'The Lantern',
-  id: 'test-puzzle-4',
-  size: { x: 9, y: 9 },
-  given: [
-    '1   8   9',
-    ' 5 6 1 2 ',
-    '   5 3   ',
-    ' 961 483 ',
-    '3   6   5',
-    ' 159 846 ',
-    '   7 5   ',
-    ' 8 3 9 7 ',
-    '5   1   3',
-  ],
-}, {
   title: 'Test Puzzle #5',
   id: 'test-puzzle-5',
   difficulty: difficulty.medium3,
@@ -145,21 +114,6 @@ const puzzleConfigs = [{
     '       89',
     '7859     ',
     '   5   62',
-  ],
-}, {
-  title: 'Test Puzzle #7',
-  id: 'test-puzzle-7',
-  size: { x: 9, y: 9 },
-  given: [
-    '1 6  9   ',
-    ' 2   8 6 ',
-    ' 43  1   ',
-    '9   7   1',
-    ' 8       ',
-    '   2  34 ',
-    '    9   7',
-    '6      1 ',
-    ' 9  4 8  ',
   ],
 }, {
   title: 'Test Puzzle #8',
@@ -240,22 +194,6 @@ const puzzleConfigs = [{
     '  6   3  ',
     '   9 5   ',
     '    1    ',
-  ],
-}, {
-  title: 'Cinch',
-  id: 'test-puzzle-13',
-  difficulty: difficulty.expert6, // TODO needs solvability verification
-  size: { x: 9, y: 9 },
-  given: [
-    '5  2   4 ',
-    '   6 3   ',
-    ' 3   9  7',
-    '  3  7   ',
-    '  7  8   ',
-    '6      2 ',
-    ' 8      3',
-    '   4  6  ',
-    '   1  5  ',
   ],
 }, {
   title: 'Test Puzzle #14',
