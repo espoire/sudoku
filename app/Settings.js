@@ -9,6 +9,7 @@ const Settings = {
     // disableTestMode: true,
 
     suppressPuzzlePermute: true,
+    unratedPuzzleButton: true,
 
     log: {
       uiEventHandling: false,
