@@ -369,6 +369,18 @@ export default class PuzzlePlayInteractor extends Interactor {
     GlobalVueProps.inputMode = this.#inputMode;
   }
 
+  toUndoableStateSnapshot(includeTimer = false) {
+    return {
+      ...this.board.toUndoableStateSnapshot(),
+      cornerNotes: structuredClone(this.cornerNotes), // Already in canonical state; 2D array of Sets.
+      centerNotes: structuredClone(this.centerNotes), // Already in canonical state; 2D array of Sets.
+      cellColors: structuredClone(this.cellColors), // Already in canonical state; 2D array of Set-like custom objects.
+      timer: includeTimer ?
+          Math.floor(this.timer.getElapsedTime()  / 100) : // tenths
+          null,
+    }
+  }
+
   toSaveDataObject() {
     return {
       ...super.toSaveDataObject(),

@@ -6,6 +6,8 @@ Undo/Redo
   These buttons not visible when not applicable
   Savegame saves the whole undo/redo state sequence
   No forking, if you Undo, then do something, it overwrites and discards the Redo future state sequence
+  Tests
+    Snapshot --> mutate state --> snapshot, assert snapshot differs
 
 Save current edit-puzzle state, and auto-resume if entering edit mode
 

@@ -35,3 +35,18 @@ export function setSome(set, predicate) {
   }
   return false;
 }
+
+/**
+ * Checks if two sets are equal by comparing their sizes and elements.
+ * @template T
+ * @param {Set<T> | Array<T>} a
+ * @param {Set<T> | Array<T>} b
+ * @returns {boolean}
+ */
+export function setEquals(a, b) {
+  if (Array.isArray(a)) a = new Set(a);
+  if (Array.isArray(b)) b = new Set(b);
+
+  if (a.size !== b.size) return false;
+  return a.isSubsetOf(b);
+}

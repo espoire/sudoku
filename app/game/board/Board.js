@@ -178,6 +178,12 @@ export default class Board {
     return trim2dArray(this.cells.map(row => row.map(cell => (cell.locked ? cell.value : null))));
   }
 
+  toUndoableStateSnapshot() {
+    return {
+      entries: this.getEntriesMap(), // (number | null)[][] User-entered digits only; omits the puzzle-Given digits.
+    };
+  }
+
   toSaveDataObject() {
     const ret = {};
 

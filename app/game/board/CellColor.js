@@ -45,6 +45,10 @@ export class CellColorSet {
   #colors = [];
   get size() { return this.#colors.length; }
 
+  [Symbol.iterator]() {
+    return this.#colors.map(c => c.id)[Symbol.iterator]();
+  }
+
   /** @returns {boolean} Whether the color was successfully added */
   add(colorOrId) {
     const color = CellColor.lookup(colorOrId);
@@ -85,6 +89,19 @@ export class CellColorSet {
   /** @returns {Array<string>} The list of color IDs in sorted order */
   get colors() {
     return this.#colors.map(c => c.id);
+  }
+
+  /**
+   * @param {string[] | Set<string>} colorIds
+   * @returns {string[]} A cloned list of color IDs, in canonical order.
+   */
+  static sortCanonical(colorIds) {
+    return [...colorIds].sort((a, b) => {
+      const colorA = CellColor.lookup(a);
+      const colorB = CellColor.lookup(b);
+      if (!colorA || !colorB) return 0;
+      return colorA.sortOrder - colorB.sortOrder;
+    });
   }
 
   #sort() {

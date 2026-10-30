@@ -73,11 +73,8 @@ export function runFunctionalTests(label, testFns) {
       newErrors = result.errors ?? [];
     }
 
-    if (newErrors.length > 0) {
-      errors += newErrors.length;
-    } else {
-      passes += newCases;
-    }
+    errors += newErrors.length;
+    passes += newCases - newErrors.length;
     cases += newCases;
   }
 

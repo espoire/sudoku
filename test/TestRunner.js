@@ -1,6 +1,7 @@
 import Settings from '../app/Settings.js';
 import { runPuzzleConfigPermutorTests } from './game/generator/PuzzleConfigPermutor.test.js';
 import { runPuzzleShareEncoderTests } from './game/PuzzleShareEncoder.test.js';
+import { runUndoHistoryTests } from './game/undo/UndoHistory.test.js';
 import { runArrayUtilityTests, visualInspectionTestRotateRectangularArray } from './util/ArrayTest.js';
 import { testDeepEquals } from './util/ObjectTest.js';
 
@@ -19,6 +20,7 @@ export function runTests() {
   visualInspectionTestRotateRectangularArray(true);
   testDeepEquals();
   runArrayUtilityTests();
+  runUndoHistoryTests();
 
   // Restore dev-test settings after auto-tests are done
   Settings.test = temp;
