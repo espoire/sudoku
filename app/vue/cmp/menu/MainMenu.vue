@@ -10,7 +10,7 @@ defineProps({ enableContinue: [Boolean, null] });
 <template>
   <div class="titleScreen">
     <div class="logoWrap">
-      <img class="logo" src="/img/name-shadowed.min.svg" />
+      <img class="logo" src="/img/name-shadowed.min.svg" alt="Sudoku" />
     </div>
     <div class="button-wrap" v-if="enableContinue">
       <button id="loadGame" @click="loadSavedPlayPuzzle">Continue</button>
@@ -44,6 +44,9 @@ defineProps({ enableContinue: [Boolean, null] });
   .logo {
     margin-top: 2rem;
     max-width: 80%;
+    color: #fff8;
+    font-weight: bold;
+    font-size: 15rem;
   }
 
   .button-wrap {

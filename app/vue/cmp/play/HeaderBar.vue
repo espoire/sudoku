@@ -7,10 +7,10 @@ const emit = defineEmits(['back', 'settings']);
 
 <template>
   <div class="header-bar">
-    <img class="logo" src="/img/name.min.svg" @click.stop="emit('back')" />
+    <img class="logo" src="/img/name.min.svg" alt="Sudoku" @click.stop="emit('back')" />
     <div style="flex: 1" />
     <div class="elapsed-time" v-if="timer" v-text="timer" />
-    <img class="settings-button" src="/img/pause-button.min.svg" @click.stop="emit('settings')" />
+    <img class="settings-button" src="/img/pause-button.min.svg" alt="Pause" @click.stop="emit('settings')" />
   </div>
 </template>
 
@@ -28,9 +28,15 @@ const emit = defineEmits(['back', 'settings']);
   margin-bottom: 2rem;
   border-bottom: .5rem solid #8886;
 
+  img {
+    color: #fff8;
+    font-weight: bold;
+    font-size: 5rem;
+  }
+
   .logo {
-    max-width: 80%;
-    max-height: 5.4rem;
+    min-width: 17rem;
+    height: 5.4rem;
 
     pointer-events: all;
     transition: scale 0.2s, filter 0.2s;
@@ -48,7 +54,8 @@ const emit = defineEmits(['back', 'settings']);
   }
 
   .settings-button {
-    max-height: 5.4rem;
+    min-width: 5rem;
+    height: 5.4rem;
 
     pointer-events: all;
     transition: scale 0.2s, filter 0.2s;
