@@ -15,6 +15,7 @@ import puzzleConfigs from "../puzzles.js";
  */
 export default class Board {
   /** @type {string?} */ id = null;
+  /** @type {number?} */ difficultyRating = null;
   /** @type {{ x: number, y: number }} */ size;
   /** @type {Cell[][]} */ cells;
   /** @type {Constraint[]} */ constraints = [];
@@ -28,11 +29,12 @@ export default class Board {
    * @param {string[]} config.constraints An array of constraint descriptors to apply to the board. May reference other data elements on the config. 
    */
   constructor(config) {
-    let { id, size, given } = config;
+    let { id, difficulty, size, given } = config;
     if (size == null) size = { x: 9, y: 9 };
     if (given == null) given = config.givens ?? Array(size.y).fill(' '.repeat(size.x));
 
     if (id) this.id = id;
+    if (difficulty) this.difficultyRating = difficulty;
 
     this.size = structuredClone(size);
 
@@ -192,7 +194,7 @@ export default class Board {
   }
 
   static rehydrate(data) {
-    let { id, size, constraints, givens, entries } = data;
+    let { id, difficulty, size, constraints, givens, entries } = data;
 
     let board;
     if (id) {
@@ -203,7 +205,7 @@ export default class Board {
     }
 
     if (!board) {
-      board = new Board({ size, constraints });
+      board = new Board({ difficulty, size, constraints });
 
       // Givens don't match the internal puzzle setup format, so we need to manually apply them.
       for (let row = 0; row < givens?.length; row++) {

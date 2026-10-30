@@ -16,7 +16,10 @@ const props = defineProps({
   settings: Object,
   mode: String,
 
-  puzzleId: [String, null],
+  puzzle: {
+    id: [String, null],
+    difficulty: [Number, null],
+  },
 
   board: {
     size: {
@@ -142,7 +145,10 @@ function onClickPaletteToggleButton() {
     <HeaderBar :timer="settings?.timer ? displayedTime : null" @back="returnToMainMenu" @settings="openSettingsMenu" />
   
     <BoardSelector :settings="settings" :board="board" :mode="mode" />
-    <div class="current-puzzle-id" v-if="puzzleId" v-text="puzzleId" />
+    <div class="row">
+      <div class="current-puzzle-difficulty" v-text="Constants.difficultyNames[puzzle.difficulty]" />
+      <div class="current-puzzle-id" v-text="puzzle.id" />
+    </div>
   
     <div class="controls-footer">
       <div class="input-modes">
@@ -194,10 +200,22 @@ function onClickPaletteToggleButton() {
   height: 100%;
 }
 
+.row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.current-puzzle-difficulty {
+  color: #fffa;
+  font-size: 1.3rem;
+  margin-left: 1rem;
+  line-height: 1;
+}
+
 .current-puzzle-id {
   color: #fffa;
   font-size: 1.3rem;
-  text-align: right;
   margin-right: 1rem;
   line-height: 1;
 }

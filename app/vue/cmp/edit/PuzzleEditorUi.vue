@@ -90,7 +90,7 @@ function copyPuzzle() {
   puzzleCode.push(`  title: '${title.value || defaultTitle.value}',`);
   puzzleCode.push(`  id: '${id.value || placeholderId.value}',`);
   if (difficulty.value) {
-    puzzleCode.push(`  difficulty: difficulty.${Constants.difficultyNames[difficulty.value]},`);
+    puzzleCode.push(`  difficulty: difficulty.${Constants.difficultyIds[difficulty.value]},`);
   }
   if (notes.value) {
     const quote = notes.value.includes("\n") ? `\`` : `'`; 

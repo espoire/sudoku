@@ -36,7 +36,16 @@ const Constants = {
     expert6: 6,
   },
 
-  difficultyNames: {
+  difficultyNames: enumeration({
+    1: 'Basic',
+    2: 'Easy',
+    3: 'Medium',
+    4: 'Hard',
+    5: 'Challenge',
+    6: 'Expert',
+  }),
+
+  difficultyIds: {
     1: 'basic1',
     2: 'easy2',
     3: 'medium3',

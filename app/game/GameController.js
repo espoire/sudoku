@@ -81,7 +81,8 @@ export default class GameController {
     this.board = new Board(puzzleConfig);
     this.interactor = new PuzzlePlayInteractor(this.board);
     this.interactor.updateVue();
-    GlobalVueProps.puzzleId = id;
+    GlobalVueProps.puzzle.id = id;
+    GlobalVueProps.puzzle.difficulty = puzzleConfig.difficulty;
     this.interactor.timer.start();
     GameController.setMode(modes.play);
   }
@@ -91,7 +92,8 @@ export default class GameController {
     this.interactor = savedGameInteractor;
     this.interactor.checkWin(); // To rehydrate the note-validation state
     this.interactor.updateVue();
-    GlobalVueProps.puzzleId = this.board.id;
+    GlobalVueProps.puzzle.id = this.board.id;
+    GlobalVueProps.puzzle.difficulty = this.board.difficultyRating;
     this.interactor.timer.start();
     GameController.setMode(modes.play);
   }

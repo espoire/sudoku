@@ -1,5 +1,3 @@
-Show current puzzle difficulty (if known) on the Play screen, same line of text as the puzzle ID
-
 Undo/Redo
   [Undo] and [Redo] buttons near bottom of screen
   Game keeps old savegame states
