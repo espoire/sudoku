@@ -603,6 +603,7 @@ const puzzleConfigs = [{
 }, {
   title: 'A Second Jape',
   id: 'a-second-jape',
+  difficulty: difficulty.expert6,
   given: [
     '4 1  8 73',
     '3 5674  1',
@@ -632,6 +633,7 @@ const puzzleConfigs = [{
 }, {
   title: 'A Giant Geometry',
   id: 'a-giant-geometry',
+  difficulty: difficulty.expert6,
   given: [
     '   5 9   ',
     '1     7  ',
@@ -646,6 +648,7 @@ const puzzleConfigs = [{
 }, {
   title: 'Intriguing Doubt',
   id: 'intriguing-doubt',
+  difficulty: difficulty.expert6,
   given: [
     '2   354  ',
     '5 7   1  ',
@@ -660,6 +663,7 @@ const puzzleConfigs = [{
 }, {
   title: 'The Number Prance',
   id: 'the-number-prance',
+  difficulty: difficulty.expert6,
   given: [
     '   9 48  ',
     ' 9  2    ',
@@ -674,6 +678,7 @@ const puzzleConfigs = [{
 }, {
   title: 'Elderberry Array',
   id: 'elderberry-array',
+  difficulty: difficulty.expert6,
   given: [
     '   2 3 7 ',
     '6    53 1',
@@ -688,6 +693,7 @@ const puzzleConfigs = [{
 }, {
   title: 'The Talented Spell',
   id: 'the-talented-spell',
+  difficulty: difficulty.expert6,
   given: [
     '   2  8 9',
     '     7   ',
@@ -702,6 +708,7 @@ const puzzleConfigs = [{
 }, {
   title: 'The Big Quest',
   id: 'the-big-quest',
+  difficulty: difficulty.expert6,
   given: [
     '     3  2',
     '     96  ',
@@ -716,6 +723,7 @@ const puzzleConfigs = [{
 }, {
   title: 'An Ultimate Letter',
   id: 'an-ultimate-letter',
+  difficulty: difficulty.expert6,
   given: [
     ' 6   4  3',
     '4   8    ',
@@ -730,6 +738,7 @@ const puzzleConfigs = [{
 }, {
   title: 'Clandestine Waltz',
   id: 'clandestine-waltz',
+  difficulty: difficulty.expert6,
   given: [
     '8   5 6  ',
     '5  1 382 ',
@@ -740,6 +749,20 @@ const puzzleConfigs = [{
     '28    3  ',
     ' 678 5  1',
     '  3 6   5',
+  ],
+}, {
+  title: 'Monkey Hide',
+  id: 'monkey-hide',
+  given: [
+    '  34     ',
+    '    19  6',
+    '4 7    91',
+    '  124    ',
+    '7  8 1  5',
+    '    962  ',
+    '59    7 2',
+    '1  95    ',
+    '     41  ',
   ],
 }];
 export default puzzleConfigs;
