@@ -83,7 +83,7 @@ export default class Board {
     if (cell.locked) return false;
     if (cell.value === value) return false;
 
-    cell.value = value;
+    cell.value = value || null;
     return true;
   }
 

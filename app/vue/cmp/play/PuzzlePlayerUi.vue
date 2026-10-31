@@ -33,6 +33,9 @@ const props = defineProps({
       type: Object, // { row: number, column: number } representing the active cell, or null if no cell is active.
       default: null
     },
+
+    canUndo: Boolean,
+    canRedo: Boolean,
   },
 
   timer: {
@@ -119,6 +122,16 @@ function onVisualNumpadClick(value) {
   onNumeralInput(value);
 }
 
+function onClickUndoButton() {
+  logUiEvent('onClickUndoButton');
+  Globals.gameController.interactor.undo();
+}
+
+function onClickRedoButton() {
+  logUiEvent('onClickRedoButton');
+  Globals.gameController.interactor.redo();
+}
+
 function onClickResetButton() {
   logUiEvent('onClickResetButton');
   Globals.gameController.interactor.resetPuzzle();
@@ -185,9 +198,17 @@ function onClickPaletteToggleButton() {
         @numeral="onVisualNumpadClick"
         @palette-toggle="onClickPaletteToggleButton"
       />
-      <PrettyButton class="reset-button" @click.stop="onClickResetButton">
-        Reset this Puzzle
-      </PrettyButton>
+      <div class="row" style="width: 100%; justify-content: space-around;">
+        <PrettyButton class="undo-button" :hidden="!board.canUndo" @click.stop="onClickUndoButton">
+          Undo
+        </PrettyButton>
+        <PrettyButton class="reset-button" @click.stop="onClickResetButton">
+          Reset this Puzzle
+        </PrettyButton>
+        <PrettyButton class="redo-button" :hidden="!board.canRedo" @click.stop="onClickRedoButton">
+          Redo
+        </PrettyButton>
+      </div>
     </div>
   </div>
 </template>
@@ -265,6 +286,11 @@ function onClickPaletteToggleButton() {
         font-weight: bold;
       }
     }
+  }
+
+  .undo-button, .redo-button {
+    background-color: #4448;
+    font-size: 4rem;
   }
 
   .reset-button {

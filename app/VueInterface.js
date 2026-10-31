@@ -21,6 +21,10 @@ const GlobalVueProps = reactive({
     accentuate: null,
     /** @type {Array<Array<{ value: number, given: boolean, error: boolean }>>} */
     contents: [],
+    /** @type {boolean} */
+    canUndo: false,
+    /** @type {boolean} */
+    canRedo: false,
   },
 
   timer: {

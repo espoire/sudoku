@@ -3,6 +3,7 @@
 import { ensureArray } from '../../util/Array.js';
 import { setEquals } from '../../util/set.js';
 import { sort } from '../../util/sort.js';
+import { warnOrThrow } from '../../util/Util.js';
 import { CellColorSet } from '../board/CellColor.js';
 
 /**
@@ -29,6 +30,53 @@ import { CellColorSet } from '../board/CellColor.js';
  */
 
 export default class UndoHistory {
+  /** @type {UndoableHistoryStep[]} */ #log = [];
+  /** @type {UndoableStateSnapshot | null} */ #snapshot = null;
+  /** @type {number} The number of log entries which are in the past. #pointer = next entry to redo / one-betond the next entry to undo. Typically, this points to the end of the log AKA = log.length. */ #pointer = 0;
+
+  beginTransaction(snapshot) {
+    if (this.#snapshot != null) {
+      warnOrThrow('Transaction already in progress');
+    }
+    this.#snapshot = snapshot;
+  }
+
+  commitTransaction(snapshot) {
+    if (this.#snapshot == null) {
+      warnOrThrow('No transaction in progress');
+      return;
+    }
+
+    const diff = UndoHistory.diff(this.#snapshot, snapshot);
+    if (diff != null) {
+      // If we're in the past, this will overwrite a "future" entry beyond the pointer.
+      this.#log[this.#pointer++] = diff;
+      this.#log.length = this.#pointer; // Truncate all such future entries.
+    }
+    this.#snapshot = null;
+  }
+
+  /**
+   * Returns the previous undoable history step, if any, and moves the pointer back.
+   * The caller is responsible for applying the returned history step to the game state.
+   */
+  undo() {
+    if (this.#pointer === 0) return null;
+    return this.#log[--this.#pointer];
+  }
+
+  /**
+   * Returns the next redoable history step, if any, and moves the pointer forward.
+   * The caller is responsible for applying the returned history step to the game state.
+   */
+  redo() {
+    if (this.#pointer >= this.#log.length) return null;
+    return this.#log[this.#pointer++];
+  }
+
+  get canUndo() { return this.#pointer > 0; }
+  get canRedo() { return this.#pointer < this.#log.length; }
+
   /**
    * @param {UndoableStateSnapshot} before
    * @param {UndoableStateSnapshot} after
@@ -76,8 +124,8 @@ export default class UndoHistory {
         }
 
         // Corner notes
-        const beforeCorner = new Set(before.cornerNotes?.[y]?.[x]);
-        const afterCorner = new Set(after.cornerNotes?.[y]?.[x]);
+        const beforeCorner = new Set(before.cornerNotes?.[y]?.[x] ?? []);
+        const afterCorner = new Set(after.cornerNotes?.[y]?.[x] ?? []);
         if (!setEquals(beforeCorner, afterCorner)) {
           result.corner = {};
           if (beforeCorner.size > 0) result.corner.was = [...beforeCorner].sort(sort.numeric.ascending);
@@ -85,8 +133,8 @@ export default class UndoHistory {
         }
 
         // Center notes
-        const beforeCenter = new Set(before.centerNotes?.[y]?.[x]);
-        const afterCenter = new Set(after.centerNotes?.[y]?.[x]);
+        const beforeCenter = new Set(before.centerNotes?.[y]?.[x] ?? []);
+        const afterCenter = new Set(after.centerNotes?.[y]?.[x] ?? []);
         if (!setEquals(beforeCenter, afterCenter)) {
           result.center = {};
           if (beforeCenter.size > 0) result.center.was = [...beforeCenter].sort(sort.numeric.ascending);
@@ -94,8 +142,8 @@ export default class UndoHistory {
         }
 
         // Colors
-        const beforeColors = new Set(before.cellColors?.[y]?.[x]);
-        const afterColors = new Set(after.cellColors?.[y]?.[x]);
+        const beforeColors = new Set(before.cellColors?.[y]?.[x] ?? []);
+        const afterColors = new Set(after.cellColors?.[y]?.[x] ?? []);
         if (!setEquals(beforeColors, afterColors)) {
           result.colors = {};
           if (beforeColors.size > 0) result.colors.was = CellColorSet.sortCanonical(beforeColors);

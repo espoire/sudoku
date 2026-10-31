@@ -31,7 +31,7 @@ const props = inject('props');
           :board="props.board"
           :timer="props.timer"
           :inputMode="props.inputMode"
-          :palette="props.palette" />
+          :palette="props.palette"/>
     </div>
   </div>
 </template>

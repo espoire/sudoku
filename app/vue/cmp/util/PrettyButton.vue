@@ -1,16 +1,17 @@
 <script setup>
 const props = defineProps({
   disabled: [Boolean, null],
+  hidden: [Boolean, null],
 });
 const emit = defineEmits(['activate']);
 
 function activate() {
-  if (!props.disabled) emit('activate');
+  if (!props.disabled && !props.hidden) emit('activate');
 }
 </script>
 
 <template>
-  <div class="buttonWrap" :class="{ disabled }" @click="activate">
+  <div class="buttonWrap" :class="{ disabled, hidden }" @click="activate">
     <slot name="special" />
     <div class="buttonBorder">
       <div class="button">
@@ -64,6 +65,10 @@ function activate() {
     top: 0;
     filter: grayscale(0.8);
   }
+}
+
+.hidden {
+  visibility: hidden;
 }
 
 .button {

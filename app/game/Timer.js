@@ -41,6 +41,7 @@ export default class Timer {
   }
 
   reset() {
+    this.initialTime = 0;
     this.startTime = null;
     this.totalPausesLength = 0;
     this.paused = false;
@@ -51,8 +52,9 @@ export default class Timer {
     this.updateVue();
   }
 
-  restart() {
+  restart(initialTime = 0) {
     this.reset();
+    this.setInitialTime(initialTime);
     this.start();
   }
 

@@ -4,9 +4,11 @@ import SaveDataManager from "../../save/SaveDataManager.js";
 import { trim2dArray } from "../../save/util.js";
 import Settings from "../../Settings.js";
 import UserSettingsManager from "../../UserSettingsManager.js";
+import { ensureArray } from "../../util/Array.js";
 import { sort } from "../../util/sort.js";
 import GlobalVueProps from "../../VueInterface.js";
 import Timer from "../Timer.js";
+import UndoHistory from "../undo/UndoHistory.js";
 import Board from "./Board.js";
 import { CellColorSet } from "./CellColor.js";
 import { create2DArray } from "./helpers.js";
@@ -26,6 +28,8 @@ export default class PuzzlePlayInteractor extends Interactor {
   /** @type {'regular' | 'color-blind'} */ #palette = Settings.user.userHighlightPalette;
   /** @type {boolean} */ wasWin = false;
 
+  /** @type {UndoHistory} */ undoHistory = new UndoHistory();
+
   constructor(board) {
     super(board);
     this.cornerNotes = create2DArray(board.size.y, board.size.x, () => new Set());
@@ -34,12 +38,16 @@ export default class PuzzlePlayInteractor extends Interactor {
   }
 
   resetPuzzle() {
+    this.undoHistory.beginTransaction(this.toUndoableStateSnapshot({ includeTimer: true }));
+
     super.resetPuzzle();
-    this.timer.reset();
+    this.timer.restart();
     this.cornerNotes = create2DArray(this.board.size.y, this.board.size.x, () => new Set());
     this.centerNotes = create2DArray(this.board.size.y, this.board.size.x, () => new Set());
     this.cellColors = create2DArray(this.board.size.y, this.board.size.x, () => new CellColorSet());
     this.wasWin = false;
+
+    this.undoHistory.commitTransaction(this.toUndoableStateSnapshot({ includeTimer: true }));
     this.updateVue();
   }
 
@@ -88,6 +96,7 @@ export default class PuzzlePlayInteractor extends Interactor {
    */
   handleNumeralInput(value) {
     if (this.wasWin) return;
+    this.undoHistory.beginTransaction(this.toUndoableStateSnapshot());
 
     const selection = this.listSelection();
 
@@ -201,6 +210,9 @@ export default class PuzzlePlayInteractor extends Interactor {
 
     // If the user changed anything, check if they won.
     if (wasEntryChange) this.checkWin();
+
+    // Commit the current transaction to the undo history. Needs to happen after the checkWin, since that might delete notes, depending on user settings.
+    this.undoHistory.commitTransaction(this.toUndoableStateSnapshot());
 
     // Update the UI with the new board state & validations.
     this.updateVue();
@@ -342,6 +354,33 @@ export default class PuzzlePlayInteractor extends Interactor {
     });
   }
 
+  undo() { this.#applyDiff(this.undoHistory.undo(), 'was'); }
+  redo() { this.#applyDiff(this.undoHistory.redo(), 'now'); }
+
+  /**
+   * @param {UndoableHistoryStep} diff
+   * @param {'was' | 'now'} key
+   */
+  #applyDiff(diff, key) {
+    if (!diff) return;
+
+    if (diff.timer) this.timer.restart((diff.timer[key] ?? 0) * 100); // Convert tenths back to milliseconds
+    for (const change of diff.cells ?? []) {
+      for (const { x, y } of ensureArray(change.at)) {
+        if (change.entry) this.board.setValue(y, x, change.entry[key]);
+        if (change.corner) this.cornerNotes[y][x] = new Set(change.corner[key]);
+        if (change.center) this.centerNotes[y][x] = new Set(change.center[key]);
+        if (change.colors) this.cellColors[y][x] = CellColorSet.rehydrate(change.colors[key]);
+      }
+    }
+
+    this.checkWin(); // Recompute validation, to regenerate the e.g. error highlighting
+    this.clearSelection();
+
+    this.updateVue();
+  }
+
+
   /**
    * Updates the Vue.js reactive board model with the current state of the board and selection.
    */
@@ -365,20 +404,22 @@ export default class PuzzlePlayInteractor extends Interactor {
     );
     vm.active = this.activeCell ? { ...this.activeCell } : null;
     vm.accentuate = this.getAccentuatedNumber();
+    vm.canUndo = this.undoHistory.canUndo;
+    vm.canRedo = this.undoHistory.canRedo;
     
     GlobalVueProps.inputMode = this.#inputMode;
   }
 
-  toUndoableStateSnapshot(includeTimer = false) {
+  toUndoableStateSnapshot({includeTimer = false} = {}) {
     return {
       ...this.board.toUndoableStateSnapshot(),
       cornerNotes: structuredClone(this.cornerNotes), // Already in canonical state; 2D array of Sets.
       centerNotes: structuredClone(this.centerNotes), // Already in canonical state; 2D array of Sets.
-      cellColors: structuredClone(this.cellColors), // Already in canonical state; 2D array of Set-like custom objects.
+      cellColors: this.cellColors.map(row => row.map(cell => cell.toSaveDataObject())), // Convert `CellColorSet`s to string[]
       timer: includeTimer ?
           Math.floor(this.timer.getElapsedTime()  / 100) : // tenths
           null,
-    }
+    };
   }
 
   toSaveDataObject() {
