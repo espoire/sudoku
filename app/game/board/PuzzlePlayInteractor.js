@@ -429,6 +429,7 @@ export default class PuzzlePlayInteractor extends Interactor {
       centerNotes: trim2dArray(this.centerNotes.map(row => row.map(cell => cell.size ? [...cell] : null))),
       cellColors: trim2dArray(this.cellColors.map(row => row.map(cell => cell.toSaveDataObject()))),
       timer: Math.floor(this.timer.getElapsedTime()  / 100), // tenths
+      history: this.undoHistory.toSaveDataObject(),
     };
   }
 
@@ -445,6 +446,7 @@ export default class PuzzlePlayInteractor extends Interactor {
     interactor.cornerNotes = create2DArray(board.size.y, board.size.x, (row, col) => new Set(data.cornerNotes?.[row]?.[col]));
     interactor.centerNotes = create2DArray(board.size.y, board.size.x, (row, col) => new Set(data.centerNotes?.[row]?.[col]));
     interactor.cellColors = create2DArray(board.size.y, board.size.x, (row, col) => CellColorSet.rehydrate(data.cellColors?.[row]?.[col]));
+    interactor.undoHistory = UndoHistory.rehydrate(data.history);
     return interactor;
   }
 }

@@ -117,4 +117,25 @@ export default class GameController {
     if (GlobalVueProps.mode === modes.play) SaveDataManager.saveGameState(this.interactor);
     if (GlobalVueProps.mode === modes.edit) SaveDataManager.saveEditState(this.interactor);
   }
+
+  undo() {
+    if (GlobalVueProps.mode === modes.play) {
+      this.interactor.undo();
+      SaveDataManager.saveGameState(this.interactor);
+    }
+  }
+
+  redo() {
+    if (GlobalVueProps.mode === modes.play) {
+      this.interactor.redo();
+      SaveDataManager.saveGameState(this.interactor);
+    }
+  }
+
+  resetPuzzle() {
+    if (GlobalVueProps.mode === modes.play) {
+      this.interactor.resetPuzzle();
+      SaveDataManager.saveGameState(this.interactor);
+    }
+  }
 }

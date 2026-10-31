@@ -124,17 +124,17 @@ function onVisualNumpadClick(value) {
 
 function onClickUndoButton() {
   logUiEvent('onClickUndoButton');
-  Globals.gameController.interactor.undo();
+  Globals.gameController.undo();
 }
 
 function onClickRedoButton() {
   logUiEvent('onClickRedoButton');
-  Globals.gameController.interactor.redo();
+  Globals.gameController.redo();
 }
 
 function onClickResetButton() {
   logUiEvent('onClickResetButton');
-  Globals.gameController.interactor.resetPuzzle();
+  Globals.gameController.reset();
 }
 
 function onClickInputModeButton(mode) {

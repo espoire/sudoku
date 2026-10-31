@@ -1,5 +1,7 @@
 Undo/Redo
-  Savegame saves the whole undo/redo state sequence
+  Ctrl+Shift+Click "Reset this Puzzle" to also wipe the undo history at the same time.
+  Ctrl+Z to Undo
+  Ctrl+Y to Redo
   Tests
     Snapshot --> mutate state --> snapshot, assert snapshot differs
     Snapshot --> mutate state --> undo --> snapshot, assert snapshot does not differ

@@ -77,6 +77,22 @@ export default class UndoHistory {
   get canUndo() { return this.#pointer > 0; }
   get canRedo() { return this.#pointer < this.#log.length; }
 
+  toSaveDataObject() {
+    return {
+      pointer: this.#pointer,
+      log: this.#log,
+    };
+  }
+
+  static rehydrate(data) {
+    const history = new UndoHistory();
+
+    history.#pointer = data.pointer;
+    history.#log = structuredClone(data.log);
+
+    return history;
+  }
+
   /**
    * @param {UndoableStateSnapshot} before
    * @param {UndoableStateSnapshot} after
